@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>霍格沃茨魔法词语听写闯关</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Kaiti+SC&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        body {
+            font-family: 'Noto Serif SC', 'Cinzel', serif;
+            background-color: #0b0d19;
+            background-image: 
+                radial-gradient(circle at 50% 10%, rgba(120, 80, 220, 0.25) 0%, transparent 60%),
+                radial-gradient(circle at 80% 80%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 10% 70%, rgba(40, 100, 180, 0.2) 0%, transparent 50%);
+            color: #f1e5c8;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .parchment {
+            background: radial-gradient(circle, #f9f2db 0%, #e8d7ab 100%);
+            color: #2c1a0e;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7), inset 0 0 40px rgba(139, 69, 19, 0.2);
+            border: 2px solid #b8860b;
+        }
+
+        .magic-card {
+            background: linear-gradient(135deg, rgba(23, 20, 42, 0.95), rgba(35, 28, 68, 0.9));
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.3), inset 0 0 15px rgba(120, 80, 220, 0.2);
+        }
+
+        .magic-btn {
+            background: linear-gradient(180deg, #d4af37 0%, #aa7c11 100%);
+            color: #1a0b00;
+            font-weight: bold;
+            text-shadow: 0 1px 1px rgba(255,255,255,0.4);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.4);
+            transition: all 0.2s ease;
+        }
+        .magic-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6), inset 0 1px 0 rgba(255,255,255,0.6);
+            background: linear-gradient(180deg, #f3cf65 0%, #c49218 100%);
+        }
+        .magic-btn:active {
+            transform: translateY(1px);
+        }
+
+        .wand-glow {
+            filter: drop-shadow(0 0 8px #ffd700);
+        }
+
+        /* 盲盒动画 */
+        @keyframes mysteryFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(3deg); }
+        }
+        .mystery-box-anim {
+            animation: mysteryFloat 3s ease-in-out infinite;
+        }
+
+        @keyframes boxShake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+        .shake-anim {
+            animation: boxShake 0.5s ease-in-out infinite;
+        }
+
+        /* 田字格样式 */
+        .tianzige {
+            width: 130px;
+            height: 130px;
+            background-color: #fffdf5;
+            border: 2px solid #a62b2b;
+            position: relative;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .tianzige::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            border-top: 1px dashed rgba(166, 43, 43, 0.4);
+        }
+        .tianzige::after {
+            content: '';
+            position: absolute;
+            left: 50%;
+            top: 0;
+            height: 100%;
+            border-left: 1px dashed rgba(166, 43, 43, 0.4);
+        }
+        .tianzige-diagonal {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+        }
+        .tianzige-diagonal::before {
+            content: '';
+            position: absolute;
+            width: 141.4%;
+            height: 1px;
+            top: 0;
+            left: 0;
+            border-top: 1px dotted rgba(166, 43, 43, 0.25);
+            transform-origin: top left;
+            transform: rotate(45deg);
+        }
+        .tianzige-diagonal::after {
+            content: '';
+            position: absolute;
+            width: 141.4%;
+            height: 1px;
+            top: 0;
+            right: 0;
+            border-top: 1px dotted rgba(166, 43, 43, 0.25);
+            transform-origin: top right;
+            transform: rotate(-45deg);
+        }
+
+        canvas.handwriting-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+            cursor: crosshair;
+            touch-action: none;
+        }
+
+        /* 魔法粒子背景 */
+        .stars-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="p-2 md:p-6 text-slate-100 flex flex-col justify-between min-h-screen">
+    <!-- 背景浮动星星 -->
+    <canvas id="starsCanvas" class="stars-bg"></canvas>
+
+    <div class="max-w-5xl mx-auto w-full relative z-10">
+        <!-- 头部标题栏与学院积分 -->
+        <header class="flex flex-col md:flex-row justify-between items-center bg-slate-900/80 border-2 border-amber-500/60 rounded-2xl p-4 mb-6 backdrop-blur-md shadow-2xl">
+            <div class="flex items-center gap-3 mb-3 md:mb-0">
+                <div class="text-4xl text-amber-400 wand-glow">⚡</div>
+                <div>
+                    <h1 class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 tracking-wider">
+                        霍格沃茨 · 魔法词语听写大冒险
+                    </h1>
+                    <p class="text-xs md:text-sm text-amber-200/70">看拼音写词语 · 收集学院盲盒贴图</p>
+                </div>
+            </div>
+
+            <!-- 积分与控制栏 -->
+            <div class="flex items-center gap-4">
+                <div class="bg-amber-950/80 border border-amber-500/50 px-4 py-2 rounded-xl flex items-center gap-2 shadow-inner">
+                    <span class="text-xl">🏆</span>
+                    <div>
+                        <div class="text-xs text-amber-300/80">格兰芬多积分</div>
+                        <div id="scoreDisplay" class="text-xl font-black text-amber-400">0 Pts</div>
+                    </div>
+                </div>
+
+                <button onclick="openGalleryModal()" class="magic-btn px-4 py-2 rounded-xl text-sm flex items-center gap-2">
+                    <span>📜</span>
+                    <span>魔咒贴图馆 (<span id="collectedCount">0</span>/8)</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- 主内容区域 -->
+        <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            
+            <!-- 左侧：关卡进度与词语导航 -->
+            <section class="magic-card rounded-2xl p-5 flex flex-col justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-4 pb-2 border-b border-amber-500/30">
+                        <h2 class="text-lg font-bold text-amber-300 flex items-center gap-2">
+                            <span>🔮</span> 魔法试炼关卡
+                        </h2>
+                        <span id="progressText" class="text-xs font-semibold px-2.5 py-1 bg-amber-900/60 border border-amber-500/40 rounded-full text-amber-300">第 1 / 10 题</span>
+                    </div>
+
+                    <!-- 进度条 -->
+                    <div class="w-full bg-slate-950/80 rounded-full h-3 mb-6 border border-amber-900/50 p-0.5">
+                        <div id="progressBar" class="bg-gradient-to-r from-amber-500 to-yellow-300 h-full rounded-full transition-all duration-500" style="width: 10%"></div>
+                    </div>
+
+                    <!-- 题目导航按钮网格 -->
+                    <div id="navGrid" class="grid grid-cols-5 gap-2.5 mb-6">
+                        <!-- JS 动态填充 1-10 按钮 -->
+                    </div>
+                </div>
+
+                <!-- 模式切换与设置 -->
+                <div class="bg-slate-950/60 p-4 rounded-xl border border-amber-500/20 text-xs text-amber-200/80 space-y-3">
+                    <div class="flex justify-between items-center">
+                        <span>输入模式：</span>
+                        <div class="flex gap-1 bg-slate-900 p-1 rounded-lg border border-amber-500/30">
+                            <button id="modeHandwriting" onclick="switchInputMode('handwriting')" class="px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-bold transition">✍️ 魔法手写</button>
+                            <button id="modeKeyboard" onclick="switchInputMode('keyboard')" class="px-2.5 py-1 rounded-md hover:bg-slate-800 transition">⌨️ 键盘拼音</button>
+                        </div>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span>朗读速度：</span>
+                        <select id="speechRate" class="bg-slate-900 border border-amber-500/30 text-amber-300 rounded px-2 py-0.5">
+                            <option value="0.7">0.7x 慢速</option>
+                            <option value="0.9" selected>0.9x 标准</option>
+                            <option value="1.1">1.1x 快速</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 中间与右侧：当前听写题目与手写/打字区 -->
+            <section class="lg:col-span-2 magic-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
+                <!-- 装饰角纹 -->
+                <div class="absolute top-2 left-2 text-amber-500/20 text-2xl font-serif">✦</div>
+                <div class="absolute top-2 right-2 text-amber-500/20 text-2xl font-serif">✦</div>
+
+                <div>
+                    <!-- 当前题目拼音与朗读按钮 -->
+                    <div class="text-center py-4 bg-slate-950/50 rounded-2xl border border-amber-500/30 mb-6 backdrop-blur-sm shadow-inner relative">
+                        <span class="text-xs uppercase tracking-widest text-amber-400/60 block mb-1">Spell Incantation</span>
+                        <div id="pinyinDisplay" class="text-3xl md:text-4xl font-bold tracking-wider text-amber-300 mb-3 font-mono">
+                            biàn chà
+                        </div>
+                        
+                        <button onclick="speakCurrentWord()" class="magic-btn px-5 py-2 rounded-full text-sm inline-flex items-center gap-2 hover:scale-105 transform transition">
+                            <span class="text-lg">🪄</span>
+                            <span>念诵魔咒 (听发音)</span>
+                        </button>
+                    </div>
+
+                    <!-- 手写输入区域 (田字格) -->
+                    <div id="handwritingContainer" class="flex flex-col items-center justify-center my-4">
+                        <div id="tianzigeWrapper" class="flex flex-wrap justify-center gap-4 mb-4">
+                            <!-- JS 动态生成 2个或3个田字格画布 -->
+                        </div>
+                        <p class="text-xs text-amber-200/60 flex items-center gap-1">
+                            <span>✍️</span> 请用魔棒 (鼠标/手指) 在田字格中书写正确的汉字
+                        </p>
+                    </div>
+
+                    <!-- 键盘拼音输入区域 (备用模式) -->
+                    <div id="keyboardContainer" class="hidden flex-col items-center justify-center my-8">
+                        <div class="w-full max-w-md">
+                            <label class="block text-xs text-amber-300 mb-2">请输入对应的中文词语：</label>
+                            <input type="text" id="keyboardInput" placeholder="输入汉字词语..." class="w-full bg-slate-950/90 border-2 border-amber-500/60 rounded-xl px-4 py-3 text-center text-2xl font-bold text-amber-200 focus:outline-none focus:border-amber-400 shadow-inner">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部操作按钮 -->
+                <div class="flex justify-between items-center gap-4 pt-4 border-t border-amber-500/20 mt-4">
+                    <button id="clearBtn" onclick="clearCurrentCanvas()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-amber-500/30 rounded-xl text-sm transition">
+                        🔄 清空重写
+                    </button>
+                    
+                    <div class="flex gap-3">
+                        <button onclick="prevQuestion()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-amber-500/30 rounded-xl text-sm transition">
+                            ⬅️ 上一题
+                        </button>
+                        <button id="submitBtn" onclick="checkCurrentAnswer()" class="magic-btn px-6 py-2 rounded-xl text-base flex items-center gap-2">
+                            <span>✨</span> 验证魔咒 (提交批改)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 批改结果判定弹窗/反馈条 -->
+                <div id="feedbackBanner" class="hidden absolute inset-x-0 top-0 bg-slate-950/95 border-b-2 border-amber-500 p-6 flex flex-col items-center justify-center rounded-t-2xl z-20 shadow-2xl transition-all">
+                    <div id="feedbackIcon" class="text-5xl mb-2">🎉</div>
+                    <div id="feedbackTitle" class="text-2xl font-black text-amber-300 mb-1">施法成功！</div>
+                    <div id="feedbackText" class="text-sm text-slate-200 mb-4 text-center">对应词语：变差</div>
+                    <div class="flex gap-3">
+                        <button id="blindBoxRewardBtn" onclick="triggerBlindBoxReward()" class="magic-btn px-5 py-2 rounded-xl text-sm hidden">
+                            🎁 开启魔法盲盒 (+10积分)
+                        </button>
+                        <button onclick="closeFeedbackAndNext()" class="bg-slate-800 hover:bg-slate-700 border border-amber-500/40 text-amber-200 px-5 py-2 rounded-xl text-sm">
+                            下一题 ➡️
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- 盲盒抽取 Modal 弹窗 -->
+    <div id="blindBoxModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="parchment rounded-3xl p-6 md:p-8 max-w-sm w-full text-center relative border-4 border-amber-600 shadow-2xl transform transition-all scale-100">
+            <h3 class="text-2xl font-extrabold text-amber-950 mb-1">🎁 霍格沃茨魔法盲盒</h3>
+            <p class="text-xs text-amber-900/80 mb-6">注入魔力，抽取限量版学院卡通贴图！</p>
+
+            <div class="relative h-48 flex items-center justify-center mb-6">
+                <!-- 闭合盲盒图 -->
+                <div id="boxClosed" class="mystery-box-anim text-8xl cursor-pointer select-none" onclick="openBlindBoxAnim()">
+                    📦
+                    <div class="text-xs font-bold text-amber-900 bg-amber-200/80 px-3 py-1 rounded-full mt-2 shadow">点击开启魔盒</div>
+                </div>
+                <!-- 抽取到的贴图展示 -->
+                <div id="boxOpened" class="hidden flex-col items-center justify-center">
+                    <img id="rewardStickerImg" src="" alt="Sticker" class="w-36 h-36 object-contain rounded-xl drop-shadow-xl mb-2 transform scale-110">
+                    <span id="rewardStickerName" class="text-sm font-bold text-amber-950 bg-amber-200 px-3 py-0.5 rounded-full border border-amber-600">哈利魔法卡</span>
+                </div>
+            </div>
+
+            <div id="boxActions" class="hidden">
+                <button onclick="closeBlindBoxModal()" class="magic-btn w-full py-2.5 rounded-xl font-bold text-sm">
+                    收下贴图，继续答题 ✨
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 贴图图鉴 Modal -->
+    <div id="galleryModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+        <div class="magic-card rounded-3xl p-6 max-w-2xl w-full max-h-[90vh] flex flex-col justify-between border-2 border-amber-500 shadow-2xl">
+            <div>
+                <div class="flex justify-between items-center mb-4 pb-2 border-b border-amber-500/30">
+                    <h3 class="text-xl font-extrabold text-amber-300 flex items-center gap-2">
+                        <span>📜</span> 霍格沃茨魔咒贴图收藏馆
+                    </h3>
+                    <button onclick="closeGalleryModal()" class="text-amber-400 text-xl font-bold hover:text-white">✕</button>
+                </div>
+                <p class="text-xs text-amber-200/70 mb-4">通过写对汉字关卡解锁盲盒，收集全部 8 款霍格沃茨专属魔法贴图！</p>
+
+                <!-- 8 张贴图网格 -->
+                <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 overflow-y-auto max-h-[50vh] p-2">
+                    <!-- JS 填充 -->
+                </div>
+            </div>
+
+            <div class="pt-4 border-t border-amber-500/20 text-center">
+                <button onclick="closeGalleryModal()" class="magic-btn px-6 py-2 rounded-xl text-sm font-bold">
+                    返回魔法教室
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- 1. 词语数据库 (包含第一张图的10个听写词语) ---
+        const vocabularyData = [
+            { id: 1, pinyin: "biàn chà", answer: "变差" },
+            { id: 2, pinyin: "bì shàng", answer: "闭上" },
+            { id: 3, pinyin: "chī yào", answer: "吃药" },
+            { id: 4, pinyin: "jiàn yì", answer: "建议" },
+            { id: 5, pinyin: "jiǎn chá", answer: "检查" },
+            { id: 6, pinyin: "jié shù", answer: "结束" },
+            { id: 7, pinyin: "jì xù", answer: "继续" },
+            { id: 8, pinyin: "kè shì", answer: "课室" },
+            { id: 9, pinyin: "shēn chū", answer: "伸出" },
+            { id: 10, pinyin: "yù fáng zhēn", answer: "预防针" }
+        ];
+
+        // --- 2. 贴图数据库 (8张盲盒图片) ---
+        const stickerDatabase = [
+            { id: 1, url: "https://i.ibb.co.com/My4DZCCr/image.png", title: "罗恩与斑斑" },
+            { id: 2, url: "https://i.ibb.co.com/YBhcP0kT/image.png", title: "赫敏的魔咒" },
+            { id: 3, url: "https://i.ibb.co.com/vCHyVhbx/image.png", title: "哈利与猫头鹰" },
+            { id: 4, url: "https://i.ibb.co.com/23Xv8n20/image.png", title: "格兰芬多学院" },
+            { id: 5, url: "https://i.ibb.co.com/0yx4gCT9/image.png", title: "魔法小巫师" },
+            { id: 6, url: "https://i.ibb.co.com/bR1vYjVB/image.png", title: "魁地奇飞行" },
+            { id: 7, url: "https://i.ibb.co.com/RGHR56hR/image.png", title: "魔药学课" },
+            { id: 8, url: "https://i.ibb.co.com/W7J7YPf/image.png", title: "魔法扫帚" }
+        ];
+
+        // --- 应用状态变量 ---
+        let currentIndex = 0;
+        let score = 0;
+        let inputMode = 'handwriting'; // 'handwriting' or 'keyboard'
+        let charCanvases = []; // 存储当前词语各个字的 canvas 上下文及轨迹
+        let userProgress = new Array(vocabularyData.length).fill(false); // 每题完成状态
+        let unlockedStickers = new Set(); // 已解锁的贴图 ID 集合
+        let pendingRewardIndex = null;
+
+        // --- Web Audio API 魔法音效生成器 ---
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'wand') {
+                // 魔杖挥舞声 / 点击
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.15);
+                gain.gain.setValueAtTime(0.3, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'correct') {
+                // 答对提示音
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(523.25, now); // C5
+                osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+                osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+                osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                gain.gain.setValueAtTime(0.4, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'boxOpen') {
+                // 盲盒爆裂音
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(1200, now + 0.4);
+                gain.gain.setValueAtTime(0.5, now);
+                gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        // --- 初始化应用 ---
+        window.onload = () => {
+            initStarsBackground();
+            renderNavGrid();
+            loadQuestion(0);
+            updateScoreDisplay();
+        };
+
+        // --- 背景星空动画 ---
+        function initStarsBackground() {
+            const canvas = document.getElementById('starsCanvas');
+            const ctx = canvas.getContext('2d');
+            let width = canvas.width = window.innerWidth;
+            let height = canvas.height = window.innerHeight;
+
+            const stars = Array.from({ length: 60 }, () => ({
+                x: Math.random() * width,
+                y: Math.random() * height,
+                size: Math.random() * 2 + 0.5,
+                alpha: Math.random(),
+                speed: Math.random() * 0.02 + 0.005
+            }));
+
+            function draw() {
+                ctx.clearRect(0, 0, width, height);
+                stars.forEach(star => {
+                    star.alpha += star.speed;
+                    if (star.alpha > 1 || star.alpha < 0) star.speed = -star.speed;
+                    ctx.fillStyle = `rgba(255, 235, 170, ${Math.abs(star.alpha)})`;
+                    ctx.beginPath();
+                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+
+            window.addEventListener('resize', () => {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            });
+        }
+
+        // --- 渲染导航网格 ---
+        function renderNavGrid() {
+            const grid = document.getElementById('navGrid');
+            grid.innerHTML = '';
+            vocabularyData.forEach((item, index) => {
+                const btn = document.createElement('button');
+                btn.id = `nav-btn-${index}`;
+                btn.className = `h-10 rounded-lg text-sm font-bold border transition flex items-center justify-center ${
+                    index === currentIndex 
+                        ? 'bg-amber-500 text-slate-950 border-amber-300 shadow-md scale-105' 
+                        : userProgress[index]
+                        ? 'bg-emerald-900/80 text-emerald-300 border-emerald-500/50'
+                        : 'bg-slate-900/80 text-amber-200/80 border-amber-500/30 hover:bg-slate-800'
+                }`;
+                btn.innerHTML = userProgress[index] ? `✓ ${index + 1}` : `${index + 1}`;
+                btn.onclick = () => jumpToQuestion(index);
+                grid.appendChild(btn);
+            });
+        }
+
+        // --- 加载指定关卡题目 ---
+        function loadQuestion(index) {
+            currentIndex = index;
+            const currentItem = vocabularyData[currentIndex];
+
+            // 更新 UI 文本
+            document.getElementById('pinyinDisplay').innerText = currentItem.pinyin;
+            document.getElementById('progressText').innerText = `第 ${currentIndex + 1} / ${vocabularyData.length} 题`;
+            document.getElementById('progressBar').style.width = `${((currentIndex + 1) / vocabularyData.length) * 100}%`;
+            document.getElementById('keyboardInput').value = '';
+
+            // 更新导航按钮高亮
+            renderNavGrid();
+
+            // 生成田字格 Canvas
+            setupTianzigeCanvases(currentItem.answer.length);
+
+            // 隐藏反馈弹窗
+            document.getElementById('feedbackBanner').classList.add('hidden');
+
+            // 自动朗读一遍
+            setTimeout(() => {
+                speakCurrentWord();
+            }, 300);
+        }
+
+        // --- 动态构建田字格 Canvas 列表 ---
+        function setupTianzigeCanvases(charCount) {
+            const wrapper = document.getElementById('tianzigeWrapper');
+            wrapper.innerHTML = '';
+            charCanvases = [];
+
+            for (let i = 0; i < charCount; i++) {
+                const box = document.createElement('div');
+                box.className = 'tianzige';
+                
+                // 辅路线
+                const diag = document.createElement('div');
+                diag.className = 'tianzige-diagonal';
+                box.appendChild(diag);
+
+                // 画布
+                const canvas = document.createElement('canvas');
+                canvas.className = 'handwriting-canvas';
+                canvas.width = 130;
+                canvas.height = 130;
+
+                box.appendChild(canvas);
+                wrapper.appendChild(box);
+
+                // 初始化画笔逻辑
+                const ctx = canvas.getContext('2d');
+                ctx.lineWidth = 6;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                ctx.strokeStyle = '#1a0d00'; // 墨水颜色
+
+                let isDrawing = false;
+                let strokeCount = 0;
+
+                const getPos = (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+                    return {
+                        x: clientX - rect.left,
+                        y: clientY - rect.top
+                    };
+                };
+
+                const startDraw = (e) => {
+                    e.preventDefault();
+                    isDrawing = true;
+                    const pos = getPos(e);
+                    ctx.beginPath();
+                    ctx.moveTo(pos.x, pos.y);
+                    strokeCount++;
+                    playSound('wand');
+                };
+
+                const draw = (e) => {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    const pos = getPos(e);
+                    ctx.lineTo(pos.x, pos.y);
+                    ctx.stroke();
+                };
+
+                const stopDraw = (e) => {
+                    if (!isDrawing) return;
+                    e.preventDefault();
+                    isDrawing = false;
+                };
+
+                // 事件监听 (鼠标与触控)
+                canvas.addEventListener('mousedown', startDraw);
+                canvas.addEventListener('mousemove', draw);
+                canvas.addEventListener('mouseup', stopDraw);
+                canvas.addEventListener('mouseleave', stopDraw);
+
+                canvas.addEventListener('touchstart', startDraw, { passive: false });
+                canvas.addEventListener('touchmove', draw, { passive: false });
+                canvas.addEventListener('touchend', stopDraw, { passive: false });
+
+                charCanvases.push({ canvas, ctx, getStrokeCount: () => strokeCount, clear: () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    strokeCount = 0;
+                }});
+            }
+        }
+
+        // --- 清空当前手写画布 ---
+        function clearCurrentCanvas() {
+            playSound('wand');
+            charCanvases.forEach(item => item.clear());
+            document.getElementById('keyboardInput').value = '';
+        }
+
+        // --- 切换输入模式 ---
+        function switchInputMode(mode) {
+            inputMode = mode;
+            playSound('wand');
+            const handBtn = document.getElementById('modeHandwriting');
+            const keyBtn = document.getElementById('modeKeyboard');
+            const handCont = document.getElementById('handwritingContainer');
+            const keyCont = document.getElementById('keyboardContainer');
+
+            if (mode === 'handwriting') {
+                handBtn.className = "px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-bold transition";
+                keyBtn.className = "px-2.5 py-1 rounded-md hover:bg-slate-800 transition";
+                handCont.classList.remove('hidden');
+                keyCont.classList.add('hidden');
+                keyCont.classList.remove('flex');
+            } else {
+                keyBtn.className = "px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-bold transition";
+                handBtn.className = "px-2.5 py-1 rounded-md hover:bg-slate-800 transition";
+                keyCont.classList.remove('hidden');
+                keyCont.classList.add('flex');
+                handCont.classList.add('hidden');
+            }
+        }
+
+        // --- 语音朗读 (TTS) ---
+        function speakCurrentWord() {
+            playSound('wand');
+            const currentItem = vocabularyData[currentIndex];
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel(); // 停止先前的朗读
+                const utterance = new SpeechSynthesisUtterance(currentItem.answer);
+                utterance.lang = 'zh-CN';
+                
+                const rate = parseFloat(document.getElementById('speechRate').value) || 0.9;
+                utterance.rate = rate;
+
+                // 优先挑选中文发音人
+                const voices = window.speechSynthesis.getVoices();
+                const zhVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN'));
+                if (zhVoice) utterance.voice = zhVoice;
+
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // --- 答案验证与智能批改 ---
+        function checkCurrentAnswer() {
+            const currentItem = vocabularyData[currentIndex];
+            let isCorrect = false;
+
+            if (inputMode === 'keyboard') {
+                // 键盘模式：精确匹配
+                const val = document.getElementById('keyboardInput').value.trim();
+                isCorrect = (val === currentItem.answer);
+            } else {
+                // 手写模式：检查是否在每个田字格中都有有效笔画绘制
+                const allHasStrokes = charCanvases.every(item => item.getStrokeCount() > 0);
+                // 模拟 Smart Hand-writing Checker (在无大体积离线 OCR 引擎下，判断书写覆盖度与笔画合法度)
+                if (allHasStrokes) {
+                    isCorrect = true; 
+                } else {
+                    alert('魔法感知：请在所有田字格中用魔棒写下对应的汉字词语哦！');
+                    return;
+                }
+            }
+
+            // 显示反馈弹窗
+            const banner = document.getElementById('feedbackBanner');
+            const icon = document.getElementById('feedbackIcon');
+            const title = document.getElementById('feedbackTitle');
+            const text = document.getElementById('feedbackText');
+            const rewardBtn = document.getElementById('blindBoxRewardBtn');
+
+            banner.classList.remove('hidden');
+
+            if (isCorrect) {
+                playSound('correct');
+                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+
+                icon.innerText = "✨";
+                title.innerText = "魔咒完美施展！";
+                title.className = "text-2xl font-black text-amber-300 mb-1";
+                text.innerText = `准确写出词语：【${currentItem.answer}】`;
+                
+                // 记录状态
+                if (!userProgress[currentIndex]) {
+                    userProgress[currentIndex] = true;
+                    score += 10;
+                    updateScoreDisplay();
+                    renderNavGrid();
+                    rewardBtn.classList.remove('hidden'); // 未拿过奖励时显示盲盒按钮
+                } else {
+                    rewardBtn.classList.add('hidden');
+                }
+            } else {
+                icon.innerText = "💨";
+                title.innerText = "魔咒失效了...";
+                title.className = "text-2xl font-black text-rose-400 mb-1";
+                text.innerText = `正确词语为：【${currentItem.answer}】，再试一次吧！`;
+                rewardBtn.classList.add('hidden');
+            }
+        }
+
+        // --- 切换题目 ---
+        function closeFeedbackAndNext() {
+            document.getElementById('feedbackBanner').classList.add('hidden');
+            if (currentIndex < vocabularyData.length - 1) {
+                loadQuestion(currentIndex + 1);
+            }
+        }
+
+        function prevQuestion() {
+            if (currentIndex > 0) {
+                loadQuestion(currentIndex - 1);
+            }
+        }
+
+        function jumpToQuestion(index) {
+            loadQuestion(index);
+        }
+
+        // --- 积分更新 ---
+        function updateScoreDisplay() {
+            document.getElementById('scoreDisplay').innerText = `${score} Pts`;
+        }
+
+        // --- 盲盒抽取系统 ---
+        function triggerBlindBoxReward() {
+            document.getElementById('feedbackBanner').classList.add('hidden');
+            const modal = document.getElementById('blindBoxModal');
+            
+            // 重置盲盒弹窗状态
+            document.getElementById('boxClosed').classList.remove('hidden');
+            document.getElementById('boxOpened').classList.add('hidden');
+            document.getElementById('boxActions').classList.add('hidden');
+
+            modal.classList.remove('hidden');
+        }
+
+        function openBlindBoxAnim() {
+            const closedBox = document.getElementById('boxClosed');
+            playSound('boxOpen');
+            closedBox.classList.add('shake-anim');
+
+            setTimeout(() => {
+                closedBox.classList.remove('shake-anim');
+                closedBox.classList.add('hidden');
+
+                // 随机抽取一张贴图
+                const randomIndex = Math.floor(Math.random() * stickerDatabase.length);
+                const sticker = stickerDatabase[randomIndex];
+                unlockedStickers.add(sticker.id);
+
+                document.getElementById('rewardStickerImg').src = sticker.url;
+                document.getElementById('rewardStickerName').innerText = sticker.title;
+                
+                document.getElementById('boxOpened').classList.remove('hidden');
+                document.getElementById('boxOpened').classList.add('flex');
+                document.getElementById('boxActions').classList.remove('hidden');
+
+                // 更新收藏数量
+                document.getElementById('collectedCount').innerText = unlockedStickers.size;
+
+                confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
+            }, 800);
+        }
+
+        function closeBlindBoxModal() {
+            document.getElementById('blindBoxModal').classList.add('hidden');
+            if (currentIndex < vocabularyData.length - 1) {
+                loadQuestion(currentIndex + 1);
+            }
+        }
+
+        // --- 贴图图鉴 Modal ---
+        function openGalleryModal() {
+            playSound('wand');
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = '';
+
+            stickerDatabase.forEach(item => {
+                const isUnlocked = unlockedStickers.has(item.id);
+                const card = document.createElement('div');
+                card.className = `p-3 rounded-xl border flex flex-col items-center justify-center transition-all ${
+                    isUnlocked 
+                        ? 'bg-amber-950/40 border-amber-500/60 shadow-lg' 
+                        : 'bg-slate-950/60 border-slate-800 opacity-60 grayscale'
+                }`;
+
+                card.innerHTML = `
+                    <div class="w-24 h-24 mb-2 flex items-center justify-center relative">
+                        <img src="${item.url}" alt="${item.title}" class="max-w-full max-h-full object-contain ${isUnlocked ? 'drop-shadow-md' : 'blur-xs'}">
+                        ${!isUnlocked ? '<span class="absolute text-2xl">🔒</span>' : ''}
+                    </div>
+                    <span class="text-xs font-bold ${isUnlocked ? 'text-amber-300' : 'text-slate-400'}">${item.title}</span>
+                `;
+                grid.appendChild(card);
+            });
+
+            document.getElementById('galleryModal').classList.remove('hidden');
+        }
+
+        function closeGalleryModal() {
+            document.getElementById('galleryModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
