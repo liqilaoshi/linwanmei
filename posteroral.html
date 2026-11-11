@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>四年级汉语口语演讲闯关小能手 - 健康检查</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            blue: '#4AC8F5',
+                            green: '#48BB78',
+                            yellow: '#ECC94B',
+                            pink: '#ED64A6',
+                            purple: '#9F7AEA',
+                            coral: '#FF7A59',
+                            bg: '#F0F9FF'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Fredoka', 'Noto Sans SC', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #F0F9FF;
+            font-family: 'Fredoka', 'Noto Sans SC', sans-serif;
+            user-select: none;
+        }
+        .bouncy {
+            transition: transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .bouncy:hover {
+            transform: scale(1.04);
+        }
+        .bouncy:active {
+            transform: scale(0.96);
+        }
+        @keyframes pulse-red {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.6; transform: scale(1.12); }
+        }
+        .recording-pulse {
+            animation: pulse-red 1.2s infinite ease-in-out;
+        }
+        .highlight-poster-item {
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.6);
+            border-color: #3B82F6 !important;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 pb-12">
+
+    <!-- Header Navigation -->
+    <header class="bg-white/90 backdrop-blur border-b border-sky-100 sticky top-0 z-40 shadow-sm">
+        <div class="max-w-4xl mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-2xl bg-gradient-to-tr from-sky-400 to-blue-500 text-white flex items-center justify-center text-xl shadow-md">
+                    <i class="fa-solid fa-gamepad"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-slate-800 text-base md:text-lg">健康检查口语单词闯关 App</h1>
+                    <p class="text-xs text-sky-600">小学四年级 · 独立卡片专注训练</p>
+                </div>
+            </div>
+            <div class="flex items-center gap-3">
+                <!-- Pinyin Toggle -->
+                <button id="pinyinToggleBtn" onclick="togglePinyinGlobal()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border border-amber-300 transition">
+                    <i class="fa-solid fa-language text-base"></i>
+                    <span id="pinyinToggleText">隐藏拼音</span>
+                </button>
+                <div class="flex items-center bg-emerald-50 px-3 py-1.5 rounded-xl border border-emerald-200">
+                    <i class="fa-solid fa-star text-amber-400 mr-1.5"></i>
+                    <span class="text-xs text-emerald-800 font-bold">星光: <span id="starCounter" class="text-amber-600 text-sm">0</span></span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 pt-4 space-y-6">
+        
+        <!-- Interactive Poster Quick Reference Banner -->
+        <section class="bg-white rounded-3xl p-4 shadow-sm border border-sky-100">
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="w-24 md:w-32 shrink-0 rounded-2xl overflow-hidden border-2 border-amber-300 shadow">
+                    <img src="https://i.ibb.co.com/qLwybjhj/image.png" alt="健康检查海报" class="w-full h-auto object-cover">
+                </div>
+                <div class="flex-1 w-full">
+                    <div class="flex justify-between items-center mb-2">
+                        <span class="text-xs font-bold text-slate-500"><i class="fa-solid fa-map-pin mr-1 text-sky-500"></i>海报4大核心项目联动</span>
+                        <span id="highlightNotice" class="text-xs text-sky-600 font-semibold">练到对应词汇会自动高亮！</span>
+                    </div>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center text-xs">
+                        <div id="poster-item-shili" class="poster-badge bg-sky-50 border border-sky-200 p-2 rounded-xl transition">
+                            <i class="fa-solid fa-eye text-sky-500 block text-base mb-1"></i>
+                            <span class="font-bold">检查视力</span>
+                        </div>
+                        <div id="poster-item-shengao" class="poster-badge bg-emerald-50 border border-emerald-200 p-2 rounded-xl transition">
+                            <i class="fa-solid fa-ruler-vertical text-emerald-500 block text-base mb-1"></i>
+                            <span class="font-bold">量身高</span>
+                        </div>
+                        <div id="poster-item-tizhong" class="poster-badge bg-amber-50 border border-amber-200 p-2 rounded-xl transition">
+                            <i class="fa-solid fa-weight-scale text-amber-500 block text-base mb-1"></i>
+                            <span class="font-bold">称体重</span>
+                        </div>
+                        <div id="poster-item-yufangzhen" class="poster-badge bg-rose-50 border border-rose-200 p-2 rounded-xl transition">
+                            <i class="fa-solid fa-syringe text-rose-500 block text-base mb-1"></i>
+                            <span class="font-bold">打预防针</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mode Select Tabs -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 bg-white p-1.5 rounded-2xl shadow-sm border border-slate-200">
+            <button onclick="switchMode('vocab')" id="mode-vocab" class="mode-btn py-2 px-3 rounded-xl font-bold text-xs sm:text-sm transition bg-sky-500 text-white shadow-md">
+                第一关：生词大突破
+            </button>
+            <button onclick="switchMode('phrase')" id="mode-phrase" class="mode-btn py-2 px-3 rounded-xl font-bold text-xs sm:text-sm transition text-slate-600 hover:bg-slate-100">
+                第二关：短语连连练
+            </button>
+            <button onclick="switchMode('sentence')" id="mode-sentence" class="mode-btn py-2 px-3 rounded-xl font-bold text-xs sm:text-sm transition text-slate-600 hover:bg-slate-100">
+                第三关：金句独立练
+            </button>
+            <button onclick="switchMode('full')" id="mode-full" class="mode-btn py-2 px-3 rounded-xl font-bold text-xs sm:text-sm transition text-slate-600 hover:bg-slate-100">
+                第四关：整篇大挑战
+            </button>
+        </div>
+
+        <!-- ============================================================== -->
+        <!-- SINGLE CARD FOCUS ARENA (USED FOR STAGES 1, 2, AND 3) -->
+        <!-- ============================================================== -->
+        <section id="singleCardArena" class="space-y-4">
+            
+            <!-- Progress & Navigation Header -->
+            <div class="bg-white rounded-2xl px-5 py-3 shadow-sm border border-slate-200 flex justify-between items-center">
+                <div class="flex items-center gap-3">
+                    <span id="currentCategoryBadge" class="bg-sky-100 text-sky-700 text-xs px-3 py-1 rounded-full font-bold">生词关卡</span>
+                    <span class="text-slate-400 text-sm">|</span>
+                    <span class="text-sm text-slate-600 font-bold">卡片: <span id="cardProgressText" class="text-sky-600">1 / 10</span></span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-32 sm:w-48 bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                    <div id="progressBarInner" class="bg-gradient-to-r from-sky-400 to-emerald-400 h-full w-10 transition-all duration-300"></div>
+                </div>
+            </div>
+
+            <!-- Focus Flashcard Box -->
+            <div class="bg-white rounded-3xl p-6 md:p-8 shadow-md border-2 border-sky-100 text-center relative overflow-hidden min-h-[340px] flex flex-col justify-between">
+                
+                <!-- Corner Category Tag -->
+                <div class="flex justify-between items-center text-xs text-slate-400 border-b pb-3">
+                    <span id="cardTypeTag" class="bg-slate-100 text-slate-600 px-2.5 py-1 rounded-lg font-bold">核心生词</span>
+                    <span id="actionTipTag" class="text-amber-700 font-semibold bg-amber-50 px-2.5 py-1 rounded-lg border border-amber-200 hidden">
+                        <i class="fa-solid fa-hand-pointer mr-1"></i>手指海报左上角
+                    </span>
+                </div>
+
+                <!-- Main Card Content Display -->
+                <div class="my-6 space-y-3">
+                    <!-- Pinyin -->
+                    <div id="cardPinyin" class="pinyin-text text-lg sm:text-xl text-sky-600 font-bold tracking-wide">
+                        jiǎn chá
+                    </div>
+                    <!-- Hanzi Text -->
+                    <div id="cardHanzi" class="text-3xl sm:text-5xl font-bold text-slate-800 leading-tight">
+                        检查
+                    </div>
+                    <!-- Translation -->
+                    <div id="cardEnglish" class="text-sm text-slate-400 font-medium">
+                        to examine / check
+                    </div>
+                </div>
+
+                <!-- Interactive Audio Console for Current Card -->
+                <div class="bg-slate-50 rounded-2xl p-4 border border-slate-200 space-y-4">
+                    <div class="flex flex-wrap items-center justify-center gap-3">
+                        <!-- Play Standard Demo -->
+                        <button onclick="speakCurrentCard()" class="bouncy bg-sky-500 hover:bg-sky-600 text-white font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-volume-high text-base"></i>
+                            听示范发音
+                        </button>
+
+                        <!-- Record Microphone -->
+                        <button id="cardRecBtn" onclick="toggleCardRecord()" class="bouncy bg-rose-500 hover:bg-rose-600 text-white font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-microphone text-base"></i>
+                            <span id="cardRecText">开始录音</span>
+                        </button>
+
+                        <!-- Play Recording -->
+                        <button id="cardPlayBtn" onclick="playCardAudio()" disabled class="bg-slate-200 text-slate-400 font-bold px-4 py-2.5 rounded-xl text-sm flex items-center gap-2 cursor-not-allowed">
+                            <i class="fa-solid fa-play"></i>
+                            听我的录音
+                        </button>
+                    </div>
+
+                    <!-- Self-Evaluation Rating Stars -->
+                    <div class="flex items-center justify-center gap-2 pt-2 border-t border-slate-200">
+                        <span class="text-xs text-slate-500 font-bold mr-2">给这次发音打分:</span>
+                        <button onclick="rateCurrentCard(1)" class="star-btn text-slate-300 hover:text-amber-400 text-2xl transition"><i class="fa-solid fa-star"></i></button>
+                        <button onclick="rateCurrentCard(2)" class="star-btn text-slate-300 hover:text-amber-400 text-2xl transition"><i class="fa-solid fa-star"></i></button>
+                        <button onclick="rateCurrentCard(3)" class="star-btn text-slate-300 hover:text-amber-400 text-2xl transition"><i class="fa-solid fa-star"></i></button>
+                    </div>
+                </div>
+
+                <!-- Previous / Next Card Navigation Bar -->
+                <div class="flex justify-between items-center pt-4 mt-2">
+                    <button id="prevCardBtn" onclick="prevCard()" class="bouncy bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold px-5 py-2.5 rounded-xl text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-arrow-left"></i> 上一关
+                    </button>
+                    <button id="nextCardBtn" onclick="nextCard()" class="bouncy bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-6 py-2.5 rounded-xl text-sm flex items-center gap-2 shadow-md">
+                        下一关 <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- STAGE 4: FULL SPEECH STAGE (UNCHANGED CORE SCRIPT) -->
+        <!-- ============================================================== -->
+        <section id="fullStageArena" class="space-y-6 hidden">
+            <div class="bg-white rounded-3xl p-6 shadow-sm border border-amber-200 space-y-4">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <div>
+                        <h3 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i class="fa-solid fa-trophy text-amber-500 text-2xl"></i>
+                            第四关：整篇演讲通关大挑战
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">连贯通读全文，配上手势与表情！</p>
+                    </div>
+                    <button onclick="speakFullSpeech()" class="bouncy bg-sky-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 shadow">
+                        <i class="fa-solid fa-volume-high"></i> 听全篇示范
+                    </button>
+                </div>
+
+                <!-- Full Speech Box -->
+                <div class="p-6 bg-amber-50/70 rounded-2xl border-2 border-amber-200/80 space-y-3 leading-relaxed">
+                    <div class="speech-paragraph space-y-1">
+                        <p class="pinyin-text text-xs text-amber-800">lǎo shī hǎo, tóng xué men hǎo! jīn tiān wǒ yào xiàng dà jiā jiè shào de shì xué xiào de "jiàn kāng jiǎn chá".</p>
+                        <p class="text-base font-bold text-slate-800">老师好，同学们好！今天我要向大家介绍的是学校的“健康检查”。</p>
+                    </div>
+                    <div class="speech-paragraph space-y-1">
+                        <p class="pinyin-text text-xs text-amber-800">zài wǒ men de hǎi bào shàng yǒu sì gè zhòng yào de xiàng mù: jiǎn chá shì lì, liáng shēn gāo, chēng tǐ zhòng hé dǎ yù fáng zhēn.</p>
+                        <p class="text-base text-slate-800">在我们的海报上有四个重要的项目：<span class="text-sky-600 font-bold">检查视力</span>、<span class="text-emerald-600 font-bold">量身高</span>、<span class="text-amber-600 font-bold">称体重</span>和<span class="text-rose-600 font-bold">打预防针</span>。</p>
+                    </div>
+                    <div class="speech-paragraph space-y-1">
+                        <p class="pinyin-text text-xs text-amber-800">jì de shàng yī cì tǐ jiǎn shí, wǒ xīn lǐ yǒu diǎn jǐn zhāng. bù guò, wēn róu de yī shēng ā yí duì wǒ shuō: "bù yòng pà, nǐ hěn yǒng gǎn!"</p>
+                        <p class="text-base text-slate-800">记得上一次体检时，我心里有点紧张。不过，温柔的医生阿姨对我说：“不用怕，你很勇敢！”</p>
+                    </div>
+                    <div class="speech-paragraph space-y-1">
+                        <p class="pinyin-text text-xs text-amber-800">yī shēng kuā wǒ shì lì bù cuò, hái jiàn yì wǒ zuò zī duān zhèng, duō chī shū cài, duō zuò yùn dòng.</p>
+                        <p class="text-base text-slate-800">医生夸我视力不错，还建议我坐姿端正，多吃蔬菜，多做运动。</p>
+                    </div>
+                    <div class="speech-paragraph space-y-1">
+                        <p class="pinyin-text text-xs text-amber-800">wǒ míng bái le, zhī yǒu yǒng yǒu jiàn kāng de tǐ gé, cái néng kāi kāi xīn xīn de xué xí hé wán shuǎ. xiè xie dà jiā!</p>
+                        <p class="text-base font-bold text-amber-900">我明白了，只有拥有健康的身体，才能开开心心地学习和玩耍。谢谢大家！我的演讲完毕。</p>
+                    </div>
+                </div>
+
+                <!-- Console -->
+                <div class="bg-slate-50 p-5 rounded-2xl border border-slate-200 flex flex-col items-center space-y-4">
+                    <div id="fullSpeechTimer" class="text-2xl font-bold font-mono text-slate-600 bg-white px-4 py-1 rounded-lg border">00:00</div>
+                    <div class="flex items-center gap-3">
+                        <button id="fullRecordBtn" onclick="toggleFullRecord()" class="bouncy bg-rose-500 text-white font-bold px-6 py-3 rounded-2xl flex items-center gap-2 shadow">
+                            <i class="fa-solid fa-microphone text-lg"></i>
+                            <span id="fullRecordText">全篇演讲录音</span>
+                        </button>
+                        <button id="fullPlayBtn" onclick="playFullAudio()" disabled class="bg-slate-200 text-slate-400 font-bold px-5 py-3 rounded-2xl flex items-center gap-2 cursor-not-allowed">
+                            <i class="fa-solid fa-play"></i> 听我的录音
+                        </button>
+                    </div>
+                    <button onclick="submitChallenge()" class="bouncy bg-gradient-to-r from-amber-400 to-rose-400 text-white font-bold text-base px-8 py-3 rounded-2xl shadow-lg flex items-center gap-2 mt-2">
+                        <i class="fa-solid fa-award text-xl"></i>
+                        提交全篇演讲并领奖！
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Celebration Modal -->
+    <div id="celebrationModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 text-center space-y-5 shadow-2xl border-4 border-amber-300 transform transition-all scale-95 opacity-0" id="modalCard">
+            <div class="w-20 h-20 bg-amber-100 text-amber-500 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner">
+                <i class="fa-solid fa-crown"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-slate-800">太棒了！通关成功！</h3>
+                <p class="text-slate-500 text-sm mt-1">你成功完成了《健康检查》口语单字/演讲闯关！</p>
+            </div>
+            <div class="bg-amber-50 rounded-2xl p-4 border border-amber-200 text-left space-y-2">
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-600"><i class="fa-solid fa-star text-amber-400 mr-1.5"></i>获得的集星:</span>
+                    <span id="finalStarCount" class="font-bold text-amber-700">0 颗星</span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-slate-600"><i class="fa-solid fa-medal text-purple-500 mr-1.5"></i>获得荣誉:</span>
+                    <span class="font-bold text-purple-700">“小小健康宣讲员” 🏅</span>
+                </div>
+            </div>
+            <button onclick="closeModal()" class="w-full bg-amber-400 hover:bg-amber-500 text-amber-950 font-bold py-3 rounded-2xl shadow-md transition text-base">
+                继续练习
+            </button>
+        </div>
+    </div>
+
+    <!-- GLOBAL JAVASCRIPT LOGIC -->
+    <script>
+        // -------------------------------------------------------------
+        // DISCRETE CARD DATA (SINGLE ITEMS FOR FOCUSED CHALLENGES)
+        // -------------------------------------------------------------
+        const cardDatasets = {
+            vocab: [
+                { hanzi: "视力", pinyin: "shì lì", english: "vision / eyesight", posterKey: "shili" },
+                { hanzi: "身高", pinyin: "shēn gāo", english: "height", posterKey: "shengao" },
+                { hanzi: "体重", pinyin: "tǐ zhòng", english: "body weight", posterKey: "tizhong" },
+                { hanzi: "预防针", pinyin: "yù fáng zhēn", english: "vaccine", posterKey: "yufangzhen" },
+                { hanzi: "检查", pinyin: "jiǎn chá", english: "to examine / check" },
+                { hanzi: "测量", pinyin: "cè liáng", english: "to measure" },
+                { hanzi: "称", pinyin: "chēng", english: "to weigh" },
+                { hanzi: "紧张", pinyin: "jǐn zhāng", english: "nervous" },
+                { hanzi: "勇敢", pinyin: "yǒng gǎn", english: "brave" },
+                { hanzi: "端正", pinyin: "duān zhèng", english: "upright / proper" }
+            ],
+            phrase: [
+                { hanzi: "检查视力", pinyin: "jiǎn chá shì lì", english: "check vision", posterKey: "shili" },
+                { hanzi: "量身高", pinyin: "liáng shēn gāo", english: "measure height", posterKey: "shengao" },
+                { hanzi: "称体重", pinyin: "chēng tǐ zhòng", english: "weigh body weight", posterKey: "tizhong" },
+                { hanzi: "打预防针", pinyin: "dǎ yù fáng zhēn", english: "get vaccination", posterKey: "yufangzhen" },
+                { hanzi: "温柔的医生", pinyin: "wēn róu de yī shēng", english: "gentle doctor" },
+                { hanzi: "坐姿端正", pinyin: "zuò zī duān zhèng", english: "upright posture" },
+                { hanzi: "保护眼睛", pinyin: "bǎo hù yǎn jing", english: "protect eyes" },
+                { hanzi: "健康的身体", pinyin: "jiàn kāng de shēn tǐ", english: "healthy body" }
+            ],
+            sentence: [
+                {
+                    hanzi: "老师好，同学们好！今天我要向大家介绍的是学校的“健康检查”。",
+                    pinyin: "lǎo shī hǎo, tóng xué men hǎo! jīn tiān wǒ yào xiàng dà jiā jiè shào de shì xué xiào de \"jiàn kāng jiǎn chá\".",
+                    english: "Greeting & Topic Introduction",
+                    action: "表情微笑，大声问好"
+                },
+                {
+                    hanzi: "在我们的海报上有四个重要的项目：检查视力、量身高、称体重和打预防针。",
+                    pinyin: "zài wǒ men de hǎi bào shàng yǒu sì gè zhòng yào de xiàng mù: jiǎn chá shì lì, liáng shēn gāo, chēng tǐ zhòng hé dǎ yù fáng zhēn.",
+                    english: "4 Items Overview",
+                    action: "用手指依次指着海报4个图画"
+                },
+                {
+                    hanzi: "记得上一次体检时，我心里有点紧张。",
+                    pinyin: "jì de shàng yī cì tǐ jiǎn shí, wǒ xīn lǐ yǒu diǎn jǐn zhāng.",
+                    english: "Sharing Personal Feeling",
+                    action: "眼神带有稍微紧张的小表情"
+                },
+                {
+                    hanzi: "温柔的医生阿姨对我说：“不用怕，你很勇敢！”",
+                    pinyin: "wēn róu de yī shēng ā yí duì wǒ shuō: \"bù yòng pà, nǐ hěn yǒng gǎn!\"",
+                    english: "Doctor Encouragement",
+                    action: "模仿医生阿姨亲切温柔的声音"
+                },
+                {
+                    hanzi: "医生夸我视力不错，还建议我坐姿端正，多吃蔬菜，多做运动。",
+                    pinyin: "yī shēng kuā wǒ shì lì bù cuò, hái jiàn yì wǒ zuò zī duān zhèng, duō chī shū cài, duō zuò yùn dòng.",
+                    english: "Doctor Advice",
+                    action: "挺直腰板，配合手势强调"
+                },
+                {
+                    hanzi: "我明白了，只有拥有健康的身体，才能开开心心地学习和玩耍。谢谢大家！",
+                    pinyin: "wǒ míng bái le, zhī yǒu yǒng yǒu jiàn kāng de tǐ gé, cái néng kāi kāi xīn xīn de xué xí hé wán shuǎ. xiè xie dà jiā!",
+                    english: "Conclusion & Thanking",
+                    action: "自信结语，完毕后微笑鞠躬"
+                }
+            ]
+        };
+
+        // -------------------------------------------------------------
+        // APP STATE
+        // -------------------------------------------------------------
+        let currentMode = 'vocab'; // 'vocab', 'phrase', 'sentence', 'full'
+        let currentIndex = 0;
+        let totalStars = 0;
+        let pinyinVisible = true;
+
+        // Card audio state
+        let cardMediaRecorder = null;
+        let cardAudioChunks = [];
+        let cardAudioUrl = null;
+        let isCardRecording = false;
+
+        // Full speech state
+        let isRecordingFull = false;
+        let fullMediaRecorder = null;
+        let fullAudioChunks = [];
+        let fullAudioUrl = null;
+        let fullTimerInterval = null;
+        let fullSeconds = 0;
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderCard();
+        });
+
+        // -------------------------------------------------------------
+        // MODE SWITCHING & NAVIGATION
+        // -------------------------------------------------------------
+        function switchMode(mode) {
+            currentMode = mode;
+            currentIndex = 0;
+
+            // Highlight tab button
+            document.querySelectorAll('.mode-btn').forEach(btn => {
+                btn.classList.remove('bg-sky-500', 'text-white', 'shadow-md');
+                btn.classList.add('text-slate-600', 'hover:bg-slate-100');
+            });
+            const activeBtn = document.getElementById(`mode-${mode}`);
+            activeBtn.classList.add('bg-sky-500', 'text-white', 'shadow-md');
+
+            if (mode === 'full') {
+                document.getElementById('singleCardArena').classList.add('hidden');
+                document.getElementById('fullStageArena').classList.remove('hidden');
+                clearPosterHighlights();
+            } else {
+                document.getElementById('singleCardArena').classList.remove('hidden');
+                document.getElementById('fullStageArena').classList.add('hidden');
+                renderCard();
+            }
+        }
+
+        function renderCard() {
+            const list = cardDatasets[currentMode];
+            const item = list[currentIndex];
+
+            // Reset recording player state
+            cardAudioUrl = null;
+            const playBtn = document.getElementById('cardPlayBtn');
+            playBtn.disabled = true;
+            playBtn.classList.add('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+            playBtn.classList.remove('bg-emerald-500', 'hover:bg-emerald-600', 'text-white', 'bouncy');
+
+            // Reset star ratings visual
+            resetCardStars();
+
+            // Render Header Progress
+            const catMap = { vocab: '第一关：生词大突破', phrase: '第二关：短语连连练', sentence: '第三关：金句独立练' };
+            document.getElementById('currentCategoryBadge').innerText = catMap[currentMode];
+            document.getElementById('cardProgressText').innerText = `${currentIndex + 1} / ${list.length}`;
+            
+            const pct = ((currentIndex + 1) / list.length) * 100;
+            document.getElementById('progressBarInner').style.width = `${pct}%`;
+
+            // Render Main Card Contents
+            document.getElementById('cardPinyin').innerText = item.pinyin;
+            document.getElementById('cardHanzi').innerText = item.hanzi;
+            document.getElementById('cardEnglish').innerText = item.english || '';
+
+            // Tag & Action Tip
+            const typeMap = { vocab: '核心生词卡', phrase: '实战短语卡', sentence: '演讲单句卡' };
+            document.getElementById('cardTypeTag').innerText = typeMap[currentMode];
+
+            const actionTip = document.getElementById('actionTipTag');
+            if (item.action) {
+                actionTip.classList.remove('hidden');
+                actionTip.innerHTML = `<i class="fa-solid fa-hand-pointer mr-1"></i>演讲动作：${item.action}`;
+            } else {
+                actionTip.classList.add('hidden');
+            }
+
+            // Navigation Button Disabled/Enabled state
+            document.getElementById('prevCardBtn').disabled = (currentIndex === 0);
+            document.getElementById('prevCardBtn').style.opacity = (currentIndex === 0) ? '0.5' : '1';
+
+            // Poster item highlight sync
+            clearPosterHighlights();
+            if (item.posterKey) {
+                const target = document.getElementById(`poster-item-${item.posterKey}`);
+                if (target) target.classList.add('highlight-poster-item');
+            }
+        }
+
+        function prevCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                renderCard();
+            }
+        }
+
+        function nextCard() {
+            const list = cardDatasets[currentMode];
+            if (currentIndex < list.length - 1) {
+                currentIndex++;
+                renderCard();
+            } else {
+                // Trigger celebratory toast when completing current deck
+                if (typeof confetti === 'function') {
+                    confetti({ particleCount: 50, spread: 60, origin: { y: 0.7 } });
+                }
+                alert(`🎉 恭喜完成【${document.getElementById('currentCategoryBadge').innerText}】！接下来进入下一阶段吧！`);
+            }
+        }
+
+        function clearPosterHighlights() {
+            document.querySelectorAll('.poster-badge').forEach(el => el.classList.remove('highlight-poster-item'));
+        }
+
+        // -------------------------------------------------------------
+        // AUDIO SYNTHESIS & SINGLE CARD RECORDING
+        // -------------------------------------------------------------
+        function speakCurrentCard() {
+            const item = cardDatasets[currentMode][currentIndex];
+            const textToSpeak = item.hanzi.replace(/"/g, '');
+            speakText(textToSpeak);
+        }
+
+        function speakText(text) {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.85;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        async function toggleCardRecord() {
+            const btn = document.getElementById('cardRecBtn');
+            const btnText = document.getElementById('cardRecText');
+            const playBtn = document.getElementById('cardPlayBtn');
+
+            if (!isCardRecording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    cardMediaRecorder = new MediaRecorder(stream);
+                    cardAudioChunks = [];
+
+                    cardMediaRecorder.ondataavailable = e => cardAudioChunks.push(e.data);
+                    cardMediaRecorder.onstop = () => {
+                        const blob = new Blob(cardAudioChunks, { type: 'audio/webm' });
+                        cardAudioUrl = URL.createObjectURL(blob);
+
+                        playBtn.disabled = false;
+                        playBtn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                        playBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'text-white', 'bouncy');
+                        
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    cardMediaRecorder.start();
+                    isCardRecording = true;
+
+                    btn.classList.remove('bg-rose-500', 'hover:bg-rose-600');
+                    btn.classList.add('bg-slate-800', 'recording-pulse');
+                    btnText.innerText = "停止录音";
+
+                } catch (err) {
+                    alert("请允许使用麦克风进行发音练习！");
+                }
+            } else {
+                cardMediaRecorder.stop();
+                isCardRecording = false;
+
+                btn.classList.remove('bg-slate-800', 'recording-pulse');
+                btn.classList.add('bg-rose-500', 'hover:bg-rose-600');
+                btnText.innerText = "重新录音";
+            }
+        }
+
+        function playCardAudio() {
+            if (cardAudioUrl) {
+                const audio = new Audio(cardAudioUrl);
+                audio.play();
+            }
+        }
+
+        // -------------------------------------------------------------
+        // RATING & STRENGTH REWARDS
+        // -------------------------------------------------------------
+        function rateCurrentCard(starsCount) {
+            const btns = document.querySelectorAll('.star-btn i');
+            btns.forEach((star, idx) => {
+                if (idx < starsCount) {
+                    star.classList.remove('text-slate-300');
+                    star.classList.add('text-amber-400');
+                } else {
+                    star.classList.remove('text-amber-400');
+                    star.classList.add('text-slate-300');
+                }
+            });
+
+            totalStars += starsCount;
+            document.getElementById('starCounter').innerText = totalStars;
+
+            if (starsCount === 3 && typeof confetti === 'function') {
+                confetti({ particleCount: 30, spread: 50, origin: { y: 0.8 } });
+            }
+        }
+
+        function resetCardStars() {
+            document.querySelectorAll('.star-btn i').forEach(star => {
+                star.classList.remove('text-amber-400');
+                star.classList.add('text-slate-300');
+            });
+        }
+
+        // -------------------------------------------------------------
+        // STAGE 4 FULL SPEECH FUNCTIONS
+        // -------------------------------------------------------------
+        function speakFullSpeech() {
+            const text = "老师好，同学们好！今天我要向大家介绍的是学校的健康检查。在我们的海报上有四个重要的项目：检查视力、量身高、称体重和打预防针。记得上一次体检时，我心里有点紧张。不过，温柔的医生阿姨对我说：不用怕，你很勇敢！医生夸我视力不错，还建议我坐姿端正，多吃蔬菜，多做运动。我明白了，只有拥有健康的身体，才能开开心心地学习和玩耍。谢谢大家！我的演讲完毕。";
+            speakText(text);
+        }
+
+        async function toggleFullRecord() {
+            const btn = document.getElementById('fullRecordBtn');
+            const btnText = document.getElementById('fullRecordText');
+            const playBtn = document.getElementById('fullPlayBtn');
+
+            if (!isRecordingFull) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    fullMediaRecorder = new MediaRecorder(stream);
+                    fullAudioChunks = [];
+
+                    fullMediaRecorder.ondataavailable = e => fullAudioChunks.push(e.data);
+                    fullMediaRecorder.onstop = () => {
+                        const blob = new Blob(fullAudioChunks, { type: 'audio/webm' });
+                        fullAudioUrl = URL.createObjectURL(blob);
+                        
+                        playBtn.disabled = false;
+                        playBtn.classList.remove('bg-slate-200', 'text-slate-400', 'cursor-not-allowed');
+                        playBtn.classList.add('bg-emerald-500', 'hover:bg-emerald-600', 'text-white', 'bouncy');
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    fullMediaRecorder.start();
+                    isRecordingFull = true;
+
+                    btn.classList.remove('bg-rose-500');
+                    btn.classList.add('bg-slate-800', 'recording-pulse');
+                    btnText.innerText = "停止录音";
+
+                    fullSeconds = 0;
+                    fullTimerInterval = setInterval(() => {
+                        fullSeconds++;
+                        const mins = Math.floor(fullSeconds / 60).toString().padStart(2, '0');
+                        const secs = (fullSeconds % 60).toString().padStart(2, '0');
+                        document.getElementById('fullSpeechTimer').innerText = `${mins}:${secs}`;
+                    }, 1000);
+
+                } catch (err) {
+                    alert("请允许使用麦克风进行录音！");
+                }
+            } else {
+                fullMediaRecorder.stop();
+                isRecordingFull = false;
+                clearInterval(fullTimerInterval);
+
+                btn.classList.remove('bg-slate-800', 'recording-pulse');
+                btn.classList.add('bg-rose-500');
+                btnText.innerText = "重新录音";
+            }
+        }
+
+        function playFullAudio() {
+            if (fullAudioUrl) {
+                const audio = new Audio(fullAudioUrl);
+                audio.play();
+            }
+        }
+
+        function togglePinyinGlobal() {
+            pinyinVisible = !pinyinVisible;
+            document.querySelectorAll('.pinyin-text').forEach(el => {
+                el.style.display = pinyinVisible ? 'block' : 'none';
+            });
+            document.getElementById('pinyinToggleText').innerText = pinyinVisible ? "隐藏拼音" : "显示拼音";
+        }
+
+        function submitChallenge() {
+            if (typeof confetti === 'function') {
+                confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
+            }
+            document.getElementById('finalStarCount').innerText = `${totalStars} 颗星 ⭐`;
+            const modal = document.getElementById('celebrationModal');
+            const modalCard = document.getElementById('modalCard');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalCard.classList.remove('scale-95', 'opacity-0');
+                modalCard.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            document.getElementById('celebrationModal').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
