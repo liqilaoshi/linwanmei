@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html lang="zh-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新加坡小学四年级华文 Topical Test 完整互动试卷（满分60分）</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-dark: #1d4ed8;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+    --warning: #d97706;
+    --warning-bg: #fef3c7;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 70px;
+  }
+
+  /* 顶部固定状态栏 */
+  .sticky-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: #1e293b;
+    color: #fff;
+    padding: 10px 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bar-title {
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge-timer {
+    background: #334155;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #38bdf8;
+    border: 1px solid #475569;
+  }
+
+  .badge-score {
+    background: #0f172a;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #4ade80;
+    border: 1px solid #22c55e;
+  }
+
+  .btn {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .btn-toggle {
+    background: #475569;
+    color: #f1f5f9;
+  }
+  .btn-toggle.active {
+    background: #f59e0b;
+    color: #1e293b;
+  }
+
+  .btn-dict {
+    background: var(--purple);
+    color: #fff;
+  }
+  .btn-dict:hover { background: #6d28d9; }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+    font-size: 1.02rem;
+    padding: 11px 24px;
+  }
+  .btn-success:hover { background: #15803d; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid #94a3b8;
+    color: #e2e8f0;
+  }
+  .btn-outline:hover { background: #334155; }
+
+  /* 万能小词典侧边抽屉 */
+  .dict-drawer {
+    position: fixed;
+    top: 58px;
+    right: -400px;
+    width: 380px;
+    max-width: 92vw;
+    height: calc(100vh - 58px);
+    background: #ffffff;
+    box-shadow: -6px 0 24px rgba(0,0,0,0.18);
+    z-index: 190;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid var(--purple);
+  }
+
+  .dict-drawer.open {
+    right: 0;
+  }
+
+  .dict-header {
+    background: var(--purple);
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .dict-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .dict-search-box {
+    padding: 12px 14px;
+    background: #f5f3ff;
+    border-bottom: 1px solid #ddd6fe;
+  }
+
+  .dict-search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid #a78bfa;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+
+  .dict-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .dict-tag {
+    font-size: 0.78rem;
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 1px solid #c4b5fd;
+  }
+  .dict-tag:hover { background: #ddd6fe; }
+
+  .dict-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+  }
+
+  .dict-entry {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    background: #fafafa;
+  }
+
+  .dict-word-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .dict-word {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .dict-py {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--purple);
+  }
+
+  .dict-lesson-badge {
+    font-size: 0.72rem;
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .dict-en {
+    font-size: 0.88rem;
+    color: #475569;
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+
+  .dict-ex {
+    font-size: 0.88rem;
+    color: #0f172a;
+    background: #f1f5f9;
+    padding: 5px 8px;
+    border-radius: 6px;
+  }
+
+  /* 主容器 */
+  .container {
+    max-width: 920px;
+    margin: 22px auto;
+    padding: 0 16px;
+  }
+
+  /* 试卷头部 */
+  .exam-header {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .exam-header h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.45rem;
+    color: #0f172a;
+    text-align: center;
+  }
+
+  .exam-subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+
+  .student-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    background: #f1f5f9;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .student-info label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .student-info input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+
+  /* 辅助提示框（拼音与英译） */
+  .help-box {
+    display: none;
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 8px 12px;
+    margin-top: 8px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: #78350f;
+  }
+
+  body.show-help .help-box {
+    display: block;
+    animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .help-py {
+    font-weight: 600;
+    color: #b45309;
+    display: block;
+  }
+  .help-en {
+    color: #475569;
+    font-style: italic;
+  }
+
+  /* 大题区块 */
+  .section-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 22px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .section-desc {
+    color: #475569;
+    font-size: 0.94rem;
+    margin-bottom: 14px;
+  }
+
+  .example-box {
+    background: #f8fafc;
+    border: 1px dashed #94a3b8;
+    padding: 9px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 0.94rem;
+    color: #334155;
+  }
+
+  /* 单题样式 */
+  .question-item {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #f1f5f9;
+    margin-bottom: 14px;
+    background: #fcfcfd;
+    transition: border-color 0.2s;
+  }
+
+  .question-item.correct {
+    border-color: var(--success);
+    background: #f0fdf4;
+  }
+
+  .question-item.incorrect {
+    border-color: var(--danger);
+    background: #fef2f2;
+  }
+
+  .q-text {
+    font-size: 1.04rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  /* 选择题按钮组 */
+  .options-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .option-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+    font-size: 0.98rem;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .option-label:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .option-label input[type="radio"] {
+    accent-color: var(--primary);
+    transform: scale(1.15);
+  }
+
+  /* 看词选图卡片组 */
+  .pic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .pic-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.15s;
+  }
+
+  .pic-card:hover {
+    border-color: var(--primary);
+    background: #eff6ff;
+  }
+
+  .pic-card svg {
+    width: 90px;
+    height: 90px;
+    margin: 6px 0;
+  }
+
+  .pic-card-label {
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* 文本输入框 */
+  .text-input {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background: #f8fafc;
+    padding: 4px 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    text-align: center;
+    width: 76px;
+    border-radius: 4px 4px 0 0;
+  }
+  .text-input:focus {
+    outline: none;
+    background: var(--primary-light);
+  }
+
+  .sentence-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-top: 6px;
+  }
+  .sentence-input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  /* 词库方框 */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    background: #eff6ff;
+    border: 1.5px solid #93c5fd;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+
+  /* 选字组词十字格 */
+  .cross-grid-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+
+  .cross-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cross-table {
+    border-collapse: collapse;
+  }
+  .cross-table td {
+    width: 48px;
+    height: 48px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .cross-table td.cell-box {
+    border: 2px solid #334155;
+    background: #fff;
+  }
+  .cross-table td.cell-input input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-dark);
+    background: #fef9c3;
+  }
+
+  /* 词语搭配网格 */
+  .collocation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  /* 短文框 */
+  .passage-box {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: 1.04rem;
+    line-height: 1.95;
+  }
+
+  .inline-select {
+    padding: 4px 8px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    border: 1.5px solid var(--primary);
+    border-radius: 6px;
+    background: #eff6ff;
+    color: var(--primary-dark);
+    cursor: pointer;
+  }
+
+  /* 批改反馈信息 */
+  .feedback {
+    margin-top: 8px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { color: var(--success); }
+  .feedback.err { color: var(--danger); }
+
+  /* 底部提交与成绩单 */
+  .submit-area {
+    text-align: center;
+    margin-top: 30px;
+    padding: 24px;
+    background: var(--card);
+    border-radius: 14px;
+    border: 2px solid var(--primary-light);
+  }
+
+  .result-banner {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #eff6ff;
+    border: 2px solid var(--primary);
+    text-align: left;
+  }
+
+  .result-banner h3 {
+    margin-top: 0;
+    color: var(--primary-dark);
+  }
+
+  /* 计分明细表 */
+  .score-breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.88rem;
+    background: #fff;
+  }
+  .score-breakdown th, .score-breakdown td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  .score-breakdown th {
+    background: #dbeafe;
+    color: #1e3a8a;
+  }
+
+  @media (max-width: 640px) {
+    .pic-grid { grid-template-columns: 1fr; }
+    .options-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部状态与控制栏 -->
+<div class="sticky-bar">
+  <div class="bar-title">🇸🇬 小学四年级华文 Topical Test（13大题 · 满分60分）</div>
+  <div class="bar-controls">
+    <div class="badge-timer" id="timerDisplay">⏱ 00:00</div>
+    <button class="btn btn-outline" id="pauseBtn" onclick="toggleTimer()">暂停</button>
+    <button class="btn btn-toggle" id="helpToggleBtn" onclick="toggleHelp()">💡 拼音与英译提示：关</button>
+    <button class="btn btn-dict" onclick="toggleDict()">📖 万能小词典</button>
+    <div class="badge-score" id="scoreDisplay">得分：-- / 60</div>
+  </div>
+</div>
+
+<!-- 万能小词典侧边栏 -->
+<div class="dict-drawer" id="dictDrawer">
+  <div class="dict-header">
+    <h3>📖 本课万能小词典 (第5课 & 第6课)</h3>
+    <button class="btn btn-outline" style="padding:3px 9px;" onclick="toggleDict()">✕</button>
+  </div>
+  <div class="dict-search-box">
+    <input type="text" id="dictSearchInput" placeholder="输入汉字、拼音或英文搜索..." oninput="filterDict()">
+    <div class="dict-tags">
+      <span class="dict-tag" onclick="quickFilter('')">全部词汇</span>
+      <span class="dict-tag" onclick="quickFilter('第5课')">第5课《我不怕打针》</span>
+      <span class="dict-tag" onclick="quickFilter('第6课')">第6课《我应该参加什么活动呢》</span>
+    </div>
+  </div>
+  <div class="dict-list" id="dictList"></div>
+</div>
+
+<div class="container">
+  <!-- 试卷标题栏 -->
+  <div class="exam-header">
+    <h1>Primary 4 Chinese — Topical Test (复习测验)</h1>
+    <div class="exam-subtitle">范围：《欢乐伙伴》4A 第五课《我不怕打针》 & 第六课《我应该参加什么活动呢》｜ 总分：60 分</div>
+    <div class="student-info">
+      <label>姓名 Name: <input type="text" id="studentName" placeholder="输入学生姓名"></label>
+      <label>班级 Class: <input type="text" id="studentClass" value="P4"></label>
+      <label>建议用时: <span style="color:#2563eb;">40 分钟</span></label>
+    </div>
+  </div>
+
+  <!-- 一、辨字测验 (3题 × 2分 = 6分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>一、辨字测验（3题，共6分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">从各题所提供的答案中，选出最恰当的一个。</div>
+    <div class="example-box">例：妈妈（A. 跑 &nbsp; <strong>B. 抱</strong> &nbsp; C. 泡）着妹妹出去了。 → 答案：<strong>B</strong></div>
+
+    <div class="question-item" id="q1">
+      <div class="q-text">1. 打针前，我的（A. 心跳 &nbsp; B. 心挑 &nbsp; C. 必跳）得非常快，手心都冒汗了。</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q1" value="A"> A. 心跳</label>
+        <label class="option-label"><input type="radio" name="q1" value="B"> B. 心挑</label>
+        <label class="option-label"><input type="radio" name="q1" value="C"> C. 必跳</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Dǎ zhēn qián, wǒ de xīntiào de fēicháng kuài, shǒuxīn dōu mào hàn le.</span>
+        <span class="help-en">Before the injection, my heartbeat was very fast, and my palms were sweating. (“心跳” = heartbeat)</span>
+      </div>
+      <div class="feedback" id="fb-q1"></div>
+    </div>
+
+    <div class="question-item" id="q2">
+      <div class="q-text">2. 护士阿姨（A. 温顺 &nbsp; B. 温柔 &nbsp; C. 温暖）地对我说：“别害怕，深呼吸，很快就好了。”</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q2" value="A"> A. 温顺</label>
+        <label class="option-label"><input type="radio" name="q2" value="B"> B. 温柔</label>
+        <label class="option-label"><input type="radio" name="q2" value="C"> C. 温暖</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Hùshi āyí wēnróu de duì wǒ shuō: “Bié hàipà, shēn hūxī, hěn kuài jiù hǎo le.”</span>
+        <span class="help-en">The nurse said gently to me: "Don't be afraid, take a deep breath, it will be over soon." (“温柔” = gentle/soft)</span>
+      </div>
+      <div class="feedback" id="fb-q2"></div>
+    </div>
+
+    <div class="question-item" id="q3">
+      <div class="q-text">3. 学校有很多课外活动，我还在（A. 犹豫 &nbsp; B. 忧郁 &nbsp; C. 优秀）要参加哪一项。</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q3" value="A"> A. 犹豫</label>
+        <label class="option-label"><input type="radio" name="q3" value="B"> B. 忧郁</label>
+        <label class="option-label"><input type="radio" name="q3" value="C"> C. 优秀</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Xuéxiào yǒu hěn duō kèwài huódòng, wǒ hái zài yóuyù yào cānjiā nǎ yí xiàng.</span>
+        <span class="help-en">The school has many extracurricular activities, and I am still hesitating about which one to join. (“犹豫” = hesitate)</span>
+      </div>
+      <div class="feedback" id="fb-q3"></div>
+    </div>
+  </div>
+
+  <!-- 二、看汉字选拼音 (3题 × 1分 = 3分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>二、看汉字选拼音（3题，共3分）</span>
+      <span>每题 1 分</span>
+    </div>
+    <div class="section-desc">根据所写的汉字，选出相应的汉语拼音。</div>
+    <div class="example-box">例：你好 → <strong>B. nǐ hǎo</strong></div>
+
+    <div class="question-item" id="q4">
+      <div class="q-text">4. 勇敢</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q4" value="A"> A. yǒng gǎn</label>
+        <label class="option-label"><input type="radio" name="q4" value="B"> B. yóng gǎn</label>
+        <label class="option-label"><input type="radio" name="q4" value="C"> C. yǒng gàn</label>
+      </div>
+      <div class="help-box"><span class="help-en">Meaning: brave / courageous</span></div>
+      <div class="feedback" id="fb-q4"></div>
+    </div>
+
+    <div class="question-item" id="q5">
+      <div class="q-text">5. 参加</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q5" value="A"> A. chān jiā</label>
+        <label class="option-label"><input type="radio" name="q5" value="B"> B. cān jiā</label>
+        <label class="option-label"><input type="radio" name="q5" value="C"> C. cān jià</label>
+      </div>
+      <div class="help-box"><span class="help-en">Meaning: to participate / to join</span></div>
+      <div class="feedback" id="fb-q5"></div>
+    </div>
+
+    <div class="question-item" id="q6">
+      <div class="q-text">6. 兴趣</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q6" value="A"> A. xīng qù</label>
+        <label class="option-label"><input type="radio" name="q6" value="B"> B. xìn qù</label>
+        <label class="option-label"><input type="radio" name="q6" value="C"> C. xìng qù</label>
+      </div>
+      <div class="help-box"><span class="help-en">Meaning: interest / hobby</span></div>
+      <div class="feedback" id="fb-q6"></div>
+    </div>
+  </div>
+
+  <!-- 三、填写汉字 (2题 × 2分 = 4分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>三、填写汉字（2题，共4分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">根据括号中的拼音，把句子中所缺的汉字填写在输入框里。</div>
+    <div class="example-box">例：我非常 <u><strong>喜</strong></u> (xǐ) 欢吃苹果。</div>
+
+    <div class="question-item" id="q7">
+      <div class="q-text">7. 看到好朋友在发抖，我走过去安 <input type="text" class="text-input" id="ans-q7" maxlength="1"> (wèi) 他：“别怕，我陪着你。”</div>
+      <div class="help-box">
+        <span class="help-py">Kàndào hǎo péngyou zài fādǒu, wǒ zǒu guòqù ānwèi tā: “Bié pà, wǒ péizhe nǐ.”</span>
+        <span class="help-en">Seeing my good friend trembling, I walked over to comfort him. (安慰)</span>
+      </div>
+      <div class="feedback" id="fb-q7"></div>
+    </div>
+
+    <div class="question-item" id="q8">
+      <div class="q-text">8. 爸爸建议我根 <input type="text" class="text-input" id="ans-q8" maxlength="1"> (jù) 自己的特长来选择课程辅助活动。</div>
+      <div class="help-box">
+        <span class="help-py">Bàba jiànyì wǒ gēnjù zìjǐ de tècháng lái xuǎnzé kèchéng fǔzhù huódòng.</span>
+        <span class="help-en">Dad suggested that I choose my CCA based on my own strengths. (根据)</span>
+      </div>
+      <div class="feedback" id="fb-q8"></div>
+    </div>
+  </div>
+
+  <!-- 四、看词选图 (2题 × 2分 = 4分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>四、看词选图（2题，共4分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">根据给出的词语，选出正确的图片。</div>
+
+    <!-- 第9题：打针 -->
+    <div class="question-item" id="q9">
+      <div class="q-text">9. 打针</div>
+      <div class="pic-grid">
+        <label class="pic-card">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#1e293b" stroke-width="3">
+            <path d="M30 20 C30 50, 70 50, 70 20" stroke-linecap="round"/>
+            <circle cx="30" cy="18" r="4" fill="#1e293b"/>
+            <circle cx="70" cy="18" r="4" fill="#1e293b"/>
+            <path d="M50 43 L50 75 C50 85, 75 85, 75 72"/>
+            <circle cx="75" cy="68" r="8" fill="#dbeafe"/>
+          </svg>
+          <span class="pic-card-label"><input type="radio" name="q9" value="A"> A</span>
+        </label>
+        <label class="pic-card">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#1e293b" stroke-width="3">
+            <rect x="35" y="30" width="30" height="42" rx="3" fill="#eff6ff" transform="rotate(45 50 50)"/>
+            <line x1="65" y1="35" x2="85" y2="15" stroke-width="2.5"/>
+            <line x1="20" y1="80" x2="35" y2="65" stroke-width="4"/>
+            <line x1="14" y1="74" x2="26" y2="86" stroke-width="4"/>
+            <line x1="45" y1="45" x2="52" y2="52"/>
+            <line x1="50" y1="40" x2="57" y2="47"/>
+          </svg>
+          <span class="pic-card-label"><input type="radio" name="q9" value="B"> B</span>
+        </label>
+        <label class="pic-card">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#1e293b" stroke-width="3">
+            <rect x="28" y="35" width="44" height="48" rx="6" fill="#fef3c7"/>
+            <rect x="34" y="22" width="32" height="13" rx="2" fill="#94a3b8"/>
+            <line x1="50" y1="48" x2="50" y2="68" stroke="#dc2626" stroke-width="4"/>
+            <line x1="40" y1="58" x2="60" y2="58" stroke="#dc2626" stroke-width="4"/>
+          </svg>
+          <span class="pic-card-label"><input type="radio" name="q9" value="C"> C</span>
+        </label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">dǎ zhēn</span>
+        <span class="help-en">to get an injection / vaccination</span>
+      </div>
+      <div class="feedback" id="fb-q9"></div>
+    </div>
+
+    <!-- 第10题：拉小提琴 -->
+    <div class="question-item" id="q10">
+      <div class="q-text">10. 拉小提琴</div>
+      <div class="pic-grid">
+        <label class="pic-card">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#1e293b" stroke-width="3">
+            <ellipse cx="42" cy="36" rx="18" ry="23" transform="rotate(-35 42 36)" fill="#e0f2fe"/>
+            <line x1="55" y1="53" x2="78" y2="82" stroke-width="4"/>
+            <circle cx="75" cy="30" r="6" fill="#fef08a"/>
+          </svg>
+          <span class="pic-card-label"><input type="radio" name="q10" value="A"> A</span>
+        </label>
+        <label class="pic-card">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#1e293b" stroke-width="3">
+            <ellipse cx="48" cy="52" rx="28" ry="20" fill="#fef3c7"/>
+            <circle cx="36" cy="46" r="4" fill="#ef4444"/>
+            <circle cx="50" cy="42" r="4" fill="#3b82f6"/>
+            <circle cx="62" cy="50" r="4" fill="#22c55e"/>
+            <line x1="25" y1="78" x2="75" y2="25" stroke="#92400e" stroke-width="3.5"/>
+          </svg>
+          <span class="pic-card-label"><input type="radio" name="q10" value="B"> B</span>
+        </label>
+        <label class="pic-card">
+          <svg viewBox="0 0 100 100" fill="none" stroke="#1e293b" stroke-width="3">
+            <path d="M42 35 C30 35, 30 50, 38 54 C28 60, 28 80, 48 80 C68 80, 68 60, 58 54 C66 50, 66 35, 54 35 Z" fill="#fed7aa"/>
+            <rect x="45" y="14" width="6" height="22" fill="#78350f"/>
+            <line x1="18" y1="62" x2="84" y2="42" stroke="#1e293b" stroke-width="2.5"/>
+          </svg>
+          <span class="pic-card-label"><input type="radio" name="q10" value="C"> C</span>
+        </label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">lā xiǎotíqín</span>
+        <span class="help-en">to play the violin</span>
+      </div>
+      <div class="feedback" id="fb-q10"></div>
+    </div>
+  </div>
+
+  <!-- 五、选字组词 (2题 × 1.5分 = 3分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>五、选字组词（2题，共3分）</span>
+      <span>每题 1.5 分</span>
+    </div>
+    <div class="section-desc">从方框中选出适当的汉字，填在黄色的格子里，使横向和纵向都能组成正确的词语。</div>
+    <div class="word-bank">
+      <span>针</span>
+      <span>选</span>
+      <span>紧</span>
+      <span>练</span>
+    </div>
+
+    <div class="cross-grid-wrap">
+      <div class="cross-item question-item" id="q11" style="min-width:220px;">
+        <div style="font-weight:bold; margin-bottom:6px;">11.</div>
+        <table class="cross-table">
+          <tr><td></td><td class="cell-box">抓</td></tr>
+          <tr><td class="cell-box">要</td><td class="cell-box cell-input"><input type="text" id="ans-q11" maxlength="1"></td></tr>
+        </table>
+        <div class="help-box" style="width:100%;">
+          <span class="help-py">zhuā jǐn / yàojǐn</span>
+          <span class="help-en">grasp tightly / important</span>
+        </div>
+        <div class="feedback" id="fb-q11"></div>
+      </div>
+
+      <div class="cross-item question-item" id="q12" style="min-width:220px;">
+        <div style="font-weight:bold; margin-bottom:6px;">12.</div>
+        <table class="cross-table">
+          <tr><td></td><td class="cell-box">挑</td></tr>
+          <tr><td class="cell-box">入</td><td class="cell-box cell-input"><input type="text" id="ans-q12" maxlength="1"></td></tr>
+        </table>
+        <div class="help-box" style="width:100%;">
+          <span class="help-py">tiāoxuǎn / rùxuǎn</span>
+          <span class="help-en">pick and choose / be selected</span>
+        </div>
+        <div class="feedback" id="fb-q12"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 六、词语选择 (2题 × 2分 = 4分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>六、词语选择（2题，共4分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">选出最适当的一个词语。</div>
+
+    <div class="question-item" id="q13">
+      <div class="q-text">13. 护士拔出针头后，我松了一口气，这才发现打针其实并（ &nbsp;&nbsp;&nbsp;&nbsp; ）想象中那么疼。</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q13" value="A"> A. 没有</label>
+        <label class="option-label"><input type="radio" name="q13" value="B"> B. 不是</label>
+        <label class="option-label"><input type="radio" name="q13" value="C"> C. 不要</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Hùshi báchū zhēntóu hòu, wǒ sōng le yì kǒu qì, zhè cái fāxiàn dǎzhēn qíshí bìng méiyǒu xiǎngxiàng zhōng nàme téng.</span>
+        <span class="help-en">After the nurse pulled out the needle, I breathed a sigh of relief and realized that getting an injection wasn't as painful as I had imagined.</span>
+      </div>
+      <div class="feedback" id="fb-q13"></div>
+    </div>
+
+    <div class="question-item" id="q14">
+      <div class="q-text">14. 无论参加哪一种活动，只要（ &nbsp;&nbsp;&nbsp;&nbsp; ）努力练习，就一定会有进步。</div>
+      <div class="options-row">
+        <label class="option-label"><input type="radio" name="q14" value="A"> A. 坚持</label>
+        <label class="option-label"><input type="radio" name="q14" value="B"> B. 支持</label>
+        <label class="option-label"><input type="radio" name="q14" value="C"> C. 保持</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Wúlùn cānjiā nǎ yì zhǒng huódòng, zhǐyào jiānchí nǔlì liànxí, jiù yídìng huì yǒu jìnbù.</span>
+        <span class="help-en">No matter which activity you join, as long as you persevere and practice hard, you will definitely improve.</span>
+      </div>
+      <div class="feedback" id="fb-q14"></div>
+    </div>
+  </div>
+
+  <!-- 七、词语搭配 (3题 × 2分 = 6分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>七、词语搭配（3题，共6分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">从方框所提供的词语中，选出可以和各题词语搭配成合理词组的选项。</div>
+    <div class="word-bank">
+      <span>A. 勇气</span>
+      <span>B. 想法</span>
+      <span>C. 预防针</span>
+      <span>D. 双眼</span>
+    </div>
+    <div class="example-box">例：紧闭 <u><strong>&nbsp; D (双眼) &nbsp;</strong></u></div>
+
+    <div class="collocation-grid">
+      <div class="question-item" id="q15">
+        <div class="q-text">15. 打
+          <select class="inline-select" id="ans-q15">
+            <option value="">-- 选择 --</option>
+            <option value="A">A. 勇气</option>
+            <option value="B">B. 想法</option>
+            <option value="C">C. 预防针</option>
+          </select>
+        </div>
+        <div class="help-box"><span class="help-py">dǎ yùfángzhēn</span><span class="help-en">get a vaccination</span></div>
+        <div class="feedback" id="fb-q15"></div>
+      </div>
+
+      <div class="question-item" id="q16">
+        <div class="q-text">16. 鼓起
+          <select class="inline-select" id="ans-q16">
+            <option value="">-- 选择 --</option>
+            <option value="A">A. 勇气</option>
+            <option value="B">B. 想法</option>
+            <option value="C">C. 预防针</option>
+          </select>
+        </div>
+        <div class="help-box"><span class="help-py">gǔqǐ yǒngqì</span><span class="help-en">pluck up courage</span></div>
+        <div class="feedback" id="fb-q16"></div>
+      </div>
+
+      <div class="question-item" id="q17">
+        <div class="q-text">17. 改变
+          <select class="inline-select" id="ans-q17">
+            <option value="">-- 选择 --</option>
+            <option value="A">A. 勇气</option>
+            <option value="B">B. 想法</option>
+            <option value="C">C. 预防针</option>
+          </select>
+        </div>
+        <div class="help-box"><span class="help-py">gǎibiàn xiǎngfǎ</span><span class="help-en">change one's mind/idea</span></div>
+        <div class="feedback" id="fb-q17"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 八、短文填空 (3题 × 2分 = 6分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>八、短文填空（3题，共6分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">根据短文的意思，选择最适当的词语完成短文。</div>
+
+    <div class="word-bank" style="font-size:0.98rem;">
+      <span>A. 终于</span>
+      <span>B. 紧闭双眼</span>
+      <span>C. 紧张</span>
+      <span>D. 伸出</span>
+    </div>
+
+    <div class="passage-box question-item" id="q-cloze-box">
+      今天是学校体检的日子，同学们排队等着打预防针。轮到小伟时，他感到非常
+      <select class="inline-select" id="ans-q18">
+        <option value="">-- (18) --</option>
+        <option value="A">A. 终于</option>
+        <option value="B">B. 紧闭双眼</option>
+        <option value="C">C. 紧张</option>
+        <option value="D">D. 伸出</option>
+      </select>
+      ，双腿不停地发抖。他坐在椅子上，不敢看针筒，只是
+      <select class="inline-select" id="ans-q19">
+        <option value="">-- (19) --</option>
+        <option value="A">A. 终于</option>
+        <option value="B">B. 紧闭双眼</option>
+        <option value="C">C. 紧张</option>
+        <option value="D">D. 伸出</option>
+      </select>
+      。在老师的鼓励下，小伟深吸了一口气，鼓起勇气
+      <select class="inline-select" id="ans-q20">
+        <option value="">-- (20) --</option>
+        <option value="A">A. 终于</option>
+        <option value="B">B. 紧闭双眼</option>
+        <option value="C">C. 紧张</option>
+        <option value="D">D. 伸出</option>
+      </select>
+      了手臂。打完针后，小伟笑着说：“一点儿也不疼！”
+    </div>
+
+    <div class="help-box">
+      <span class="help-py">Lúndào Xiǎowěi shí, tā gǎndào fēicháng jǐnzhāng (18), shuāngtuǐ bùtíng de fādǒu. Tā zuò zài yǐzi shàng, bù gǎn kàn zhēntǒng, zhǐshì jǐnbì shuāngyǎn (19). Zài lǎoshī de gǔlì xià, Xiǎowěi shēnxī le yì kǒu qì, gǔqǐ yǒngqì shēnchū (20) le shǒubì.</span>
+      <span class="help-en">When it was Xiaowei's turn, he felt very nervous (18)... He dared not look at the syringe and just closed his eyes tightly (19)... He plucked up courage and stretched out (20) his arm.</span>
+    </div>
+    <div class="feedback" id="fb-q18"></div>
+    <div class="feedback" id="fb-q19"></div>
+    <div class="feedback" id="fb-q20"></div>
+  </div>
+
+  <!-- 九、语序判断 (2题 × 2分 = 4分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>九、语序判断（2题，共4分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">请选出语序最正确、通顺的句子。</div>
+
+    <div class="question-item" id="q21">
+      <div class="q-text">21. 选出正确的句子：</div>
+      <div class="options-row" style="flex-direction:column;">
+        <label class="option-label"><input type="radio" name="q21" value="A"> A. 我决定经过考虑后参加学校的华族舞蹈团。</label>
+        <label class="option-label"><input type="radio" name="q21" value="B"> B. 经过考虑后，我决定参加学校的华族舞蹈团。</label>
+        <label class="option-label"><input type="radio" name="q21" value="C"> C. 经过考虑后，学校的华族舞蹈团我决定参加。</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Jīngguò kǎolǜ hòu, wǒ juédìng cānjiā xuéxiào de Huázú wǔdǎotuán.</span>
+        <span class="help-en">After careful consideration, I decided to join the school's Chinese Dance troupe.</span>
+      </div>
+      <div class="feedback" id="fb-q21"></div>
+    </div>
+
+    <div class="question-item" id="q22">
+      <div class="q-text">22. 选出正确的句子：</div>
+      <div class="options-row" style="flex-direction:column;">
+        <label class="option-label"><input type="radio" name="q22" value="A"> A. 同学们都称赞他是一个勇敢的好孩子。</label>
+        <label class="option-label"><input type="radio" name="q22" value="B"> B. 同学们称赞他都一个勇敢的好孩子是。</label>
+        <label class="option-label"><input type="radio" name="q22" value="C"> C. 一个勇敢的好孩子同学们都称赞他是。</label>
+      </div>
+      <div class="help-box">
+        <span class="help-py">Tóngxuémen dōu chēngzàn tā shì yí gè yǒnggǎn de hǎo háizi.</span>
+        <span class="help-en">Classmates all praised him for being a brave good child.</span>
+      </div>
+      <div class="feedback" id="fb-q22"></div>
+    </div>
+  </div>
+
+  <!-- 十、完成句子 (2题 × 2分 = 4分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>十、完成句子（2题，共4分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">根据所给的半个句子，将句子补充完整。</div>
+    <div class="example-box">例：<u><strong>这本书很有趣</strong></u> ，我们都喜欢读。</div>
+
+    <div class="question-item" id="q23">
+      <div class="q-text">23. 虽然打针有一点儿疼，但是 <input type="text" class="sentence-input" id="ans-q23" placeholder="请补充后半句（提示：我没有哭 / 我一点儿也不害怕 / 它能保护身体）"></div>
+      <div class="help-box">
+        <span class="help-py">Suīrán dǎzhēn yǒu yìdiǎnr téng, dànshì ...</span>
+        <span class="help-en">Although getting an injection hurts a little, ... (Example: 但是我没有哭。 / 但是它能保护我们的身体。)</span>
+      </div>
+      <div class="feedback" id="fb-q23"></div>
+    </div>
+
+    <div class="question-item" id="q24">
+      <div class="q-text">24. 我既喜欢画画，又 <input type="text" class="sentence-input" id="ans-q24" placeholder="请补充后半句（提示：喜欢唱歌 / 喜欢打羽毛球）"></div>
+      <div class="help-box">
+        <span class="help-py">Wǒ jì xǐhuan huàhuà, yòu ...</span>
+        <span class="help-en">I like both drawing and ... (Example: 又喜欢唱歌。)</span>
+      </div>
+      <div class="feedback" id="fb-q24"></div>
+    </div>
+  </div>
+
+  <!-- 十一、造句 (2题 × 2.5分 = 5分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>十一、造句（2题，共6分）</span>
+      <span>每题 3 分</span>
+    </div>
+    <div class="section-desc">根据所提供的词语造句，并加上合适的标点符号。</div>
+    <div class="example-box">例：警察：<u><strong>警察抓住了那个坏人。</strong></u></div>
+
+    <div class="question-item" id="q25">
+      <div class="q-text">25. <strong>讨论</strong>：
+        <input type="text" class="sentence-input" id="ans-q25" placeholder="例如：下课时，我和好朋友一起讨论参加什么课外活动。">
+      </div>
+      <div class="help-box">
+        <span class="help-py">tǎolùn (to discuss)</span>
+        <span class="help-en">Make a complete sentence using "讨论" and end with a punctuation mark.</span>
+      </div>
+      <div class="feedback" id="fb-q25"></div>
+    </div>
+
+    <div class="question-item" id="q26">
+      <div class="q-text">26. <strong>安慰</strong>：
+        <input type="text" class="sentence-input" id="ans-q26" placeholder="例如：弟弟摔倒哭了，姐姐走过去温柔地安慰他。">
+      </div>
+      <div class="help-box">
+        <span class="help-py">ānwèi (to comfort / console)</span>
+        <span class="help-en">Make a complete sentence using "安慰" and end with a punctuation mark.</span>
+      </div>
+      <div class="feedback" id="fb-q26"></div>
+    </div>
+  </div>
+
+  <!-- 十二、理解测验 (3题 × 2分 = 6分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>十二、理解测验（3题，共6分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">根据短文内容，选出最适合的答案。</div>
+
+    <div class="passage-box">
+      &nbsp;&nbsp;&nbsp;&nbsp;新学年开始了，四年级学生要选择课程辅助活动（CCA）。美玲看着宣传单上的活动列表，心里十分犹豫。她喜欢唱歌，所以想参加合唱团；可是好朋友丽丽却想拉她一起参加羽毛球队。<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;回家后，美玲把这件事告诉了妈妈。妈妈笑着说：“选择活动不能只跟着朋友走，最重要的是看你自己的兴趣和特长。如果你不喜欢打球，以后练习时就会觉得很辛苦，很难坚持下去。”<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;听了妈妈的话，美玲明白了。第二天，她向丽丽说明了自己的想法，愉快地报名参加了合唱团。
+    </div>
+
+    <div class="help-box" style="margin-bottom:14px;">
+      <span class="help-en">Summary: Meiling hesitated between Choir (her interest) and Badminton (her friend Lili's choice). Mom advised her to follow her own interest and strengths so she can persevere. Meiling explained to Lili and happily joined the Choir.</span>
+    </div>
+
+    <div class="question-item" id="q27">
+      <div class="q-text">27. 为什么美玲一开始十分犹豫？</div>
+      <div class="options-row" style="flex-direction:column;">
+        <label class="option-label"><input type="radio" name="q27" value="A"> A. 因为她什么活动都不喜欢。</label>
+        <label class="option-label"><input type="radio" name="q27" value="B"> B. 因为她喜欢唱歌，但好朋友想拉她参加羽毛球队。</label>
+        <label class="option-label"><input type="radio" name="q27" value="C"> C. 因为妈妈不让她参加课外活动。</label>
+      </div>
+      <div class="feedback" id="fb-q27"></div>
+    </div>
+
+    <div class="question-item" id="q28">
+      <div class="q-text">28. 妈妈认为选择课程辅助活动最重要的是什么？</div>
+      <div class="options-row" style="flex-direction:column;">
+        <label class="option-label"><input type="radio" name="q28" value="A"> A. 跟着好朋友一起参加。</label>
+        <label class="option-label"><input type="radio" name="q28" value="B"> B. 选择练习时间最短的活动。</label>
+        <label class="option-label"><input type="radio" name="q28" value="C"> C. 看自己的兴趣和特长。</label>
+      </div>
+      <div class="feedback" id="fb-q28"></div>
+    </div>
+
+    <div class="question-item" id="q29">
+      <div class="q-text">29. 下面哪一句话是<strong>对</strong>的？</div>
+      <div class="options-row" style="flex-direction:column;">
+        <label class="option-label"><input type="radio" name="q29" value="A"> A. 美玲为了陪好朋友，最后参加了羽毛球队。</label>
+        <label class="option-label"><input type="radio" name="q29" value="B"> B. 丽丽因为美玲不参加羽毛球队而生气了。</label>
+        <label class="option-label"><input type="radio" name="q29" value="C"> C. 美玲向丽丽说明想法后，报名参加了合唱团。</label>
+      </div>
+      <div class="feedback" id="fb-q29"></div>
+    </div>
+  </div>
+
+  <!-- 十三、理解问答 (2题 × 2分 = 4分) -->
+  <div class="section-card">
+    <div class="section-title">
+      <span>十三、理解问答（2题，共4分）</span>
+      <span>每题 2 分</span>
+    </div>
+    <div class="section-desc">根据短文的内容和上下文的意思，回答问题。</div>
+
+    <div class="passage-box">
+      &nbsp;&nbsp;&nbsp;&nbsp;星期五早上，学校安排四年级同学打预防针。排队时，小华紧张得手心冒汗，一直想往后退。排在前面的好朋友志明转过身，拍拍小华的肩膀说：“别怕，就像被蚂蚁轻轻咬一下，深呼吸，闭上眼睛很快就好了！”<br>
+      &nbsp;&nbsp;&nbsp;&nbsp;轮到小华时，他照着志明的方法做了。果然，护士阿姨还没数到三，针就打完了。小华开心地笑了起来，再也不怕打针了。
+    </div>
+
+    <div class="help-box" style="margin-bottom:14px;">
+      <span class="help-en">Summary: On Friday morning, P4 students lined up for vaccinations. Xiaohua was so nervous his palms sweated. His friend Zhiming comforted him: "It's just like a tiny ant bite; take a deep breath and close your eyes." Xiaohua tried it, finished before the nurse counted to three, and wasn't afraid anymore.</span>
+    </div>
+
+    <div class="question-item" id="q30">
+      <div class="q-text">30. 排队打预防针时，小华有什么表现？
+        <input type="text" class="sentence-input" id="ans-q30" placeholder="请用完整句子回答（提示：小华紧张得……）">
+      </div>
+      <div class="help-box"><span class="help-en">Hint: Look at Paragraph 1: 小华紧张得手心冒汗，一直想往后退。</span></div>
+      <div class="feedback" id="fb-q30"></div>
+    </div>
+
+    <div class="question-item" id="q31">
+      <div class="q-text">31. 志明教了小华什么方法来克服打针的恐惧？
+        <input type="text" class="sentence-input" id="ans-q31" placeholder="请用完整句子回答（提示：志明叫小华……）">
+      </div>
+      <div class="help-box"><span class="help-en">Hint: Look at Zhiming's advice: 深呼吸，闭上眼睛。</span></div>
+      <div class="feedback" id="fb-q31"></div>
+    </div>
+  </div>
+
+  <!-- 底部交卷按钮与成绩单 -->
+  <div class="submit-area">
+    <button class="btn btn-success" onclick="gradeExam()">✅ 提交试卷并自动批改</button>
+    <button class="btn btn-primary" style="margin-left:10px;" onclick="resetExam()">🔄 重新练习</button>
+
+    <div class="result-banner" id="resultBanner">
+      <h3>📊 测验结果分析报告（满分 60 分）</h3>
+      <p id="resultSummary"></p>
+      <p id="resultAdvice" style="color:#334155; font-size:0.95rem;"></p>
+      <div id="breakdownContainer"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ================= 万能小词典数据 =================
+  const dictionaryData = [
+    { word: "打针", py: "dǎ zhēn", lesson: "第5课", en: "to get an injection", ex: "今天学校体检，同学们排队打针。" },
+    { word: "预防针", py: "yù fáng zhēn", lesson: "第5课", en: "vaccination / immunization shot", ex: "打预防针可以保护我们的身体。" },
+    { word: "紧张", py: "jǐn zhāng", lesson: "第5课", en: "nervous / tense", ex: "上台演讲前，我感到非常紧张。" },
+    { word: "心跳", py: "xīn tiào", lesson: "第5课", en: "heartbeat", ex: "听到要打针，我的心跳得很快。" },
+    { word: "发抖", py: "fā dǒu", lesson: "第5课", en: "to shiver / tremble", ex: "他害怕得双腿不停地发抖。" },
+    { word: "深呼吸", py: "shēn hū xī", lesson: "第5课", en: "take a deep breath", ex: "护士阿姨叫我先做个深呼吸。" },
+    { word: "温柔", py: "wēn róu", lesson: "第5课", en: "gentle / soft", ex: "妈妈温柔地摸了摸我的头。" },
+    { word: "安慰", py: "ān wèi", lesson: "第5课", en: "to comfort / console", ex: "好朋友走过来安慰紧张的我。" },
+    { word: "鼓起勇气", py: "gǔ qǐ yǒng qì", lesson: "第5课", en: "pluck up courage", ex: "我鼓起勇气，伸出了手臂。" },
+    { word: "紧闭双眼", py: "jǐn bì shuāng yǎn", lesson: "第5课", en: "close one's eyes tightly", ex: "他不敢看针头，只是紧闭双眼。" },
+    { word: "勇敢", py: "yǒng gǎn", lesson: "第5课", en: "brave / courageous", ex: "大家称赞他是个勇敢的好孩子。" },
+    { word: "松了一口气", py: "sōng le yì kǒu qì", lesson: "第5课", en: "breathe a sigh of relief", ex: "打完针后，我终于松了一口气。" },
+    { word: "参加", py: "cān jiā", lesson: "第6课", en: "to participate / join", ex: "我想参加学校的华族舞蹈团。" },
+    { word: "活动", py: "huó dòng", lesson: "第6课", en: "activity", ex: "学校的课程辅助活动丰富多彩。" },
+    { word: "犹豫", py: "yóu yù", lesson: "第6课", en: "to hesitate / indecisive", ex: "面对这么多选择，我心里十分犹豫。" },
+    { word: "兴趣", py: "xìng qù", lesson: "第6课", en: "interest / hobby", ex: "选择活动要看自己的兴趣。" },
+    { word: "特长", py: "tè cháng", lesson: "第6课", en: "special skill / strength", ex: "画画和唱歌都是她的特长。" },
+    { word: "根据", py: "gēn jù", lesson: "第6课", en: "according to / based on", ex: "我们要根据自己的时间来安排。" },
+    { word: "讨论", py: "tǎo lùn", lesson: "第6课", en: "to discuss", ex: "同学们正在热烈地讨论这件事。" },
+    { word: "考虑", py: "kǎo lǜ", lesson: "第6课", en: "to consider / think over", ex: "经过认真考虑，我做出了决定。" },
+    { word: "坚持", py: "jiān chí", lesson: "第6课", en: "to persevere / persist", ex: "只要坚持练习，就一定会有进步。" },
+    { word: "决定", py: "jué dìng", lesson: "第6课", en: "to decide / decision", ex: "我决定报名参加合唱团。" },
+    { word: "适合", py: "shì hé", lesson: "第6课", en: "suitable / to suit", ex: "这项运动非常适合喜欢跑步的同学。" }
+  ];
+
+  function renderDict(list) {
+    const container = document.getElementById('dictList');
+    if (list.length === 0) {
+      container.innerHTML = '<div style="text-align:center; color:#64748b; padding:20px;">未找到匹配的词语，请尝试其他关键词。</div>';
+      return;
+    }
+    container.innerHTML = list.map(item => `
+      <div class="dict-entry">
+        <div class="dict-word-row">
+          <div>
+            <span class="dict-word">${item.word}</span>
+            <span class="dict-py" style="margin-left:8px;">${item.py}</span>
+          </div>
+          <span class="dict-lesson-badge">${item.lesson}</span>
+        </div>
+        <div class="dict-en">${item.en}</div>
+        <div class="dict-ex"><strong>例句：</strong>${item.ex}</div>
+      </div>
+    `).join('');
+  }
+
+  function filterDict() {
+    const q = document.getElementById('dictSearchInput').value.trim().toLowerCase();
+    const filtered = dictionaryData.filter(d =>
+      d.word.includes(q) ||
+      d.py.toLowerCase().includes(q) ||
+      d.en.toLowerCase().includes(q) ||
+      d.lesson.includes(q)
+    );
+    renderDict(filtered);
+  }
+
+  function quickFilter(tag) {
+    document.getElementById('dictSearchInput').value = tag;
+    filterDict();
+  }
+
+  function toggleDict() {
+    document.getElementById('dictDrawer').classList.toggle('open');
+  }
+
+  renderDict(dictionaryData);
+
+  // ================= 计时器逻辑 =================
+  let secondsElapsed = 0;
+  let timerPaused = false;
+  setInterval(() => {
+    if (!timerPaused) {
+      secondsElapsed++;
+      updateTimerDisplay();
+    }
+  }, 1000);
+
+  function updateTimerDisplay() {
+    const mins = String(Math.floor(secondsElapsed / 60)).padStart(2, '0');
+    const secs = String(secondsElapsed % 60).padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `⏱ ${mins}:${secs}`;
+  }
+
+  function toggleTimer() {
+    timerPaused = !timerPaused;
+    document.getElementById('pauseBtn').textContent = timerPaused ? '继续' : '暂停';
+  }
+
+  // ================= 拼音与英译切换 =================
+  let helpVisible = false;
+  function toggleHelp() {
+    helpVisible = !helpVisible;
+    document.body.classList.toggle('show-help', helpVisible);
+    const btn = document.getElementById('helpToggleBtn');
+    btn.classList.toggle('active', helpVisible);
+    btn.textContent = helpVisible ? '💡 拼音与英译提示：开' : '💡 拼音与英译提示：关';
+  }
+
+  // ================= 精确配分库（13大题，合计严格等于 60 分） =================
+  // 一、辨字测验：3题 × 2分 = 6分
+  // 二、看汉字选拼音：3题 × 1分 = 3分
+  // 三、填写汉字：2题 × 2分 = 4分
+  // 四、看词选图：2题 × 2分 = 4分
+  // 五、选字组词：2题 × 1.5分 = 3分
+  // 六、词语选择：2题 × 2分 = 4分
+  // 七、词语搭配：3题 × 2分 = 6分
+  // 八、短文填空：3题 × 2分 = 6分
+  // 九、语序判断：2题 × 2分 = 4分
+  // 十、完成句子：2题 × 2分 = 4分
+  // 十一、造句：2题 × 2.5分 = 5分
+  // 十二、理解测验：3题 × 2分 = 6分
+  // 十三、理解问答：2题 × 2分 = 4分
+  // ------------------------------------------------
+  // 合计：6 + 3 + 4 + 4 + 3 + 4 + 6 + 6 + 4 + 4 + 5 + 6 + 4 = 59? Wait!
+  // Let's verify:
+  // 6 + 3 = 9
+  // + 4 = 13
+  // + 4 = 17
+  // + 3 = 20
+  // + 4 = 24
+  // + 6 = 30
+  // + 6 = 36
+  // + 4 = 40
+  // + 4 = 44
+  // + 5 = 49
+  // + 6 = 55
+  // + 5 = 60 -> Let's make 十一、造句 2题 × 3分 = 6分！
+  // Then: 6 + 3 + 4 + 4 + 3 + 4 + 6 + 6 + 4 + 4 + 6 + 6 + 4 = 60 分！Exact 60!
+
+  const answerKey = {
+    q1: { ans: 'A', pts: 2, exp: '正确答案：A. 心跳' },
+    q2: { ans: 'B', pts: 2, exp: '正确答案：B. 温柔' },
+    q3: { ans: 'A', pts: 2, exp: '正确答案：A. 犹豫' },
+    q4: { ans: 'A', pts: 1, exp: '正确答案：A. yǒng gǎn' },
+    q5: { ans: 'B', pts: 1, exp: '正确答案：B. cān jiā' },
+    q6: { ans: 'C', pts: 1, exp: '正确答案：C. xìng qù' },
+    q7: { ans: '慰', pts: 2, exp: '正确答案：慰（安慰 ānwèi）' },
+    q8: { ans: '据', pts: 2, exp: '正确答案：据（根据 gēnjù）' },
+    q9: { ans: 'B', pts: 2, exp: '正确答案：B（注射器表示“打针”）' },
+    q10: { ans: 'C', pts: 2, exp: '正确答案：C（小提琴与琴弓）' },
+    q11: { ans: '紧', pts: 1.5, exp: '正确答案：紧（抓紧、要紧）' },
+    q12: { ans: '选', pts: 1.5, exp: '正确答案：选（挑选、入选）' },
+    q13: { ans: 'A', pts: 2, exp: '正确答案：A. 没有（并没有……那么……）' },
+    q14: { ans: 'A', pts: 2, exp: '正确答案：A. 坚持（坚持努力练习）' },
+    q15: { ans: 'C', pts: 2, exp: '正确答案：C. 预防针（打预防针）' },
+    q16: { ans: 'A', pts: 2, exp: '正确答案：A. 勇气（鼓起勇气）' },
+    q17: { ans: 'B', pts: 2, exp: '正确答案：B. 想法（改变想法）' },
+    q18: { ans: 'C', pts: 2, exp: '第18题正确答案：C. 紧张' },
+    q19: { ans: 'B', pts: 2, exp: '第19题正确答案：B. 紧闭双眼' },
+    q20: { ans: 'D', pts: 2, exp: '第20题正确答案：D. 伸出' },
+    q21: { ans: 'B', pts: 2, exp: '正确答案：B' },
+    q22: { ans: 'A', pts: 2, exp: '正确答案：A' },
+    q27: { ans: 'B', pts: 2, exp: '正确答案：B' },
+    q28: { ans: 'C', pts: 2, exp: '正确答案：C' },
+    q29: { ans: 'C', pts: 2, exp: '正确答案：C' }
+  };
+
+  function showFeedback(id, isCorrect, msg) {
+    const fb = document.getElementById('fb-' + id);
+    const card = document.getElementById(id);
+    if (fb) {
+      fb.textContent = (isCorrect ? '✔ 回答正确！ ' : '✘ ') + msg;
+      fb.className = 'feedback show ' + (isCorrect ? 'ok' : 'err');
+    }
+    if (card) {
+      card.classList.remove('correct', 'incorrect');
+      card.classList.add(isCorrect ? 'correct' : 'incorrect');
+    }
+  }
+
+  function gradeExam() {
+    timerPaused = true;
+    document.getElementById('pauseBtn').textContent = '继续';
+
+    let secScores = {
+      s1: 0, s2: 0, s3: 0, s4: 0, s5: 0, s6: 0, s7: 0,
+      s8: 0, s9: 0, s10: 0, s11: 0, s12: 0, s13: 0
+    };
+
+    // 1. 单选框题目
+    const radioMap = {
+      q1:'s1', q2:'s1', q3:'s1',
+      q4:'s2', q5:'s2', q6:'s2',
+      q9:'s4', q10:'s4',
+      q13:'s6', q14:'s6',
+      q21:'s9', q22:'s9',
+      q27:'s12', q28:'s12', q29:'s12'
+    };
+    Object.keys(radioMap).forEach(q => {
+      const selected = document.querySelector(`input[name="${q}"]:checked`);
+      const val = selected ? selected.value : '';
+      const info = answerKey[q];
+      if (val === info.ans) {
+        secScores[radioMap[q]] += info.pts;
+        showFeedback(q, true, `(+${info.pts}分)`);
+      } else {
+        showFeedback(q, false, `${info.exp} (0分)`);
+      }
+    });
+
+    // 2. 填字与十字格
+    const textMap = { q7:'s3', q8:'s3', q11:'s5', q12:'s5' };
+    Object.keys(textMap).forEach(q => {
+      const val = document.getElementById('ans-' + q).value.trim();
+      const info = answerKey[q];
+      if (val === info.ans) {
+        secScores[textMap[q]] += info.pts;
+        showFeedback(q, true, `(+${info.pts}分)`);
+      } else {
+        showFeedback(q, false, `${info.exp} (0分)`);
+      }
+    });
+
+    // 3. 词语搭配下拉框 (s7)
+    ['q15','q16','q17'].forEach(q => {
+      const val = document.getElementById('ans-' + q).value;
+      const info = answerKey[q];
+      if (val === info.ans) {
+        secScores.s7 += info.pts;
+        showFeedback(q, true, `(+${info.pts}分)`);
+      } else {
+        showFeedback(q, false, `${info.exp} (0分)`);
+      }
+    });
+
+    // 4. 短文填空 (s8)
+    let clozeCorrect = 0;
+    ['q18','q19','q20'].forEach(q => {
+      const val = document.getElementById('ans-' + q).value;
+      const info = answerKey[q];
+      if (val === info.ans) {
+        secScores.s8 += info.pts;
+        clozeCorrect++;
+        showFeedback(q, true, `${info.exp} (+${info.pts}分)`);
+      } else {
+        showFeedback(q, false, `${info.exp} (0分)`);
+      }
+    });
+    const clozeBox = document.getElementById('q-cloze-box');
+    clozeBox.classList.remove('correct', 'incorrect');
+    clozeBox.classList.add(clozeCorrect === 3 ? 'correct' : 'incorrect');
+
+    // 5. 第十大题：完成句子 (q23, q24 各2分，共4分)
+    // 修复第23题判断逻辑：“我没有哭”、“我一点儿也不怕”、“它能保护身体”等均属于合理转折，给满分！
+    const v23 = document.getElementById('ans-q23').value.trim();
+    const valid23Keywords = ['没有哭', '没哭', '不哭', '不怕', '不害怕', '保护', '忍住', '坚持', '勇敢', '没事', '很快', '不疼', '值得', '健康', '身体'];
+    const is23Good = v23.length >= 3 && valid23Keywords.some(kw => v23.includes(kw));
+    if (is23Good) {
+      secScores.s10 += 2;
+      showFeedback('q23', true, '句意连贯，转折关系准确！（+2分）参考例句：但是我没有哭。 / 但是它能保护我们的身体。');
+    } else if (v23.length >= 2) {
+      secScores.s10 += 1;
+      showFeedback('q23', false, '已作答，注意“虽然……但是……”前后意思要形成转折。（+1分）参考例句：但是我没有哭。');
+    } else {
+      showFeedback('q23', false, '未作答。参考例句：但是我没有哭。 (0分)');
+    }
+
+    // 第24题：我既喜欢画画，又……
+    const v24 = document.getElementById('ans-q24').value.trim();
+    if (v24.length >= 3 && (v24.includes('喜欢') || v24.includes('爱') || v24.includes('想') || v24.includes('会'))) {
+      secScores.s10 += 2;
+      showFeedback('q24', true, '句式工整，并列关系准确！（+2分）参考例句：又喜欢唱歌。');
+    } else if (v24.length >= 2) {
+      secScores.s10 += 1;
+      showFeedback('q24', false, '建议用“又喜欢……”保持前后结构对称。（+1分）');
+    } else {
+      showFeedback('q24', false, '未作答。参考例句：又喜欢打羽毛球。 (0分)');
+    }
+
+    // 6. 第十一大题：造句 (q25, q26 各3分，共6分)
+    const v25 = document.getElementById('ans-q25').value.trim();
+    const punct25 = /[。！？]$/.test(v25);
+    if (v25.includes('讨论') && v25.length >= 7 && punct25) {
+      secScores.s11 += 3;
+      showFeedback('q25', true, '用词准确且标点完整！（+3分）参考：我和同学们一起讨论参加什么活动。');
+    } else if (v25.includes('讨论') && v25.length >= 6) {
+      secScores.s11 += 2;
+      showFeedback('q25', false, '句子通顺，别忘了在句末加上标点符号（。！？）哦！（+2分）');
+    } else {
+      showFeedback('q25', false, '句子需包含“讨论”并表达完整意思。参考：大家一起讨论这个问题。 (0分)');
+    }
+
+    const v26 = document.getElementById('ans-q26').value.trim();
+    const punct26 = /[。！？]$/.test(v26);
+    if (v26.includes('安慰') && v26.length >= 7 && punct26) {
+      secScores.s11 += 3;
+      showFeedback('q26', true, '用词准确且标点完整！（+3分）参考：好朋友走过去温柔地安慰他。');
+    } else if (v26.includes('安慰') && v26.length >= 6) {
+      secScores.s11 += 2;
+      showFeedback('q26', false, '句子通顺，别忘了在句末加上标点符号（。！？）哦！（+2分）');
+    } else {
+      showFeedback('q26', false, '句子需包含“安慰”并表达完整意思。参考：妈妈温柔地安慰我。 (0分)');
+    }
+
+    // 7. 第十三大题：理解问答 (q30, q31 各2分，共4分)
+    const v30 = document.getElementById('ans-q30').value.trim();
+    if ((v30.includes('冒汗') || v30.includes('紧张')) && (v30.includes('后退') || v30.includes('退'))) {
+      secScores.s13 += 2;
+      showFeedback('q30', true, '回答非常完整准确！（+2分）标准答案：小华紧张得手心冒汗，一直想往后退。');
+    } else if (v30.includes('冒汗') || v30.includes('后退') || v30.includes('紧张')) {
+      secScores.s13 += 1;
+      showFeedback('q30', false, '答对了一半！完整答案：小华紧张得手心冒汗，一直想往后退。（+1分）');
+    } else {
+      showFeedback('q30', false, '请看第一段：小华紧张得手心冒汗，一直想往后退。 (0分)');
+    }
+
+    const v31 = document.getElementById('ans-q31').value.trim();
+    if (v31.includes('深呼吸') && v31.includes('闭上眼睛')) {
+      secScores.s13 += 2;
+      showFeedback('q31', true, '回答完整准确！（+2分）标准答案：志明叫小华深呼吸，闭上眼睛。');
+    } else if (v31.includes('深呼吸') || v31.includes('闭上眼睛')) {
+      secScores.s13 += 1;
+      showFeedback('q31', false, '答对了一半！完整方法是：深呼吸，闭上眼睛。（+1分）');
+    } else {
+      showFeedback('q31', false, '请看第一段志明说的话：深呼吸，闭上眼睛很快就好了！ (0分)');
+    }
+
+    // 计算总分（严格汇总各大题得分，满分 60 分）
+    const totalScore = Object.values(secScores).reduce((a, b) => a + b, 0);
+    const maxScore = 60;
+    const pct = Math.round((totalScore / maxScore) * 100);
+
+    document.getElementById('scoreDisplay').textContent = `得分：${totalScore} / ${maxScore}`;
+
+    // 显示报告与各大题明细
+    const name = document.getElementById('studentName').value.trim() || '同学';
+    const mins = Math.floor(secondsElapsed / 60);
+    const secs = secondsElapsed % 60;
+
+    const banner = document.getElementById('resultBanner');
+    banner.style.display = 'block';
+    document.getElementById('resultSummary').innerHTML = 
+      `<strong>${name}</strong> 的最终得分：<strong>${totalScore} / ${maxScore} 分</strong>（折合百分制：<strong>${pct}%</strong>） ｜ 用时：<strong>${mins} 分 ${secs} 秒</strong>`;
+
+    let advice = '';
+    if (pct >= 85) {
+      advice = '🌟 非常优秀！你对第五课和第六课的生字词、搭配和句式掌握得很扎实！';
+    } else if (pct >= 65) {
+      advice = '👍 表现不错！建议打开右上角的【📖 万能小词典】和【💡 拼音与英译提示】，重点订正失分题目。';
+    } else {
+      advice = '💪 继续加油！做题时可以随时打开右上角的【📖 万能小词典】查生词，再点击“重新练习”挑战一次！';
+    }
+    document.getElementById('resultAdvice').textContent = advice;
+
+    // 渲染各大题得分对照表
+    document.getElementById('breakdownContainer').innerHTML = `
+      <table class="score-breakdown">
+        <tr><th>大题项目</th><th>得分 / 满分</th><th>大题项目</th><th>得分 / 满分</th></tr>
+        <tr><td>一、辨字测验</td><td>${secScores.s1} / 6</td><td>八、短文填空</td><td>${secScores.s8} / 6</td></tr>
+        <tr><td>二、看汉字选拼音</td><td>${secScores.s2} / 3</td><td>九、语序判断</td><td>${secScores.s9} / 4</td></tr>
+        <tr><td>三、填写汉字</td><td>${secScores.s3} / 4</td><td>十、完成句子</td><td>${secScores.s10} / 4</td></tr>
+        <tr><td>四、看词选图</td><td>${secScores.s4} / 4</td><td>十一、造句</td><td>${secScores.s11} / 6</td></tr>
+        <tr><td>五、选字组词</td><td>${secScores.s5} / 3</td><td>十二、理解测验</td><td>${secScores.s12} / 6</td></tr>
+        <tr><td>六、词语选择</td><td>${secScores.s6} / 4</td><td>十三、理解问答</td><td>${secScores.s13} / 4</td></tr>
+        <tr><td>七、词语搭配</td><td>${secScores.s7} / 6</td><td><strong>总计合计</strong></td><td><strong>${totalScore} / 60</strong></td></tr>
+      </table>
+    `;
+
+    banner.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function resetExam() {
+    if (!confirm('确定要清空所有答案并重新计时吗？')) return;
+    document.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+    document.querySelectorAll('input[type="text"]').forEach(el => {
+      if (el.id !== 'studentName' && el.id !== 'studentClass' && el.id !== 'dictSearchInput') el.value = '';
+    });
+    document.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+    document.querySelectorAll('.feedback').forEach(el => {
+      el.className = 'feedback';
+      el.textContent = '';
+    });
+    document.querySelectorAll('.question-item').forEach(el => {
+      el.classList.remove('correct', 'incorrect');
+    });
+    document.getElementById('resultBanner').style.display = 'none';
+    document.getElementById('scoreDisplay').textContent = '得分：-- / 60';
+    secondsElapsed = 0;
+    timerPaused = false;
+    document.getElementById('pauseBtn').textContent = '暂停';
+    updateTimerDisplay();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
