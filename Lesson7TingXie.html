@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>霍格沃茨魔法词语听写闯关</title>
+    <title>霍格沃茨魔法词语听写闯关 · 第7课《他的脸红了》</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Kaiti+SC&family=Noto+Serif+SC:wght@600;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
@@ -54,7 +54,6 @@
             filter: drop-shadow(0 0 8px #ffd700);
         }
 
-        /* 盲盒动画 */
         @keyframes mysteryFloat {
             0%, 100% { transform: translateY(0px) rotate(0deg); }
             50% { transform: translateY(-10px) rotate(3deg); }
@@ -80,86 +79,25 @@
             animation: boxShake 0.5s ease-in-out infinite;
         }
 
-        /* 田字格样式 */
-        .tianzige {
-            width: 130px;
-            height: 130px;
-            background-color: #fffdf5;
-            border: 2px solid #a62b2b;
-            position: relative;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            border-radius: 8px;
-            overflow: hidden;
+        .magic-text-input {
+            background: rgba(11, 13, 25, 0.92);
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.25), inset 0 2px 10px rgba(0, 0, 0, 0.7);
+            transition: all 0.25s ease;
         }
-        .tianzige::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            width: 100%;
-            border-top: 1px dashed rgba(166, 43, 43, 0.4);
+        .magic-text-input:focus {
+            outline: none;
+            border-color: #fde047;
+            box-shadow: 0 0 28px rgba(250, 204, 21, 0.45), inset 0 2px 10px rgba(0, 0, 0, 0.7);
         }
-        .tianzige::after {
-            content: '';
-            position: absolute;
-            left: 50%;
-            top: 0;
-            height: 100%;
-            border-left: 1px dashed rgba(166, 43, 43, 0.4);
-        }
-        .tianzige-diagonal {
-            position: absolute;
-            inset: 0;
-            pointer-events: none;
-        }
-        .tianzige-diagonal::before {
-            content: '';
-            position: absolute;
-            width: 141.4%;
-            height: 1px;
-            top: 0;
-            left: 0;
-            border-top: 1px dotted rgba(166, 43, 43, 0.25);
-            transform-origin: top left;
-            transform: rotate(45deg);
-        }
-        .tianzige-diagonal::after {
-            content: '';
-            position: absolute;
-            width: 141.4%;
-            height: 1px;
-            top: 0;
-            right: 0;
-            border-top: 1px dotted rgba(166, 43, 43, 0.25);
-            transform-origin: top right;
-            transform: rotate(-45deg);
-        }
-
-        canvas.handwriting-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 10;
-            cursor: crosshair;
-            touch-action: none;
-        }
-
-        /* 魔法粒子背景 */
-        .stars-bg {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 0;
+        .magic-text-input::placeholder {
+            color: rgba(253, 230, 138, 0.45);
+            font-size: 0.95rem;
+            font-weight: normal;
         }
     </style>
 </head>
 <body class="p-2 md:p-6 text-slate-100 flex flex-col justify-between min-h-screen">
-    <!-- 背景浮动星星 -->
-    <canvas id="starsCanvas" class="stars-bg"></canvas>
-
     <div class="max-w-5xl mx-auto w-full relative z-10">
         <!-- 头部标题栏与学院积分 -->
         <header class="flex flex-col md:flex-row justify-between items-center bg-slate-900/80 border-2 border-amber-500/60 rounded-2xl p-4 mb-6 backdrop-blur-md shadow-2xl">
@@ -169,11 +107,10 @@
                     <h1 class="text-2xl md:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-amber-400 to-yellow-500 tracking-wider">
                         霍格沃茨 · 魔法词语听写大冒险
                     </h1>
-                    <p class="text-xs md:text-sm text-amber-200/70">第7课：《他的脸红了》· 收集学院盲盒贴图</p>
+                    <p class="text-xs md:text-sm text-amber-200/70">Spelling 3 · 第7课：《他的脸红了》· 收集学院盲盒贴图</p>
                 </div>
             </div>
 
-            <!-- 积分与控制栏 -->
             <div class="flex items-center gap-4">
                 <div class="bg-amber-950/80 border border-amber-500/50 px-4 py-2 rounded-xl flex items-center gap-2 shadow-inner">
                     <span class="text-xl">🏆</span>
@@ -192,7 +129,6 @@
 
         <!-- 主内容区域 -->
         <main class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            
             <!-- 左侧：关卡进度与词语导航 -->
             <section class="magic-card rounded-2xl p-5 flex flex-col justify-between">
                 <div>
@@ -203,26 +139,14 @@
                         <span id="progressText" class="text-xs font-semibold px-2.5 py-1 bg-amber-900/60 border border-amber-500/40 rounded-full text-amber-300">第 1 / 12 题</span>
                     </div>
 
-                    <!-- 进度条 -->
                     <div class="w-full bg-slate-950/80 rounded-full h-3 mb-6 border border-amber-900/50 p-0.5">
                         <div id="progressBar" class="bg-gradient-to-r from-amber-500 to-yellow-300 h-full rounded-full transition-all duration-500" style="width: 8.33%"></div>
                     </div>
 
-                    <!-- 题目导航按钮网格 -->
-                    <div id="navGrid" class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-4 gap-2 mb-6">
-                        <!-- JS 动态填充 1-12 按钮 -->
-                    </div>
+                    <div id="navGrid" class="grid grid-cols-4 sm:grid-cols-6 lg:grid-cols-4 gap-2 mb-6"></div>
                 </div>
 
-                <!-- 模式切换与设置 -->
                 <div class="bg-slate-950/60 p-4 rounded-xl border border-amber-500/20 text-xs text-amber-200/80 space-y-3">
-                    <div class="flex justify-between items-center">
-                        <span>输入模式：</span>
-                        <div class="flex gap-1 bg-slate-900 p-1 rounded-lg border border-amber-500/30">
-                            <button id="modeHandwriting" onclick="switchInputMode('handwriting')" class="px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-bold transition">✍️ 魔法手写</button>
-                            <button id="modeKeyboard" onclick="switchInputMode('keyboard')" class="px-2.5 py-1 rounded-md hover:bg-slate-800 transition">⌨️ 键盘拼音</button>
-                        </div>
-                    </div>
                     <div class="flex justify-between items-center">
                         <span>朗读速度：</span>
                         <select id="speechRate" class="bg-slate-900 border border-amber-500/30 text-amber-300 rounded px-2 py-0.5">
@@ -231,12 +155,14 @@
                             <option value="1.1">1.1x 快速</option>
                         </select>
                     </div>
+                    <div class="text-[11px] text-amber-300/75 leading-relaxed pt-2 border-t border-amber-500/15">
+                        ✍️ <b>作答说明</b>：请点击中央输入框，使用手机键盘或电脑输入法自带的<b>手写功能</b>直接输入汉字。提交后系统将与标准答案进行 <b>100% 严格比对</b>！
+                    </div>
                 </div>
             </section>
 
-            <!-- 中间与右侧：当前听写题目与手写/打字区 -->
+            <!-- 中间与右侧：当前听写题目与原生手写输入框 -->
             <section class="lg:col-span-2 magic-card rounded-2xl p-6 flex flex-col justify-between relative overflow-hidden">
-                <!-- 装饰角纹 -->
                 <div class="absolute top-2 left-2 text-amber-500/20 text-2xl font-serif">✦</div>
                 <div class="absolute top-2 right-2 text-amber-500/20 text-2xl font-serif">✦</div>
 
@@ -257,38 +183,33 @@
                         </button>
                     </div>
 
-                    <!-- 手写输入区域 (田字格) -->
-                <div id="handwritingContainer" class="flex flex-col items-center justify-center my-4">
-                    <!-- 笔头粗细调节控制栏 -->
-                    <div class="flex items-center gap-3 mb-3 bg-slate-950/70 border border-amber-500/30 px-3 py-1.5 rounded-xl text-xs text-amber-200">
-                        <span class="font-bold flex items-center gap-1">🖋️ 魔棒笔触：</span>
-                        <div class="flex gap-1.5">
-                            <button onclick="setLineWidth(4, this)" class="stroke-btn px-2 py-0.5 rounded border border-amber-500/30 bg-slate-800 hover:bg-amber-500/20 text-amber-300 transition">细 (4px)</button>
-                            <button onclick="setLineWidth(8, this)" class="stroke-btn px-2 py-0.5 rounded border border-amber-500/80 bg-amber-500 text-slate-950 font-bold transition">中 (8px)</button>
-                            <button onclick="setLineWidth(14, this)" class="stroke-btn px-2 py-0.5 rounded border border-amber-500/30 bg-slate-800 hover:bg-amber-500/20 text-amber-300 transition">粗 (14px)</button>
+                    <!-- 页面正中央：宽大的原生 <input type="text"> 文本输入框 -->
+                    <div class="flex flex-col items-center justify-center my-8 px-2">
+                        <div class="w-full max-w-xl">
+                            <label for="answerInput" class="block text-center text-sm font-bold text-amber-300 mb-3 tracking-wide">
+                                ✨ 魔咒书写区（调用手机 / 电脑系统手写输入法写入汉字）
+                            </label>
+                            <input
+                                type="text"
+                                id="answerInput"
+                                autocomplete="off"
+                                autocorrect="off"
+                                autocapitalize="off"
+                                spellcheck="false"
+                                placeholder="请点击此处，切换手机/电脑手写输入法写字"
+                                onkeydown="if(event.key === 'Enter'){ checkCurrentAnswer(); }"
+                                class="magic-text-input w-full rounded-2xl px-5 py-5 text-center text-2xl md:text-3xl font-bold text-amber-200 tracking-wider"
+                            />
                         </div>
-                    </div>
-
-                    <div id="tianzigeWrapper" class="flex flex-wrap items-center justify-center gap-3 mb-4">
-                        <!-- JS 动态生成田字格画布及句子标点 -->
-                    </div>
-                    <p class="text-xs text-amber-200/60 flex items-center gap-1">
-                        <span>✍️</span> 请用魔棒 (鼠标/手指) 在田字格中书写正确的汉字
-                    </p>
-                </div>
-
-                <!-- 键盘拼音输入区域 (备用模式) -->
-                    <div id="keyboardContainer" class="hidden flex-col items-center justify-center my-8">
-                        <div class="w-full max-w-md">
-                            <label class="block text-xs text-amber-300 mb-2">请输入对应的中文词语：</label>
-                            <input type="text" id="keyboardInput" placeholder="输入汉字词语..." class="w-full bg-slate-950/90 border-2 border-amber-500/60 rounded-xl px-4 py-3 text-center text-2xl font-bold text-amber-200 focus:outline-none focus:border-amber-400 shadow-inner">
-                        </div>
+                        <p class="text-xs text-amber-200/65 mt-3 text-center">
+                            💡 提示：句子题（第 11、12 题）请连同中文标点符号一并输入，须与标准答案 100% 一致
+                        </p>
                     </div>
                 </div>
 
                 <!-- 底部操作按钮 -->
                 <div class="flex justify-between items-center gap-4 pt-4 border-t border-amber-500/20 mt-4">
-                    <button id="clearBtn" onclick="clearCurrentCanvas()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-amber-500/30 rounded-xl text-sm transition">
+                    <button id="clearBtn" onclick="clearCurrentInput()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-amber-200 border border-amber-500/30 rounded-xl text-sm transition">
                         🔄 清空重写
                     </button>
                     
@@ -306,7 +227,7 @@
                 <div id="feedbackBanner" class="hidden absolute inset-x-0 top-0 bg-slate-950/95 border-b-2 border-amber-500 p-6 flex flex-col items-center justify-center rounded-t-2xl z-20 shadow-2xl transition-all">
                     <div id="feedbackIcon" class="text-5xl mb-2">🎉</div>
                     <div id="feedbackTitle" class="text-2xl font-black text-amber-300 mb-1">施法成功！</div>
-                    <div id="feedbackText" class="text-sm text-slate-200 mb-4 text-center">对应词语：变差</div>
+                    <div id="feedbackText" class="text-sm md:text-base text-slate-200 mb-4 text-center max-w-lg leading-relaxed"></div>
                     <div class="flex gap-3">
                         <button id="blindBoxRewardBtn" onclick="triggerBlindBoxReward()" class="magic-btn px-5 py-2 rounded-xl text-sm hidden">
                             🎁 开启魔法盲盒 (+10积分)
@@ -320,19 +241,17 @@
         </main>
     </div>
 
-    <!-- 盲盒抽取 Modal 弹窗 -->
+    <!-- 盲盒抽取 Modal -->
     <div id="blindBoxModal" class="hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
         <div class="parchment rounded-3xl p-6 md:p-8 max-w-sm w-full text-center relative border-4 border-amber-600 shadow-2xl transform transition-all scale-100">
             <h3 class="text-2xl font-extrabold text-amber-950 mb-1">🎁 霍格沃茨魔法盲盒</h3>
             <p class="text-xs text-amber-900/80 mb-6">注入魔力，抽取限量版学院卡通贴图！</p>
 
             <div class="relative h-48 flex items-center justify-center mb-6">
-                <!-- 闭合盲盒图 -->
                 <div id="boxClosed" class="mystery-box-anim text-8xl cursor-pointer select-none" onclick="openBlindBoxAnim()">
                     📦
                     <div class="text-xs font-bold text-amber-900 bg-amber-200/80 px-3 py-1 rounded-full mt-2 shadow">点击开启魔盒</div>
                 </div>
-                <!-- 抽取到的贴图展示 -->
                 <div id="boxOpened" class="hidden flex-col items-center justify-center">
                     <img id="rewardStickerImg" src="" alt="Sticker" class="w-36 h-36 object-contain rounded-xl drop-shadow-xl mb-2 transform scale-110">
                     <span id="rewardStickerName" class="text-sm font-bold text-amber-950 bg-amber-200 px-3 py-0.5 rounded-full border border-amber-600">哈利魔法卡</span>
@@ -359,10 +278,7 @@
                 </div>
                 <p class="text-xs text-amber-200/70 mb-4">通过写对汉字关卡解锁盲盒，收集全部 11 款霍格沃茨专属魔法贴图！</p>
 
-                <!-- 11 张贴图网格 -->
-            <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 overflow-y-auto max-h-[50vh] p-2">
-                <!-- JS 填充 -->
-            </div>
+                <div id="galleryGrid" class="grid grid-cols-2 sm:grid-cols-4 gap-4 overflow-y-auto max-h-[50vh] p-2"></div>
             </div>
 
             <div class="pt-4 border-t border-amber-500/20 text-center">
@@ -374,7 +290,7 @@
     </div>
 
     <script>
-        // --- 1. 词语与句子数据库 (第7课：《他的脸红了》 Spelling 3 共 12 题) ---
+        // --- 1. 词库数据库（Spelling 3 · 第7课：《他的脸红了》 共 12 题） ---
         const vocabularyData = [
             { id: 1, pinyin: "chē xiāng", english: "carriage", answer: "车厢" },
             { id: 2, pinyin: "chéng kè", english: "passenger", answer: "乘客" },
@@ -390,215 +306,7 @@
             { id: 12, pinyin: "Qǐ é nài xīn de děng dài zhe .", english: "The penguins are waiting patiently.", answer: "企鹅耐心地等待着。" }
         ];
 
-        // --- 2. 汉字结构、笔画拆解与核心部件知识库 (覆盖第7课全部 34 个汉字) ---
-        const hanziAnalysisDict = {
-            "车": {
-                strokes: 4,
-                structure: "独体字结构",
-                parts: "由横、撇折、横与贯穿悬针竖组成的象形独体部件。",
-                breakdown: "1.横 2.撇折 3.横 4.竖"
-            },
-            "厢": {
-                strokes: 11,
-                structure: "半包围结构",
-                parts: "外部为‘厂’字偏旁，内部为‘相’字部件（由‘木’与‘目’组成）。",
-                breakdown: "1.横 2.撇 3.横 4.竖 5.撇 6.点 7.竖 8.横折 9.横 10.横 11.横"
-            },
-            "乘": {
-                strokes: 10,
-                structure: "镶嵌/独体复合结构",
-                parts: "由‘禾’字部件中间嵌入‘北’字变体复合而成。",
-                breakdown: "1.撇 2.横 3.竖 4.竖 5.横 6.提 7.撇 8.竖弯钩 9.撇 10.捺"
-            },
-            "客": {
-                strokes: 9,
-                structure: "上下结构",
-                parts: "顶部为‘宀’（宝盖头），下部为‘各’字部件（由‘夂’折文与‘口’组成）。",
-                breakdown: "1.点 2.点 3.横钩 4.撇 5.横撇 6.捺 7.竖 8.横折 9.横"
-            },
-            "劝": {
-                strokes: 4,
-                structure: "左右结构",
-                parts: "左侧为‘又’字旁（第二笔变长点），右侧为‘力’字部件。",
-                breakdown: "1.横撇 2.点 3.横折钩 4.撇"
-            },
-            "告": {
-                strokes: 7,
-                structure: "上下结构",
-                parts: "上半部为‘牛’字变体（末笔竖不出头），下半部为‘口’字部件。",
-                breakdown: "1.撇 2.横 3.竖 4.长横 5.竖 6.横折 7.横"
-            },
-            "不": {
-                strokes: 4,
-                structure: "独体字结构",
-                parts: "由顶横、斜撇、垂露竖与右长点构成。",
-                breakdown: "1.横 2.撇 3.竖 4.点"
-            },
-            "好": {
-                strokes: 6,
-                structure: "左右结构",
-                parts: "左侧为‘女’字旁，右侧为‘子’字部件。",
-                breakdown: "1.撇点 2.撇 3.提 4.横撇 5.弯钩 6.横"
-            },
-            "意": {
-                strokes: 13,
-                structure: "上中下结构",
-                parts: "顶部为‘立’，中部为‘日’（合为‘音’），底部为‘心’字底。",
-                breakdown: "1.点 2.横 3.点 4.撇 5.长横 6.竖 7.横折 8.横 9.横 10.点 11.卧钩 12.点 13.点"
-            },
-            "思": {
-                strokes: 9,
-                structure: "上下结构",
-                parts: "上半部为‘田’字部件，下半部为‘心’字底。",
-                breakdown: "1.竖 2.横折 3.横 4.竖 5.横 6.点 7.卧钩 8.点 9.点"
-            },
-            "批": {
-                strokes: 7,
-                structure: "左右结构",
-                parts: "左侧为‘扌’（提手旁），右侧为‘比’字部件。",
-                breakdown: "1.横 2.竖钩 3.提 4.横 5.竖提 6.撇 7.竖弯钩"
-            },
-            "评": {
-                strokes: 7,
-                structure: "左右结构",
-                parts: "左侧为‘讠’（言字旁），右侧为‘平’字部件。",
-                breakdown: "1.点 2.提 3.横 4.点 5.撇 6.长横 7.竖"
-            },
-            "企": {
-                strokes: 6,
-                structure: "上下结构",
-                parts: "上半部为‘人’字头，下半部为‘止’字部件。",
-                breakdown: "1.撇 2.捺 3.竖 4.横 5.竖 6.横"
-            },
-            "鹅": {
-                strokes: 12,
-                structure: "左右结构",
-                parts: "左侧为‘我’字部件，右侧为‘鸟’字旁。",
-                breakdown: "1.撇 2.横 3.竖钩 4.提 5.斜钩 6.撇 7.点 8.撇 9.横折钩 10.点 11.竖折折钩 12.横"
-            },
-            "馆": {
-                strokes: 11,
-                structure: "左右结构",
-                parts: "左侧为‘饣’（食字旁），右侧为‘官’字部件（‘宀’加两个相连的‘口’）。",
-                breakdown: "1.撇 2.横钩 3.竖提 4.点 5.点 6.横钩 7.竖 8.横折 9.横 10.横折 11.横"
-            },
-            "拼": {
-                strokes: 9,
-                structure: "左右结构",
-                parts: "左侧为‘扌’（提手旁），右侧为‘并’字部件。",
-                breakdown: "1.横 2.竖钩 3.提 4.点 5.撇 6.横 7.横 8.撇 9.竖"
-            },
-            "命": {
-                strokes: 8,
-                structure: "上下结构",
-                parts: "顶部为‘人’字头，中部为‘一’和‘口’，底部右侧为‘卩’（单耳旁）。",
-                breakdown: "1.撇 2.捺 3.横 4.竖 5.横折 6.横 7.横折钩 8.竖"
-            },
-            "挤": {
-                strokes: 9,
-                structure: "左右结构",
-                parts: "左侧为‘扌’（提手旁），右侧为‘齐’字部件（‘文’加撇、竖）。",
-                breakdown: "1.横 2.竖钩 3.提 4.点 5.横 6.撇 7.捺 8.撇 9.竖"
-            },
-            "摇": {
-                strokes: 13,
-                structure: "左右结构",
-                parts: "左侧为‘扌’（提手旁），右侧为‘䍃’部件（‘爫’爪字头加‘缶’）。",
-                breakdown: "1.横 2.竖钩 3.提 4.撇 5.点 6.点 7.撇 8.撇 9.横 10.横 11.竖 12.竖折 13.竖"
-            },
-            "摆": {
-                strokes: 13,
-                structure: "左右结构",
-                parts: "左侧为‘扌’（提手旁），右侧为‘罢’字部件（‘罒’四字头加‘去’）。",
-                breakdown: "1.横 2.竖钩 3.提 4.竖 5.横折 6.竖 7.竖 8.横 9.横 10.竖 11.横 12.撇折 13.点"
-            },
-            "抢": {
-                strokes: 7,
-                structure: "左右结构",
-                parts: "左侧为‘扌’（提手旁），右侧为‘仓’字部件（‘人’字头加‘㔾’）。",
-                breakdown: "1.横 2.竖钩 3.提 4.撇 5.捺 6.横折钩 7.竖弯钩"
-            },
-            "听": {
-                strokes: 7,
-                structure: "左右结构",
-                parts: "左侧为‘口’字旁，右侧为‘斤’字部件。",
-                breakdown: "1.竖 2.横折 3.横 4.撇 5.撇 6.横 7.竖"
-            },
-            "了": {
-                strokes: 2,
-                structure: "独体字结构",
-                parts: "由横撇与弯钩两笔构成的独体部件。",
-                breakdown: "1.横撇 2.弯钩"
-            },
-            "他": {
-                strokes: 5,
-                structure: "左右结构",
-                parts: "左侧为‘亻’（单人旁），右侧为‘也’字部件。",
-                breakdown: "1.撇 2.竖 3.横折钩 4.竖 5.竖弯钩"
-            },
-            "的": {
-                strokes: 8,
-                structure: "左右结构",
-                parts: "左侧为‘白’字旁，右侧为‘勺’字部件。",
-                breakdown: "1.撇 2.竖 3.横折 4.横 5.横 6.撇 7.横折钩 8.点"
-            },
-            "我": {
-                strokes: 7,
-                structure: "左右/穿插结构",
-                parts: "左侧为‘禾’字变体（撇、横、竖钩、提），右侧为‘戈’字部件。",
-                breakdown: "1.撇 2.横 3.竖钩 4.提 5.斜钩 6.撇 7.点"
-            },
-            "觉": {
-                strokes: 9,
-                structure: "上下结构",
-                parts: "顶部为‘⺌’（小字头变体），中部为‘冖’（秃宝盖），底部为‘见’字部件。",
-                breakdown: "1.点 2.点 3.撇 4.点 5.横钩 6.竖 7.横折 8.撇 9.竖弯钩"
-            },
-            "得": {
-                strokes: 11,
-                structure: "左右结构",
-                parts: "左侧为‘彳’（双人旁），右侧为‘㝵’部件（‘日’、‘一’、‘寸’）。",
-                breakdown: "1.撇 2.撇 3.竖 4.竖 5.横折 6.横 7.横 8.横 9.横 10.竖钩 11.点"
-            },
-            "耐": {
-                strokes: 9,
-                structure: "左右结构",
-                parts: "左侧为‘而’字部件，右侧为‘寸’字旁。",
-                breakdown: "1.横 2.撇 3.竖 4.横折钩 5.竖 6.竖 7.横 8.竖钩 9.点"
-            },
-            "心": {
-                strokes: 4,
-                structure: "独体字结构",
-                parts: "由左点、卧钩、中点与右点构成的象形独体部件。",
-                breakdown: "1.点 2.卧钩 3.点 4.点"
-            },
-            "地": {
-                strokes: 6,
-                structure: "左右结构",
-                parts: "左侧为‘土’字旁（末笔改提），右侧为‘也’字部件。",
-                breakdown: "1.横 2.竖 3.提 4.横折钩 5.竖 6.竖弯钩"
-            },
-            "等": {
-                strokes: 12,
-                structure: "上下结构",
-                parts: "顶部为‘⺮’（竹字头），中部为‘土’，底部为‘寸’（合为‘寺’部件）。",
-                breakdown: "1.撇 2.横 3.点 4.撇 5.横 6.点 7.横 8.竖 9.横 10.横 11.竖钩 12.点"
-            },
-            "待": {
-                strokes: 9,
-                structure: "左右结构",
-                parts: "左侧为‘彳’（双人旁），右侧为‘寺’字部件（由‘土’与‘寸’组成）。",
-                breakdown: "1.撇 2.撇 3.竖 4.横 5.竖 6.横 7.横 8.竖钩 9.点"
-            },
-            "着": {
-                strokes: 11,
-                structure: "半包围/上下结构",
-                parts: "上半部为‘羊’字头变体加撇，下半部为‘目’字部件。",
-                breakdown: "1.点 2.撇 3.横 4.横 5.横 6.撇 7.竖 8.横折 9.横 10.横 11.横"
-            }
-        };
-
-        // --- 3. 贴图数据库 (共 11 张盲盒贴图) ---
+        // --- 2. 贴图数据库 (共 11 张盲盒贴图) ---
         const stickerDatabase = [
             { id: 1, url: "https://i.ibb.co.com/My4DZCCr/image.png", title: "罗恩与斑斑" },
             { id: 2, url: "https://i.ibb.co.com/YBhcP0kT/image.png", title: "赫敏的魔咒" },
@@ -616,20 +324,15 @@
         // --- 应用状态变量 ---
         let currentIndex = 0;
         let score = 0;
-        let inputMode = 'handwriting'; // 'handwriting' or 'keyboard'
-        let strokeWidth = 8;
-        let userProgress = {}; // key: question index, value: boolean
+        let userProgress = {};
         let unlockedStickers = new Set();
-        let charCanvases = []; // array of canvas wrapper objects for current word
 
-        // Audio synthesizer / sound effect generator using Web Audio API
+        // --- 音效合成 ---
         const AudioContext = window.AudioContext || window.webkitAudioContext;
         let audioCtx = null;
 
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new AudioContext();
-            }
+            if (!audioCtx) audioCtx = new AudioContext();
         }
 
         function playSound(type) {
@@ -652,10 +355,10 @@
                     osc.stop(now + 0.15);
                 } else if (type === 'correct') {
                     osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(523.25, now); // C5
-                    osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
-                    osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
-                    osc.frequency.setValueAtTime(1046.50, now + 0.3); // C6
+                    osc.frequency.setValueAtTime(523.25, now);
+                    osc.frequency.setValueAtTime(659.25, now + 0.1);
+                    osc.frequency.setValueAtTime(783.99, now + 0.2);
+                    osc.frequency.setValueAtTime(1046.50, now + 0.3);
                     gain.gain.setValueAtTime(0.3, now);
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
                     osc.start(now);
@@ -669,143 +372,10 @@
                     osc.start(now);
                     osc.stop(now + 0.4);
                 }
-            } catch (e) {
-                console.log("Audio playback not allowed without user interaction.");
-            }
+            } catch (e) {}
         }
 
-        // --- 手写板 Canvas 管理类 ---
-        class CharacterCanvas {
-            constructor(container, index, charStr) {
-                this.index = index;
-                this.charStr = charStr;
-                this.strokes = 0;
-                this.totalPathLength = 0;
-                this.points = [];
-
-                // 创建田字格外层元素
-                this.wrapper = document.createElement('div');
-                this.wrapper.className = 'tianzige';
-
-                // 辅助对角线虚线
-                const diag = document.createElement('div');
-                diag.className = 'tianzige-diagonal';
-                this.wrapper.appendChild(diag);
-
-                // 创建 Canvas 元素
-                this.canvas = document.createElement('canvas');
-                this.canvas.className = 'handwriting-canvas';
-                this.canvas.width = 130;
-                this.canvas.height = 130;
-                this.ctx = this.canvas.getContext('2d');
-                
-                this.wrapper.appendChild(this.canvas);
-                container.appendChild(this.wrapper);
-
-                this.isDrawing = false;
-                this.lastPoint = null;
-
-                this.bindEvents();
-            }
-
-            bindEvents() {
-                const getPos = (e) => {
-                    const rect = this.canvas.getBoundingClientRect();
-                    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
-                    return {
-                        x: clientX - rect.left,
-                        y: clientY - rect.top
-                    };
-                };
-
-                const startDraw = (e) => {
-                    e.preventDefault();
-                    this.isDrawing = true;
-                    this.strokes++;
-                    this.lastPoint = getPos(e);
-                    this.points.push(this.lastPoint);
-                    playSound('wand');
-                };
-
-                const moveDraw = (e) => {
-                    if (!this.isDrawing) return;
-                    e.preventDefault();
-                    const pt = getPos(e);
-
-                    this.ctx.beginPath();
-                    this.ctx.strokeStyle = '#1b120c';
-                    this.ctx.lineWidth = strokeWidth;
-                    this.ctx.lineCap = 'round';
-                    this.ctx.lineJoin = 'round';
-                    this.ctx.moveTo(this.lastPoint.x, this.lastPoint.y);
-                    this.ctx.lineTo(pt.x, pt.y);
-                    this.ctx.stroke();
-
-                    const dist = Math.hypot(pt.x - this.lastPoint.x, pt.y - this.lastPoint.y);
-                    this.totalPathLength += dist;
-
-                    this.lastPoint = pt;
-                    this.points.push(pt);
-                };
-
-                const stopDraw = (e) => {
-                    if (this.isDrawing) {
-                        this.isDrawing = false;
-                    }
-                };
-
-                this.canvas.addEventListener('mousedown', startDraw);
-                this.canvas.addEventListener('mousemove', moveDraw);
-                window.addEventListener('mouseup', stopDraw);
-
-                this.canvas.addEventListener('touchstart', startDraw, { passive: false });
-                this.canvas.addEventListener('touchmove', moveDraw, { passive: false });
-                this.canvas.addEventListener('touchend', stopDraw);
-            }
-
-            clear() {
-                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-                this.strokes = 0;
-                this.totalPathLength = 0;
-                this.points = [];
-            }
-
-            getStrokeCount() {
-                return this.strokes;
-            }
-
-            getTotalPathLength() {
-                return this.totalPathLength;
-            }
-
-            getInkMetrics() {
-                const imgData = this.ctx.getImageData(0, 0, this.canvas.width, this.canvas.height);
-                const data = imgData.data;
-                let totalPixels = 0;
-                const halfW = this.canvas.width / 2;
-                const halfH = this.canvas.height / 2;
-                const qCount = [0, 0, 0, 0]; // 象限计数
-
-                for (let y = 0; y < this.canvas.height; y++) {
-                    for (let x = 0; x < this.canvas.width; x++) {
-                        const idx = (y * this.canvas.width + x) * 4;
-                        if (data[idx + 3] > 20) { // Alpha > 20 代表涂写过
-                            totalPixels++;
-                            if (x < halfW && y < halfH) qCount[0]++;
-                            else if (x >= halfW && y < halfH) qCount[1]++;
-                            else if (x < halfW && y >= halfH) qCount[2]++;
-                            else qCount[3]++;
-                        }
-                    }
-                }
-
-                const activeQuadrants = qCount.filter(cnt => cnt > 15).length;
-                return { totalPixels, activeQuadrants };
-            }
-        }
-
-        // --- 应用初始化与题目加载 ---
+        // --- 初始化与加载题目 ---
         window.onload = function () {
             renderNavGrid();
             loadQuestion(0);
@@ -829,10 +399,7 @@
                 }
 
                 btn.className = classNames;
-                btn.innerHTML = `
-                    <span>第${index + 1}题</span>
-                    <span>${isPassed ? '✨' : '⚪'}</span>
-                `;
+                btn.innerHTML = `<span>第${index + 1}题</span><span>${isPassed ? '✨' : '⚪'}</span>`;
                 btn.onclick = () => jumpToQuestion(index);
                 grid.appendChild(btn);
             });
@@ -843,87 +410,30 @@
             currentIndex = index;
             const currentItem = vocabularyData[currentIndex];
 
-            // 更新 UI 标识
             document.getElementById('progressText').innerText = `第 ${currentIndex + 1} / ${vocabularyData.length} 题`;
             document.getElementById('progressBar').style.width = `${((currentIndex + 1) / vocabularyData.length) * 100}%`;
             document.getElementById('pinyinDisplay').innerText = currentItem.pinyin;
             document.getElementById('englishHintDisplay').innerText = currentItem.english || '';
-            document.getElementById('keyboardInput').value = '';
 
-            // 清理与重构田字格手写板（自动过滤标点符号，标点直接展示在卡片中）
-            const wrapper = document.getElementById('tianzigeWrapper');
-            wrapper.innerHTML = '';
-            charCanvases = [];
-
-            const punctuationRegex = /[，。！？、；：“”‘’（）,.!?;:'"()\s]/;
-            let charGridIndex = 0;
-
-            for (let i = 0; i < currentItem.answer.length; i++) {
-                const ch = currentItem.answer[i];
-                if (punctuationRegex.test(ch)) {
-                    const punctEl = document.createElement('div');
-                    punctEl.className = 'text-3xl font-black text-amber-400 self-end pb-2 px-1 select-none';
-                    punctEl.innerText = ch;
-                    wrapper.appendChild(punctEl);
-                } else {
-                    const charObj = new CharacterCanvas(wrapper, charGridIndex, ch);
-                    charCanvases.push(charObj);
-                    charGridIndex++;
-                }
-            }
+            const inputEl = document.getElementById('answerInput');
+            inputEl.value = '';
 
             renderNavGrid();
             document.getElementById('feedbackBanner').classList.add('hidden');
 
-            // 自动朗读发音
             setTimeout(() => {
                 speakCurrentWord();
+                inputEl.focus();
             }, 300);
         }
 
-        // --- 模式切换与笔触设置 ---
-        function switchInputMode(mode) {
-            inputMode = mode;
-            const hwContainer = document.getElementById('handwritingContainer');
-            const kbContainer = document.getElementById('keyboardContainer');
-            const clearBtn = document.getElementById('clearBtn');
-            const btnHw = document.getElementById('modeHandwriting');
-            const btnKb = document.getElementById('modeKeyboard');
-
-            if (mode === 'handwriting') {
-                hwContainer.classList.remove('hidden');
-                hwContainer.classList.add('flex');
-                kbContainer.classList.add('hidden');
-                kbContainer.classList.remove('flex');
-                clearBtn.classList.remove('hidden');
-
-                btnHw.className = "px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-bold transition";
-                btnKb.className = "px-2.5 py-1 rounded-md hover:bg-slate-800 text-amber-200/80 transition";
-            } else {
-                hwContainer.classList.add('hidden');
-                hwContainer.classList.remove('flex');
-                kbContainer.classList.remove('hidden');
-                kbContainer.classList.add('flex');
-                clearBtn.classList.add('hidden');
-
-                btnKb.className = "px-2.5 py-1 rounded-md bg-amber-500 text-slate-950 font-bold transition";
-                btnHw.className = "px-2.5 py-1 rounded-md hover:bg-slate-800 text-amber-200/80 transition";
-            }
+        function clearCurrentInput() {
+            const inputEl = document.getElementById('answerInput');
+            inputEl.value = '';
+            inputEl.focus();
+            document.getElementById('feedbackBanner').classList.add('hidden');
         }
 
-        function setLineWidth(width, btnEl) {
-            strokeWidth = width;
-            document.querySelectorAll('.stroke-btn').forEach(btn => {
-                btn.className = "stroke-btn px-2 py-0.5 rounded border border-amber-500/30 bg-slate-800 text-amber-300 hover:bg-amber-500/20 transition";
-            });
-            btnEl.className = "stroke-btn px-2 py-0.5 rounded border border-amber-500/80 bg-amber-500 text-slate-950 font-bold transition";
-        }
-
-        function clearCurrentCanvas() {
-            charCanvases.forEach(item => item.clear());
-        }
-
-        // --- Web Speech API 语音朗读 ---
         function speakCurrentWord() {
             const wordStr = vocabularyData[currentIndex].answer;
             if ('speechSynthesis' in window) {
@@ -936,51 +446,21 @@
             }
         }
 
-        // --- 答案验证与智能批改 (增加汉字结构与核心部件完整性深度检验) ---
+        // --- 严格判卷：input.value.trim() === 标准答案 ---
         function checkCurrentAnswer() {
             const currentItem = vocabularyData[currentIndex];
-            let isCorrect = false;
+            const standardAnswer = currentItem.answer;
+            const inputEl = document.getElementById('answerInput');
+            const userText = inputEl.value.trim();
 
-            if (inputMode === 'keyboard') {
-                // 键盘模式：精确匹配
-                const val = document.getElementById('keyboardInput').value.trim();
-                isCorrect = (val === currentItem.answer);
-            } else {
-                // 严格手写批改机制：逐字检验笔画数、路径长度、墨迹分布与部件完整度
-                for (let i = 0; i < charCanvases.length; i++) {
-                    const item = charCanvases[i];
-                    const charStr = item.charStr;
-                    const charInfo = hanziAnalysisDict[charStr] || { strokes: 8, structure: "组合结构", parts: "完整规范部件", breakdown: "按规范笔顺" };
-                    const strokes = item.getStrokeCount();
-                    const pathLen = item.getTotalPathLength();
-                    const metrics = item.getInkMetrics();
-
-                    // 1. 笔画数与路径长度门槛 (防止一笔扫过或漏写部件，同时兼容“了”等2画少笔画汉字)
-                    const minStrokesNeeded = charInfo.strokes <= 2 ? charInfo.strokes : Math.max(3, Math.floor(charInfo.strokes * 0.6));
-                    const minPixelsNeeded = charInfo.strokes <= 2 ? 110 : charInfo.strokes * 65;
-                    const minPathNeeded = charInfo.strokes <= 2 ? 95 : 200;
-                    const minQuadrantsNeeded = charInfo.strokes <= 2 ? 1 : 2;
-
-                    if (strokes < minStrokesNeeded || pathLen < minPathNeeded || metrics.totalPixels < minPixelsNeeded || metrics.activeQuadrants < minQuadrantsNeeded) {
-                        playSound('wand');
-                        
-                        // 弹出符合严格要求的汉字结构、笔画拆解及核心部件深度指导提示
-                        alert(
-                            `🪄 魔法指导：第 ${i + 1} 个汉字【${charStr}】笔画或部件尚未写完整哦！\n\n` +
-                            `【汉字结构】：${charInfo.structure}\n` +
-                            `【核心部件】：${charInfo.parts}\n` +
-                            `【标准笔画（共 ${charInfo.strokes} 画）】：\n${charInfo.breakdown}\n\n` +
-                            `请对照以上规范提示，把【${charStr}】字的部件与笔画补充完整后再来验证吧！`
-                        );
-                        return;
-                    }
-                }
-                
-                // 所有汉字部件与笔画均校验通过
-                isCorrect = true;
+            if (!userText) {
+                playSound('wand');
+                inputEl.focus();
+                return;
             }
 
-            // 显示反馈弹窗
+            const isCorrect = (userText === standardAnswer);
+
             const banner = document.getElementById('feedbackBanner');
             const icon = document.getElementById('feedbackIcon');
             const title = document.getElementById('feedbackTitle');
@@ -996,28 +476,27 @@
                 icon.innerText = "✨";
                 title.innerText = "魔咒完美施展！";
                 title.className = "text-2xl font-black text-amber-300 mb-1";
-                text.innerText = `准确写出词语：【${currentItem.answer}】`;
-                
-                // 记录状态
+                text.innerText = `✅ 回答正确：【${standardAnswer}】`;
+
                 if (!userProgress[currentIndex]) {
                     userProgress[currentIndex] = true;
                     score += 10;
                     updateScoreDisplay();
                     renderNavGrid();
-                    rewardBtn.classList.remove('hidden'); // 未拿过奖励时显示盲盒按钮
+                    rewardBtn.classList.remove('hidden');
                 } else {
                     rewardBtn.classList.add('hidden');
                 }
             } else {
-                icon.innerText = "💨";
-                title.innerText = "魔咒失效了...";
-                title.className = "text-2xl font-black text-rose-400 mb-1";
-                text.innerText = `正确词语为：【${currentItem.answer}】，再试一次吧！`;
+                playSound('wand');
+                icon.innerText = "❌";
+                title.innerText = `❌ 错误（你写的是：${userText}，正确答案是：${standardAnswer}）`;
+                title.className = "text-xl md:text-2xl font-black text-rose-400 mb-1 text-center";
+                text.innerText = "请点击“清空重写”后使用手写输入法重新输入，或点击“下一题”继续。";
                 rewardBtn.classList.add('hidden');
             }
         }
 
-        // --- 切换题目 ---
         function closeFeedbackAndNext() {
             document.getElementById('feedbackBanner').classList.add('hidden');
             if (currentIndex < vocabularyData.length - 1) {
@@ -1026,30 +505,23 @@
         }
 
         function prevQuestion() {
-            if (currentIndex > 0) {
-                loadQuestion(currentIndex - 1);
-            }
+            if (currentIndex > 0) loadQuestion(currentIndex - 1);
         }
 
         function jumpToQuestion(index) {
             loadQuestion(index);
         }
 
-        // --- 积分更新 ---
         function updateScoreDisplay() {
             document.getElementById('scoreDisplay').innerText = `${score} Pts`;
         }
 
-        // --- 盲盒抽取系统 ---
         function triggerBlindBoxReward() {
             document.getElementById('feedbackBanner').classList.add('hidden');
             const modal = document.getElementById('blindBoxModal');
-            
-            // 重置盲盒弹窗状态
             document.getElementById('boxClosed').classList.remove('hidden');
             document.getElementById('boxOpened').classList.add('hidden');
             document.getElementById('boxActions').classList.add('hidden');
-
             modal.classList.remove('hidden');
         }
 
@@ -1062,19 +534,15 @@
                 closedBox.classList.remove('shake-anim');
                 closedBox.classList.add('hidden');
 
-                // 随机抽取一张贴图
                 const randomIndex = Math.floor(Math.random() * stickerDatabase.length);
                 const sticker = stickerDatabase[randomIndex];
                 unlockedStickers.add(sticker.id);
 
                 document.getElementById('rewardStickerImg').src = sticker.url;
                 document.getElementById('rewardStickerName').innerText = sticker.title;
-                
                 document.getElementById('boxOpened').classList.remove('hidden');
                 document.getElementById('boxOpened').classList.add('flex');
                 document.getElementById('boxActions').classList.remove('hidden');
-
-                // 更新收藏数量
                 document.getElementById('collectedCount').innerText = unlockedStickers.size;
 
                 confetti({ particleCount: 100, spread: 80, origin: { y: 0.5 } });
@@ -1083,12 +551,9 @@
 
         function closeBlindBoxModal() {
             document.getElementById('blindBoxModal').classList.add('hidden');
-            if (currentIndex < vocabularyData.length - 1) {
-                loadQuestion(currentIndex + 1);
-            }
+            if (currentIndex < vocabularyData.length - 1) loadQuestion(currentIndex + 1);
         }
 
-        // --- 贴图图鉴 Modal ---
         function openGalleryModal() {
             playSound('wand');
             const grid = document.getElementById('galleryGrid');
@@ -1098,8 +563,8 @@
                 const isUnlocked = unlockedStickers.has(item.id);
                 const card = document.createElement('div');
                 card.className = `p-3 rounded-xl border flex flex-col items-center justify-center transition-all ${
-                    isUnlocked 
-                        ? 'bg-amber-950/40 border-amber-500/60 shadow-lg' 
+                    isUnlocked
+                        ? 'bg-amber-950/40 border-amber-500/60 shadow-lg'
                         : 'bg-slate-950/60 border-slate-800 opacity-60 grayscale'
                 }`;
 
