@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>第七课《他的脸红了》魔法学院互动学习与自动批改系统</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Noto+Serif+SC:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy-deep: #1A5276;
+      --royal-blue: #2980B9;
+      --magic-gold: #F1C40F;
+      --magic-gold-dark: #D4AC0D;
+      --parchment: #FDFBF7;
+      --night-sky: #0B192C;
+    }
+
+    body {
+      font-family: 'Inter', 'Microsoft YaHei', sans-serif;
+      background: radial-gradient(circle at 20% 20%, #152C4E 0%, #0B192C 60%, #060D17 100%);
+      color: #1E293B;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .font-magic {
+      font-family: 'Cinzel', 'Noto Serif SC', serif;
+    }
+
+    /* 星空微光背景动画 */
+    .stars-bg {
+      background-image: 
+        radial-gradient(1.5px 1.5px at 20px 30px, #F1C40F, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 80px 120px, #ffffff, rgba(0,0,0,0)),
+        radial-gradient(1.5px 1.5px at 160px 70px, #F9E79F, rgba(0,0,0,0)),
+        radial-gradient(2px 2px at 240px 180px, #85C1E9, rgba(0,0,0,0)),
+        radial-gradient(1px 1px at 310px 40px, #ffffff, rgba(0,0,0,0));
+      background-repeat: repeat;
+      background-size: 350px 250px;
+      animation: twinkle 8s ease-in-out infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.45; }
+      100% { opacity: 0.9; }
+    }
+
+    /* 羊皮纸质感卡片 */
+    .parchment-card {
+      background-color: var(--parchment);
+      background-image: linear-gradient(to bottom right, rgba(255,255,255,0.9), rgba(245, 238, 220, 0.55));
+      border: 1px solid rgba(212, 172, 13, 0.45);
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(241, 196, 15, 0.08);
+    }
+
+    /* 盲盒晃动与悬浮光效 */
+    @keyframes floatBox {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-6px); }
+    }
+
+    @keyframes shakeMagic {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      20% { transform: rotate(-6deg) scale(1.06); }
+      40% { transform: rotate(6deg) scale(1.08); }
+      60% { transform: rotate(-5deg) scale(1.06); }
+      80% { transform: rotate(5deg) scale(1.04); }
+    }
+
+    @keyframes popReveal {
+      0% { transform: scale(0.2) rotate(-12deg); opacity: 0; }
+      70% { transform: scale(1.08) rotate(3deg); opacity: 1; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    .blind-box-ready {
+      animation: floatBox 3s ease-in-out infinite;
+    }
+    .blind-box-ready:hover {
+      animation: shakeMagic 0.6s ease-in-out infinite;
+    }
+    .reveal-anim {
+      animation: popReveal 0.65s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    /* 闪卡翻转效果 */
+    .perspective { perspective: 1000px; }
+    .preserve-3d { transform-style: preserve-3d; transition: transform 0.6s; }
+    .backface-hidden { backface-visibility: hidden; }
+    .rotate-y-180 { transform: rotateY(180deg); }
+
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0F233C; }
+    ::-webkit-scrollbar-thumb { background: #2980B9; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #F1C40F; }
+  </style>
+</head>
+<body class="relative selection:bg-amber-300 selection:text-slate-900">
+  <!-- 星空背景层 -->
+  <div class="fixed inset-0 stars-bg pointer-events-none z-0"></div>
+
+  <!-- 顶部魔法导航栏 -->
+  <header class="sticky top-0 z-40 bg-[#0D2137]/95 backdrop-blur-md border-b border-amber-400/30 shadow-lg">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+      <!-- 标题与徽章 -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-[#1A5276] to-[#2980B9] border-2 border-amber-400 flex items-center justify-center text-2xl shadow-md">
+          🪄
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold uppercase tracking-wider px-2 py-0.5 rounded bg-amber-400/20 text-amber-300 border border-amber-400/40">Spelling 3 · 第7课</span>
+            <h1 class="text-lg sm:text-xl font-bold text-white font-magic tracking-wide">《他的脸红了》魔法学习单</h1>
+          </div>
+          <p class="text-xs text-sky-200/80 hidden sm:block">生词表 · 自动批改挑战 · 积分开启神秘贴图盲盒</p>
+        </div>
+      </div>
+
+      <!-- 积分状态胶囊 + 魔法背景音乐开关 -->
+      <div class="flex items-center gap-2 sm:gap-3">
+        <!-- 实时积分与盲盒额度 -->
+        <button onclick="switchTab('blindbox')" class="flex items-center gap-2 px-3 py-2 rounded-xl bg-[#1A5276]/90 hover:bg-[#2980B9] border border-amber-400/50 text-amber-200 text-xs sm:text-sm font-semibold transition shadow">
+          <span>🏆 积分: <strong id="header-score" class="text-amber-300 text-base">0</strong></span>
+          <span class="text-amber-400/50">|</span>
+          <span>🎁 盲盒: <strong id="header-boxes" class="text-emerald-300 text-base">0</strong>/5</span>
+        </button>
+
+        <!-- 哈利波特神秘音乐开关 -->
+        <button id="music-toggle-btn" onclick="toggleMagicMusic()" class="flex items-center gap-2 px-3.5 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 to-purple-500/20 hover:from-amber-500/30 hover:to-purple-500/30 border border-amber-400/60 text-amber-200 text-xs sm:text-sm font-semibold transition shadow cursor-pointer">
+          <span id="music-icon" class="text-base">🔇</span>
+          <span id="music-label">魔法音乐: 关</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 功能选项卡 -->
+    <nav class="max-w-6xl mx-auto px-4 pb-2.5 flex gap-2 overflow-x-auto">
+      <button id="tab-btn-vocab" onclick="switchTab('vocab')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-1.5 bg-[#2980B9] text-white border border-amber-300 shadow">
+        <span>📖</span> 生词学习单 (28词)
+      </button>
+      <button id="tab-btn-practice" onclick="switchTab('practice')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-1.5 bg-[#132C4A] text-sky-200 hover:bg-[#1A5276] border border-sky-700/50">
+        <span>✍️</span> 自动批改练习题
+      </button>
+      <button id="tab-btn-blindbox" onclick="switchTab('blindbox')" class="tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-1.5 bg-[#132C4A] text-amber-200 hover:bg-[#1A5276] border border-amber-500/40">
+        <span>🎁</span> 魔法盲盒奖励 <span id="nav-box-badge" class="ml-1 px-1.5 py-0.2 text-xs rounded-full bg-amber-400 text-slate-900 font-extrabold hidden">0</span>
+      </button>
+    </nav>
+  </header>
+
+  <!-- 主内容区 -->
+  <main class="relative z-10 max-w-6xl mx-auto px-4 py-6 pb-20">
+
+    <!-- ==================== TAB 1: 生词学习单 ==================== -->
+    <section id="panel-vocab" class="space-y-5">
+      <div class="parchment-card rounded-2xl p-5 sm:p-6">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#1A5276] font-magic flex items-center gap-2">
+              <span>📜</span> 第七课《他的脸红了》生词总表（按拼音 A—Z 排序）
+            </h2>
+            <p class="text-sm text-slate-600 mt-1">点击喇叭图标 🔊 可聆听标准华语发音；可切换「表格模式」或「魔法闪卡模式」复习。</p>
+          </div>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <!-- 搜索框 -->
+            <div class="relative">
+              <input id="vocab-search" type="text" oninput="filterVocab()" placeholder="搜索汉字 / 拼音 / 英文..." class="pl-9 pr-3 py-2 rounded-xl border border-slate-300 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-[#2980B9] w-52 sm:w-60" />
+              <span class="absolute left-3 top-2.5 text-slate-400 text-sm">🔍</span>
+            </div>
+
+            <!-- 视图切换 -->
+            <div class="inline-flex rounded-xl bg-slate-200/80 p-1">
+              <button id="view-table-btn" onclick="setVocabView('table')" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1A5276] text-white shadow transition">表格视图</button>
+              <button id="view-card-btn" onclick="setVocabView('card')" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:text-slate-900 transition">魔法闪卡</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 表格视图 (沿用 #1A5276 / #2980B9 / #F2F4F4 经典设计DNA) -->
+        <div id="vocab-table-container" class="mt-5 overflow-x-auto rounded-xl border border-slate-300 shadow-sm">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="bg-[#2980B9] text-white text-sm">
+                <th class="py-3 px-3 text-center w-12 font-bold">序号</th>
+                <th class="py-3 px-4 text-center font-bold">汉字</th>
+                <th class="py-3 px-4 text-center font-bold">拼音</th>
+                <th class="py-3 px-4 font-bold">英文翻译</th>
+                <th class="py-3 px-4 font-bold">简短例句与翻译</th>
+                <th class="py-3 px-3 text-center w-16 font-bold">朗读</th>
+              </tr>
+            </thead>
+            <tbody id="vocab-tbody" class="divide-y divide-slate-200 text-sm">
+              <!-- 由 JS 动态渲染 -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 闪卡视图 -->
+        <div id="vocab-cards-container" class="mt-5 hidden grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <!-- 由 JS 动态渲染 -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 2: 自动批改练习题 ==================== -->
+    <section id="panel-practice" class="hidden space-y-6">
+      <!-- 顶部成绩与规则横幅 -->
+      <div class="parchment-card rounded-2xl p-5 border-l-8 border-l-[#2980B9]">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h2 class="text-xl sm:text-2xl font-bold text-[#1A5276] font-magic">🪄 魔法学院随堂测验（自动批改）</h2>
+            <p class="text-sm text-slate-600 mt-1">
+              共 <strong>53</strong> 道小题（每题 2 分，满分 <strong>106</strong> 分）。得分越高，可开启的<strong>神秘贴图盲盒</strong>越多（最高 5 个）！
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <button onclick="gradePractice()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#1A5276] to-[#2980B9] hover:from-[#154360] hover:to-[#2471A3] text-white font-bold text-sm shadow-lg border border-amber-300/60 flex items-center gap-2 transition transform active:scale-95 cursor-pointer">
+              <span>✨</span> 提交并自动批改
+            </button>
+            <button onclick="resetPractice()" class="px-4 py-2.5 rounded-xl bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-sm transition flex items-center gap-1.5 cursor-pointer">
+              <span>🔄</span> 清空重做
+            </button>
+          </div>
+        </div>
+
+        <!-- 批改结果反馈面板（提交后显示） -->
+        <div id="grade-result-banner" class="hidden mt-4 p-4 rounded-xl bg-gradient-to-r from-[#1A5276] to-[#0E2F44] text-white border border-amber-400 shadow-inner">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <div class="text-amber-300 font-bold text-lg flex items-center gap-2">
+                <span>⚡ 魔法批改完成！</span>
+                <span id="grade-rank-badge" class="text-xs px-2.5 py-0.5 rounded-full bg-amber-400 text-slate-900 font-extrabold">优秀巫师</span>
+              </div>
+              <p class="text-sm text-sky-100">
+                答对 <strong id="grade-correct-count" class="text-emerald-300 text-base">0</strong> / 53 题
+                （正确率 <strong id="grade-accuracy" class="text-amber-300">0%</strong>），
+                总积分：<strong id="grade-total-points" class="text-amber-300 text-xl">0</strong> 分！
+              </p>
+              <p id="grade-box-message" class="text-xs text-amber-200 font-medium"></p>
+            </div>
+            <button onclick="switchTab('blindbox')" class="px-5 py-3 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-900 font-extrabold text-sm shadow-lg animate-bounce flex items-center justify-center gap-2 cursor-pointer">
+              <span>🎁</span> 前往开启盲盒 (<span id="banner-box-count">0</span> 个)
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第一部分：看拼音写词语 (28题) -->
+      <div class="parchment-card rounded-2xl p-5 sm:p-6">
+        <div class="flex items-center justify-between border-b-2 border-[#2980B9] pb-2.5 mb-4">
+          <h3 class="text-lg font-bold text-[#1A5276]">一、看拼音写词语（共 28 题，每题 2 分）</h3>
+          <span class="text-xs font-semibold text-slate-500">请直接输入对应汉字</span>
+        </div>
+        <div id="section1-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-3.5">
+          <!-- 由 JS 动态渲染 28 题 -->
+        </div>
+      </div>
+
+      <!-- 第二部分：选词填空（核心词汇与词组） -->
+      <div class="parchment-card rounded-2xl p-5 sm:p-6">
+        <div class="border-b-2 border-[#2980B9] pb-2.5 mb-4">
+          <h3 class="text-lg font-bold text-[#1A5276]">二、选词填空：核心词汇与词组（共 11 空，每空 2 分）</h3>
+        </div>
+        <!-- 备选词提示栏 -->
+        <div class="mb-4 p-3.5 rounded-xl bg-[#F2F4F4] border border-slate-300 text-sm text-slate-700">
+          <span class="font-bold text-[#1A5276]">【备选词语 A】：</span>
+          <span class="leading-relaxed">孕妇、车厢、乘客、让座、劝告、道歉、不好意思、批评、随手、塑料袋、节约</span>
+        </div>
+        <div id="section2-container" class="space-y-4 text-base text-slate-800 leading-loose">
+          <!-- 由 JS 动态渲染 -->
+        </div>
+      </div>
+
+      <!-- 第三部分：选词填空（课文扩展词语） -->
+      <div class="parchment-card rounded-2xl p-5 sm:p-6">
+        <div class="border-b-2 border-[#2980B9] pb-2.5 mb-4">
+          <h3 class="text-lg font-bold text-[#1A5276]">三、选词填空：课文扩展词语（共 14 空，每空 2 分）</h3>
+        </div>
+        <!-- 备选词提示栏 -->
+        <div class="mb-4 p-3.5 rounded-xl bg-[#F2F4F4] border border-slate-300 text-sm text-slate-700">
+          <span class="font-bold text-[#1A5276]">【备选词语 B】：</span>
+          <span class="leading-relaxed">舅舅、人龙、人群、移动、拼命、挤、等待、终于、悄悄、秩序、耐心、胖乎乎、圆滚滚、摇摆、手舞足蹈</span>
+        </div>
+        <div id="section3-container" class="space-y-4 text-base text-slate-800 leading-loose">
+          <!-- 由 JS 动态渲染 -->
+        </div>
+      </div>
+
+      <!-- 底部再次提供提交按钮 -->
+      <div class="flex justify-center gap-4 pt-2">
+        <button onclick="gradePractice()" class="px-8 py-3.5 rounded-2xl bg-gradient-to-r from-[#1A5276] to-[#2980B9] hover:from-[#154360] hover:to-[#2471A3] text-white font-bold text-base shadow-xl border-2 border-amber-400 flex items-center gap-2 transition transform hover:scale-105 cursor-pointer">
+          <span>⚡</span> 完成作答，立即自动批改！
+        </button>
+      </div>
+    </section>
+
+    <!-- ==================== TAB 3: 魔法盲盒抽奖馆 ==================== -->
+    <section id="panel-blindbox" class="hidden space-y-6">
+      <!-- 盲盒规则与状态面板 -->
+      <div class="parchment-card rounded-2xl p-6 text-center relative overflow-hidden">
+        <div class="max-w-2xl mx-auto space-y-2">
+          <span class="inline-block px-3 py-1 rounded-full bg-amber-100 text-amber-800 border border-amber-300 text-xs font-bold">
+            ✨ 霍格沃茨神秘奖励阁 ✨
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-[#1A5276] font-magic">魔法贴图盲盒抽奖</h2>
+          <p class="text-sm text-slate-600">
+            完成练习题获得积分即可解锁盲盒机会（<strong>最多可开启 5 个盲盒</strong>）：<br/>
+            <span class="text-xs text-slate-500">1~20分: 1个 ｜ 21~42分: 2个 ｜ 43~64分: 3个 ｜ 65~86分: 4个 ｜ 87~106分: 5个</span>
+          </p>
+
+          <div class="mt-4 inline-flex flex-wrap items-center justify-center gap-4 px-5 py-2.5 rounded-2xl bg-[#1A5276] text-white border border-amber-400 shadow">
+            <div class="text-sm">当前测验积分：<strong id="box-panel-score" class="text-amber-300 text-lg">0</strong> 分</div>
+            <div class="text-amber-400/50">|</div>
+            <div class="text-sm">已解锁上限：<strong id="box-panel-earned" class="text-sky-300 text-lg">0</strong> 个</div>
+            <div class="text-amber-400/50">|</div>
+            <div class="text-sm">剩余可开启：<strong id="box-panel-remaining" class="text-emerald-300 text-xl">0</strong> 个</div>
+          </div>
+
+          <div id="no-box-hint" class="pt-2">
+            <button onclick="switchTab('practice')" class="text-xs font-bold text-[#2980B9] underline hover:text-[#1A5276] cursor-pointer">
+              👉 还没有足够的开启次数？点击这里去做题赚取积分吧！
+            </button>
+          </div>
+        </div>
+
+        <!-- 5个神秘盲盒阵列 -->
+        <div id="blind-boxes-grid" class="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 max-w-4xl mx-auto">
+          <!-- 由 JS 动态渲染 5 个盲盒 -->
+        </div>
+      </div>
+
+      <!-- 魔法贴图收藏册（共8款随机贴图） -->
+      <div class="parchment-card rounded-2xl p-6">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 pb-3 mb-5">
+          <div>
+            <h3 class="text-xl font-bold text-[#1A5276] font-magic flex items-center gap-2">
+              <span>📔</span> 我的魔法贴图收藏册（共 8 款限定贴图）
+            </h3>
+            <p class="text-xs text-slate-500 mt-0.5">每次开启盲盒将随机获得其中一张贴图，点击已解锁贴图可放大欣赏！</p>
+          </div>
+          <div class="text-sm font-bold text-[#2980B9]">
+            收集进度：<span id="collection-progress">0</span> / 8 款
+          </div>
+        </div>
+
+        <div id="sticker-album-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <!-- 由 JS 动态渲染 8 个图鉴槽位 -->
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 盲盒开启惊喜弹窗 Modal -->
+  <div id="reward-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/75 backdrop-blur-sm p-4">
+    <div class="bg-gradient-to-b from-[#1A5276] to-[#0D2137] border-2 border-amber-400 rounded-3xl max-w-sm w-full p-6 text-center text-white shadow-2xl relative reveal-anim">
+      <div class="text-amber-300 text-xs font-bold tracking-widest uppercase mb-1">✨ 魔法显形 ✨</div>
+      <h3 id="modal-sticker-title" class="text-xl font-bold font-magic text-white mb-4">恭喜获得限定魔法贴图！</h3>
+      
+      <div class="relative mx-auto w-52 h-52 rounded-2xl bg-white/95 p-3 border-4 border-amber-300 shadow-[0_0_35px_rgba(241,196,15,0.6)] flex items-center justify-center overflow-hidden">
+        <img id="modal-sticker-img" src="" alt="魔法贴图奖励" class="max-w-full max-h-full object-contain rounded-lg" />
+      </div>
+
+      <p id="modal-sticker-desc" class="text-xs text-sky-200 mt-4">已自动收入你的魔法贴图收藏册！</p>
+
+      <div class="mt-5 flex justify-center gap-3">
+        <button onclick="closeRewardModal()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-400 to-yellow-500 hover:from-amber-300 hover:to-yellow-400 text-slate-900 font-extrabold text-sm shadow-lg transition cursor-pointer">
+          太棒了，收下贴图！
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 自定义轻提示 Toast（替代 alert） -->
+  <div id="magic-toast" class="fixed bottom-5 right-5 z-50 hidden max-w-xs bg-[#1A5276] text-white border border-amber-400 px-4 py-3 rounded-xl shadow-2xl text-sm font-medium flex items-center gap-2">
+    <span id="toast-icon">🪄</span>
+    <span id="toast-text">提示内容</span>
+  </div>
+
+  <script>
+    // ==================== 1. 数据定义 ====================
+    // 28个按拼音 A-Z 排序的生词数据
+    const VOCAB_LIST = [
+      { id: 1, word: "不好意思", pinyin: "bù hǎo yì si", en: "feel embarrassed", sentence: "听了他的劝告，我觉得不好意思。", sentenceEn: "After listening to his advice, I felt embarrassed." },
+      { id: 2, word: "车厢", pinyin: "chē xiāng", en: "carriage / compartment", sentence: "地铁车厢里站满了乘客。", sentenceEn: "The subway carriage is full of passengers." },
+      { id: 3, word: "乘客", pinyin: "chéng kè", en: "passenger", sentence: "年轻的乘客主动给老人让座。", sentenceEn: "The young passenger offered his seat to the elderly person." },
+      { id: 4, word: "道歉", pinyin: "dào qiàn", en: "apologize", sentence: "他向大家诚恳地道歉。", sentenceEn: "He sincerely apologized to everyone." },
+      { id: 5, word: "等待", pinyin: "děng dài", en: "wait for", sentence: "企鹅耐心地等待着。", sentenceEn: "The penguins are waiting patiently." },
+      { id: 6, word: "挤", pinyin: "jǐ", en: "squeeze / push against", sentence: "大家排队上车，不要互相挤。", sentenceEn: "Everyone line up to board, don't push against each other." },
+      { id: 7, word: "节约", pinyin: "jié yuē", en: "save / economize", sentence: "我们要节约用水和用电。", sentenceEn: "We must save water and electricity." },
+      { id: 8, word: "舅舅", pinyin: "jiù jiu", en: "maternal uncle", sentence: "周末舅舅带我去动物园。", sentenceEn: "My uncle took me to the zoo on the weekend." },
+      { id: 9, word: "耐心", pinyin: "nài xīn", en: "patient / patience", sentence: "老师总是耐心地教导我们。", sentenceEn: "The teacher always teaches us patiently." },
+      { id: 10, word: "胖乎乎", pinyin: "pàng hū hū", en: "chubby", sentence: "小企鹅胖乎乎的，非常可爱。", sentenceEn: "The little penguin is chubby and very cute." },
+      { id: 11, word: "批评", pinyin: "pī píng", en: "criticize", sentence: "做错了事要虚心接受批评。", sentenceEn: "When you do something wrong, accept criticism modestly." },
+      { id: 12, word: "拼命", pinyin: "pīn mìng", en: "desperately / with all one's might", sentence: "他拼命地往前挤。", sentenceEn: "He pushed forward with all his might." },
+      { id: 13, word: "企鹅馆", pinyin: "qǐ é guǎn", en: "penguin enclosure", sentence: "我们在企鹅馆里看到了许多企鹅。", sentenceEn: "We saw many penguins in the penguin enclosure." },
+      { id: 14, word: "抢", pinyin: "qiǎng", en: "snatch / rob", sentence: "小朋友们要学会分享，不能抢玩具。", sentenceEn: "Children should learn to share and not snatch toys." },
+      { id: 15, word: "悄悄", pinyin: "qiāo qiāo", en: "quietly", sentence: "他悄悄地走进了课室。", sentenceEn: "He walked into the classroom quietly." },
+      { id: 16, word: "劝告", pinyin: "quàn gào", en: "advise / admonish", sentence: "谢谢你的劝告，我以后会注意。", sentenceEn: "Thank you for your advice, I will pay attention in the future." },
+      { id: 17, word: "让座", pinyin: "ràng zuò", en: "give seat to", sentence: "在巴士上我们要主动给孕妇让座。", sentenceEn: "On the bus, we should offer our seats to pregnant women." },
+      { id: 18, word: "人龙", pinyin: "rén lóng", en: "long queue", sentence: "入口处排起了长长的人龙。", sentenceEn: "A long queue formed at the entrance." },
+      { id: 19, word: "人群", pinyin: "rén qún", en: "crowd", sentence: "他在人群中找到了妈妈。", sentenceEn: "He found his mother in the crowd." },
+      { id: 20, word: "手舞足蹈", pinyin: "shǒu wǔ zú dǎo", en: "dance with joy", sentence: "听到这个好消息，他高兴得手舞足蹈。", sentenceEn: "Hearing the good news, he danced with joy." },
+      { id: 21, word: "塑料袋", pinyin: "sù liào dài", en: "plastic bag", sentence: "去超市买东西请少用塑料袋。", sentenceEn: "Please use fewer plastic bags when shopping at the supermarket." },
+      { id: 22, word: "随手", pinyin: "suí shǒu", en: "conveniently / without extra effort", sentence: "离开房间时请随手关灯。", sentenceEn: "Please turn off the light when leaving the room." },
+      { id: 23, word: "摇摆", pinyin: "yáo bǎi", en: "swing / sway", sentence: "企鹅走起路来左右摇摆。", sentenceEn: "Penguins sway from side to side when they walk." },
+      { id: 24, word: "移动", pinyin: "yí dòng", en: "move", sentence: "队伍正在慢慢地向前移动。", sentenceEn: "The line is slowly moving forward." },
+      { id: 25, word: "圆滚滚", pinyin: "yuán gǔn gǔn", en: "round / plump", sentence: "这只小猫圆滚滚的，真讨人喜欢。", sentenceEn: "This kitten is round and plump, really lovable." },
+      { id: 26, word: "孕妇", pinyin: "yùn fù", en: "pregnant woman", sentence: "车厢里有一位孕妇正站着。", sentenceEn: "There is a pregnant woman standing in the carriage." },
+      { id: 27, word: "秩序", pinyin: "zhì xù", en: "order", sentence: "大家都要遵守公共秩序。", sentenceEn: "Everyone must obey public order." },
+      { id: 28, word: "终于", pinyin: "zhōng yú", en: "finally", sentence: "经过努力，他终于完成了任务。", sentenceEn: "After hard work, he finally completed the task." }
+    ];
+
+    // 第二部分：核心词汇与词组选词填空 (11空)
+    const SEC2_OPTIONS = ["孕妇", "车厢", "乘客", "让座", "劝告", "道歉", "不好意思", "批评", "随手", "塑料袋", "节约"];
+    const SEC2_QUESTIONS = [
+      { parts: ["1. 地铁 ", " 里非常拥挤，大家都在找空位。"], answers: ["车厢"] },
+      { parts: ["2. 看到一位 ", " 上车，小明立刻站起来给她 ", "。"], answers: ["孕妇", "让座"] },
+      { parts: ["3. 车上的 ", " 都夸奖小明是个有礼貌的好孩子。"], answers: ["乘客"] },
+      { parts: ["4. 听了老师的 ", "，他脸红了，觉得很 ", "。"], answers: ["劝告", "不好意思"] },
+      { parts: ["5. 弟弟不小心打翻了水杯，马上向姐姐 ", "。"], answers: ["道歉"] },
+      { parts: ["6. 老师 ", " 了上课不专心听讲的同学。"], answers: ["批评"] },
+      { parts: ["7. 我们要 ", " 水电，离开课室时请 ", " 关灯。"], answers: ["节约", "随手"] },
+      { parts: ["8. 为了保护环境，妈妈买菜时自带环保袋，不用 ", "。"], answers: ["塑料袋"] }
+    ];
+
+    // 第三部分：课文扩展词语选词填空 (14空)
+    const SEC3_OPTIONS = ["舅舅", "人龙", "人群", "移动", "拼命", "挤", "等待", "终于", "悄悄", "秩序", "耐心", "胖乎乎", "圆滚滚", "摇摆", "手舞足蹈"];
+    const SEC3_QUESTIONS = [
+      { parts: ["1. 假期里，", " 带我们去参观动物园的企鹅馆。"], answers: ["舅舅"] },
+      { parts: ["2. 门口排起了长长的 ", "，大家都在 ", " 地 ", " 入场。"], answers: ["人龙", "耐心", "等待"] },
+      { parts: ["3. 大家应该遵守 ", "，不要 ", " 往前 ", "。"], answers: ["秩序", "拼命", "挤"] },
+      { parts: ["4. 队伍慢慢向前 ", "，我们 ", " 走进了馆内。"], answers: ["移动", "终于"] },
+      { parts: ["5. 小企鹅 ", "、", " 的，走起路来左右 ", "，十分可爱。"], answers: ["胖乎乎", "圆滚滚", "摇摆"] },
+      { parts: ["6. 小明在旁边 ", " 地看，开心得 ", "。"], answers: ["悄悄", "手舞足蹈"] }
+    ];
+
+    // 8款神秘盲盒贴图 URL
+    const STICKER_POOL = [
+      { id: 1, name: "魔法徽章贴图 #1", url: "https://i.ibb.co.com/My4DZCCr/image.png" },
+      { id: 2, name: "魔法徽章贴图 #2", url: "https://i.ibb.co.com/YBhcP0kT/image.png" },
+      { id: 3, name: "魔法徽章贴图 #3", url: "https://i.ibb.co.com/vCHyVhbx/image.png" },
+      { id: 4, name: "魔法徽章贴图 #4", url: "https://i.ibb.co.com/23Xv8n20/image.png" },
+      { id: 5, name: "魔法徽章贴图 #5", url: "https://i.ibb.co.com/0yx4gCT9/image.png" },
+      { id: 6, name: "魔法徽章贴图 #6", url: "https://i.ibb.co.com/bR1vYjVB/image.png" },
+      { id: 7, name: "魔法徽章贴图 #7", url: "https://i.ibb.co.com/RGHR56hR/image.png" },
+      { id: 8, name: "魔法徽章贴图 #8", url: "https://i.ibb.co.com/W7J7YPf/image.png" }
+    ];
+
+    // ==================== 2. 游戏与积分状态 ====================
+    let gameState = {
+      score: 0,
+      maxEarnedBoxes: 0, // 根据最高/当前积分可开盲盒总数 (0~5)
+      openedBoxIndices: [], // 已开启的盲盒编号 [0, 1, ...]
+      boxRewards: {}, // { 0: stickerObj, ... }
+      unlockedStickerIds: new Set() // 已收集的贴图 ID
+    };
+
+    // ==================== 3. Web Audio API 哈利波特风格神秘音乐合成器 ====================
+    let audioCtx = null;
+    let isMusicPlaying = false;
+    let melodyTimer = null;
+
+    // 音符频率表 (Hz)
+    const NOTES = {
+      B4: 493.88,
+      D5: 587.33,
+      DS5: 622.25,
+      E5: 659.25,
+      F5: 698.46,
+      FS5: 739.99,
+      G5: 783.99,
+      A5: 880.00,
+      B5: 987.77,
+      C6: 1046.50,
+      D6: 1174.66,
+      DS6: 1244.51,
+      E6: 1318.51
+    };
+
+    // 富有神秘八音盒/钢片琴韵味的旋律序列 (Hedwig's Theme 经典小调进行)
+    const HEDWIG_MELODY = [
+      { note: NOTES.B4, dur: 0.45 },
+      { note: NOTES.E5, dur: 0.68 },
+      { note: NOTES.G5, dur: 0.24 },
+      { note: NOTES.FS5, dur: 0.45 },
+      { note: NOTES.E5, dur: 0.90 },
+      { note: NOTES.B5, dur: 0.45 },
+      { note: NOTES.A5, dur: 1.15 },
+      { note: NOTES.FS5, dur: 1.15 },
+      { note: NOTES.E5, dur: 0.68 },
+      { note: NOTES.G5, dur: 0.24 },
+      { note: NOTES.FS5, dur: 0.45 },
+      { note: NOTES.DS5, dur: 0.90 },
+      { note: NOTES.F5, dur: 0.45 },
+      { note: NOTES.B4, dur: 1.35 },
+      // 第二乐句
+      { note: NOTES.B4, dur: 0.45 },
+      { note: NOTES.E5, dur: 0.68 },
+      { note: NOTES.G5, dur: 0.24 },
+      { note: NOTES.FS5, dur: 0.45 },
+      { note: NOTES.E5, dur: 0.90 },
+      { note: NOTES.B5, dur: 0.45 },
+      { note: NOTES.D6, dur: 0.90 },
+      { note: NOTES.CS6 || 1108.73, dur: 0.45 },
+      { note: NOTES.C6, dur: 0.90 },
+      { note: NOTES.A5, dur: 0.45 },
+      { note: NOTES.C6, dur: 0.68 },
+      { note: NOTES.B5, dur: 0.24 },
+      { note: NOTES.AS5 || 932.33, dur: 0.45 },
+      { note: NOTES.B4, dur: 0.90 },
+      { note: NOTES.G5, dur: 0.45 },
+      { note: NOTES.E5, dur: 1.40 }
+    ];
+
+    function playCelestaNote(freq, duration) {
+      if (!audioCtx || !isMusicPlaying) return;
+      const now = audioCtx.currentTime;
+
+      // 主音：清澈正弦波（钢片琴基音）
+      const osc1 = audioCtx.createOscillator();
+      // 泛音：高八度三角波（八音盒金属闪烁感）
+      const osc2 = audioCtx.createOscillator();
+      const gainNode = audioCtx.createGain();
+      const harmonicGain = audioCtx.createGain();
+
+      osc1.type = 'sine';
+      osc1.frequency.setValueAtTime(freq, now);
+
+      osc2.type = 'triangle';
+      osc2.frequency.setValueAtTime(freq * 2, now);
+
+      // 包络：快速敲击起音 + 悠长梦幻余音
+      gainNode.gain.setValueAtTime(0.0001, now);
+      gainNode.gain.linearRampToValueAtTime(0.11, now + 0.025);
+      gainNode.gain.exponentialRampToValueAtTime(0.0008, now + duration + 0.85);
+
+      harmonicGain.gain.setValueAtTime(0.025, now);
+      harmonicGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+
+      osc1.connect(gainNode);
+      osc2.connect(harmonicGain);
+      harmonicGain.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+
+      osc1.start(now);
+      osc2.start(now);
+      osc1.stop(now + duration + 0.9);
+      osc2.stop(now + duration + 0.9);
+    }
+
+    function scheduleMelodyLoop(index = 0) {
+      if (!isMusicPlaying) return;
+      const item = HEDWIG_MELODY[index];
+      playCelestaNote(item.note, item.dur);
+
+      const nextIndex = (index + 1) % HEDWIG_MELODY.length;
+      const pause = nextIndex === 0 ? 1200 : item.dur * 1000;
+      melodyTimer = setTimeout(() => scheduleMelodyLoop(nextIndex), pause);
+    }
+
+    function toggleMagicMusic() {
+      const btn = document.getElementById('music-toggle-btn');
+      const icon = document.getElementById('music-icon');
+      const label = document.getElementById('music-label');
+
+      if (!isMusicPlaying) {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        isMusicPlaying = true;
+        icon.textContent = '🎵';
+        label.textContent = '魔法音乐: 开';
+        btn.classList.add('ring-2', 'ring-amber-300', 'bg-amber-500/30');
+        showToast('✨ 霍格沃茨神秘钢片琴背景乐已开启');
+        scheduleMelodyLoop(0);
+      } else {
+        isMusicPlaying = false;
+        clearTimeout(melodyTimer);
+        icon.textContent = '🔇';
+        label.textContent = '魔法音乐: 关';
+        btn.classList.remove('ring-2', 'ring-amber-300', 'bg-amber-500/30');
+        showToast('🔕 背景音乐已关闭');
+      }
+    }
+
+    // 魔法音效（开盲盒/批改成功时的短音效）
+    function playMagicSparkleSfx() {
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const notes = [523.25, 659.25, 783.99, 1046.50, 1318.51];
+        notes.forEach((f, idx) => {
+          const now = audioCtx.currentTime + idx * 0.08;
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(f, now);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.5);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.55);
+        });
+      } catch (e) {}
+    }
+
+    // ==================== 4. 语音朗读 (TTS) ====================
+    function speakChinese(text) {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'zh-CN';
+        utterance.rate = 0.9;
+        window.speechSynthesis.speak(utterance);
+      } else {
+        showToast('当前浏览器不支持语音朗读功能');
+      }
+    }
+
+    // ==================== 5. 渲染生词学习单 ====================
+    function renderVocab(filterText = '') {
+      const tbody = document.getElementById('vocab-tbody');
+      const cardsContainer = document.getElementById('vocab-cards-container');
+      const query = filterText.trim().toLowerCase();
+
+      const filtered = VOCAB_LIST.filter(item =>
+        item.word.includes(query) ||
+        item.pinyin.toLowerCase().includes(query) ||
+        item.en.toLowerCase().includes(query) ||
+        item.sentence.includes(query)
+      );
+
+      // 渲染表格
+      tbody.innerHTML = filtered.map((item, idx) => {
+        const rowBg = idx % 2 === 0 ? 'bg-white' : 'bg-[#F2F4F4]';
+        return `
+          <tr class="${rowBg} hover:bg-amber-50/80 transition">
+            <td class="py-3 px-3 text-center font-bold text-slate-500">${item.id}</td>
+            <td class="py-3 px-4 text-center font-bold text-lg text-[#1A5276] whitespace-nowrap">${item.word}</td>
+            <td class="py-3 px-4 text-center font-semibold text-[#2980B9] whitespace-nowrap">${item.pinyin}</td>
+            <td class="py-3 px-4 text-slate-700 font-medium">${item.en}</td>
+            <td class="py-3 px-4">
+              <div class="text-slate-900 font-medium">${item.sentence}</div>
+              <div class="text-xs text-slate-500 mt-0.5">${item.sentenceEn}</div>
+            </td>
+            <td class="py-3 px-3 text-center">
+              <button onclick="speakChinese('${item.word}。${item.sentence}')" title="点击朗读词语与例句" class="w-9 h-9 rounded-full bg-sky-100 hover:bg-[#2980B9] text-[#1A5276] hover:text-white inline-flex items-center justify-center transition shadow-sm cursor-pointer">
+                🔊
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      // 渲染魔法闪卡
+      cardsContainer.innerHTML = filtered.map(item => `
+        <div onclick="this.querySelector('.card-inner').classList.toggle('rotate-y-180')" class="perspective h-48 cursor-pointer group">
+          <div class="card-inner preserve-3d relative w-full h-full">
+            <!-- 正面 -->
+            <div class="backface-hidden absolute inset-0 rounded-2xl bg-gradient-to-br from-[#1A5276] to-[#2980B9] text-white p-5 border-2 border-amber-400/60 shadow-md flex flex-col items-center justify-center text-center">
+              <span class="absolute top-3 left-3 text-xs px-2 py-0.5 rounded bg-white/15 text-amber-200 font-bold">#${item.id}</span>
+              <button onclick="event.stopPropagation(); speakChinese('${item.word}')" class="absolute top-2.5 right-2.5 w-8 h-8 rounded-full bg-white/20 hover:bg-amber-400 hover:text-slate-900 flex items-center justify-center text-sm transition">🔊</button>
+              <div class="text-3xl font-bold tracking-wider mb-1.5">${item.word}</div>
+              <div class="text-base text-amber-300 font-semibold">${item.pinyin}</div>
+              <div class="text-xs text-sky-200 mt-3 opacity-80">点击翻转查看英文与例句 ↻</div>
+            </div>
+            <!-- 背面 -->
+            <div class="backface-hidden rotate-y-180 absolute inset-0 rounded-2xl bg-[#FDFBF7] text-slate-800 p-4 border-2 border-[#2980B9] shadow-md flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                  <span class="font-bold text-[#1A5276]">${item.word}</span>
+                  <span class="text-xs font-semibold text-[#2980B9]">${item.en}</span>
+                </div>
+                <p class="text-sm font-medium text-slate-900 mt-2.5 leading-snug">${item.sentence}</p>
+                <p class="text-xs text-slate-500 mt-1 leading-snug">${item.sentenceEn}</p>
+              </div>
+              <div class="flex justify-between items-center pt-1">
+                <button onclick="event.stopPropagation(); speakChinese('${item.sentence}')" class="text-xs px-2.5 py-1 rounded-lg bg-sky-100 text-[#1A5276] font-bold hover:bg-sky-200">🔊 读例句</button>
+                <span class="text-[11px] text-slate-400">点击翻回正面 ↺</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterVocab() {
+      const val = document.getElementById('vocab-search').value;
+      renderVocab(val);
+    }
+
+    function setVocabView(mode) {
+      const tableEl = document.getElementById('vocab-table-container');
+      const cardEl = document.getElementById('vocab-cards-container');
+      const tableBtn = document.getElementById('view-table-btn');
+      const cardBtn = document.getElementById('view-card-btn');
+
+      if (mode === 'table') {
+        tableEl.classList.remove('hidden');
+        cardEl.classList.add('hidden');
+        tableBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1A5276] text-white shadow transition';
+        cardBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:text-slate-900 transition';
+      } else {
+        tableEl.classList.add('hidden');
+        cardEl.classList.remove('hidden');
+        cardBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold bg-[#1A5276] text-white shadow transition';
+        tableBtn.className = 'px-3 py-1.5 rounded-lg text-xs font-bold text-slate-700 hover:text-slate-900 transition';
+      }
+    }
+
+    // ==================== 6. 渲染练习题 ====================
+    function renderPractice() {
+      // 第一部分：28道看拼音写词语
+      const sec1 = document.getElementById('section1-container');
+      sec1.innerHTML = VOCAB_LIST.map((item, idx) => `
+        <div class="flex items-center justify-between gap-2 p-3 rounded-xl bg-white border border-slate-200 shadow-sm">
+          <div class="flex items-center gap-2 min-w-[145px]">
+            <span class="w-6 h-6 rounded-full bg-[#1A5276] text-white text-xs font-bold flex items-center justify-center shrink-0">${idx + 1}</span>
+            <span class="font-bold text-[#2980B9] text-sm sm:text-base">${item.pinyin}</span>
+          </div>
+          <div class="flex items-center gap-2 flex-1 justify-end">
+            <input type="text" data-answer="${item.word}" class="practice-input sec1-input w-28 sm:w-36 px-3 py-1.5 rounded-lg border-2 border-slate-300 text-center font-bold text-slate-800 focus:outline-none focus:border-[#2980B9] transition" placeholder="输入汉字" />
+            <span class="feedback-badge text-xs font-bold whitespace-nowrap hidden"></span>
+          </div>
+        </div>
+      `).join('');
+
+      // 第二部分：核心词汇选词填空
+      const sec2 = document.getElementById('section2-container');
+      sec2.innerHTML = renderFillBlankSection(SEC2_QUESTIONS, SEC2_OPTIONS, 'sec2');
+
+      // 第三部分：扩展词汇选词填空
+      const sec3 = document.getElementById('section3-container');
+      sec3.innerHTML = renderFillBlankSection(SEC3_QUESTIONS, SEC3_OPTIONS, 'sec3');
+    }
+
+    function renderFillBlankSection(questions, optionsList, prefix) {
+      const optionsHtml = `<option value="">-- 请选择 --</option>` +
+        optionsList.map(opt => `<option value="${opt}">${opt}</option>`).join('');
+
+      return questions.map((q, qIdx) => {
+        let html = `<div class="p-3.5 rounded-xl bg-white border border-slate-200 shadow-sm">`;
+        q.parts.forEach((part, pIdx) => {
+          html += `<span>${part}</span>`;
+          if (pIdx < q.answers.length) {
+            const ans = q.answers[pIdx];
+            html += `
+              <span class="inline-flex items-center gap-1 mx-1 align-middle">
+                <select data-answer="${ans}" class="practice-input ${prefix}-select px-2.5 py-1 rounded-lg border-2 border-slate-300 bg-sky-50/50 font-bold text-[#1A5276] text-sm focus:outline-none focus:border-[#2980B9] cursor-pointer transition">
+                  ${optionsHtml}
+                </select>
+                <span class="feedback-badge text-xs font-bold hidden"></span>
+              </span>
+            `;
+          }
+        });
+        html += `</div>`;
+        return html;
+      }).join('');
+    }
+
+    // ==================== 7. 自动批改与积分结算 ====================
+    function gradePractice() {
+      const inputs = document.querySelectorAll('.practice-input');
+      let correctCount = 0;
+      const totalCount = inputs.length; // 53
+
+      inputs.forEach(el => {
+        const userVal = el.value.trim();
+        const expected = el.getAttribute('data-answer').trim();
+        const badge = el.parentElement.querySelector('.feedback-badge');
+
+        // 重置样式
+        el.classList.remove('border-slate-300', 'border-emerald-500', 'bg-emerald-50', 'text-emerald-800', 'border-rose-500', 'bg-rose-50', 'text-rose-800');
+        badge.classList.remove('hidden', 'text-emerald-600', 'text-rose-600');
+
+        if (userVal === expected) {
+          correctCount++;
+          el.classList.add('border-emerald-500', 'bg-emerald-50', 'text-emerald-800');
+          badge.textContent = '✅';
+          badge.classList.add('text-emerald-600');
+        } else {
+          el.classList.add('border-rose-500', 'bg-rose-50', 'text-rose-800');
+          badge.textContent = `❌ (${expected})`;
+          badge.classList.add('text-rose-600');
+        }
+      });
+
+      const points = correctCount * 2; // 满分 106 分
+      const accuracy = Math.round((correctCount / totalCount) * 100);
+
+      // 计算可开启盲盒次数 (0 ~ 5个)
+      let earnedBoxes = 0;
+      if (points >= 87) earnedBoxes = 5;
+      else if (points >= 65) earnedBoxes = 4;
+      else if (points >= 43) earnedBoxes = 3;
+      else if (points >= 21) earnedBoxes = 2;
+      else if (points >= 1) earnedBoxes = 1;
+
+      // 更新最高积分与盲盒额度（保留已开盲盒记录，若分数提高则增加可开数量）
+      if (points > gameState.score) {
+        gameState.score = points;
+      }
+      if (earnedBoxes > gameState.maxEarnedBoxes) {
+        gameState.maxEarnedBoxes = earnedBoxes;
+      }
+
+      // 更新评语等级
+      let rankText = "见习小巫师";
+      if (accuracy >= 90) rankText = "🌟 首席魔法大师";
+      else if (accuracy >= 75) rankText = "⚡ 优秀学院精英";
+      else if (accuracy >= 50) rankText = "🪄 进阶魔法学徒";
+
+      document.getElementById('grade-rank-badge').textContent = rankText;
+      document.getElementById('grade-correct-count').textContent = correctCount;
+      document.getElementById('grade-accuracy').textContent = `${accuracy}%`;
+      document.getElementById('grade-total-points').textContent = points;
+
+      const remaining = Math.max(0, gameState.maxEarnedBoxes - gameState.openedBoxIndices.length);
+      document.getElementById('banner-box-count').textContent = remaining;
+      document.getElementById('grade-box-message').textContent =
+        earnedBoxes > 0
+          ? `🎁 根据本次得分，你已累计解锁 ${gameState.maxEarnedBoxes} 个盲盒资格（当前剩余 ${remaining} 个未开启）！`
+          : `💡 至少答对 1 题即可解锁第 1 个神秘盲盒，再试一次吧！`;
+
+      const banner = document.getElementById('grade-result-banner');
+      banner.classList.remove('hidden');
+      banner.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+      playMagicSparkleSfx();
+      updateDashboardUI();
+    }
+
+    function resetPractice() {
+      const inputs = document.querySelectorAll('.practice-input');
+      inputs.forEach(el => {
+        el.value = '';
+        el.classList.remove('border-emerald-500', 'bg-emerald-50', 'text-emerald-800', 'border-rose-500', 'bg-rose-50', 'text-rose-800');
+        el.classList.add('border-slate-300');
+        const badge = el.parentElement.querySelector('.feedback-badge');
+        badge.classList.add('hidden');
+        badge.textContent = '';
+      });
+      document.getElementById('grade-result-banner').classList.add('hidden');
+      showToast('🔄 练习题已全部清空，可以重新挑战啦！');
+    }
+
+    // ==================== 8. 魔法盲盒抽奖与贴图收集系统 ====================
+    function updateDashboardUI() {
+      const remaining = Math.max(0, gameState.maxEarnedBoxes - gameState.openedBoxIndices.length);
+
+      // 顶部栏数据
+      document.getElementById('header-score').textContent = gameState.score;
+      document.getElementById('header-boxes').textContent = remaining;
+
+      // 导航栏红点提示
+      const navBadge = document.getElementById('nav-box-badge');
+      if (remaining > 0) {
+        navBadge.textContent = remaining;
+        navBadge.classList.remove('hidden');
+      } else {
+        navBadge.classList.add('hidden');
+      }
+
+      // 盲盒面板数据
+      document.getElementById('box-panel-score').textContent = gameState.score;
+      document.getElementById('box-panel-earned').textContent = gameState.maxEarnedBoxes;
+      document.getElementById('box-panel-remaining').textContent = remaining;
+
+      const hintEl = document.getElementById('no-box-hint');
+      if (remaining > 0 || gameState.maxEarnedBoxes >= 5) {
+        hintEl.classList.add('hidden');
+      } else {
+        hintEl.classList.remove('hidden');
+      }
+
+      renderBlindBoxes();
+      renderStickerAlbum();
+    }
+
+    function renderBlindBoxes() {
+      const grid = document.getElementById('blind-boxes-grid');
+      const remaining = Math.max(0, gameState.maxEarnedBoxes - gameState.openedBoxIndices.length);
+
+      let html = '';
+      for (let i = 0; i < 5; i++) {
+        const isOpened = gameState.openedBoxIndices.includes(i);
+        const reward = gameState.boxRewards[i];
+
+        if (isOpened && reward) {
+          // 已开启状态：展示开出的贴图
+          html += `
+            <div onclick="previewSticker(${reward.id})" class="rounded-2xl bg-gradient-to-b from-amber-50 to-white border-2 border-amber-400 p-3 flex flex-col items-center justify-between shadow-md cursor-pointer hover:scale-105 transition">
+              <span class="text-[11px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800">已开启 #${i + 1}</span>
+              <div class="w-24 h-24 my-2 flex items-center justify-center">
+                <img src="${reward.url}" alt="${reward.name}" class="max-w-full max-h-full object-contain rounded-lg" />
+              </div>
+              <span class="text-xs font-bold text-[#1A5276] truncate w-full">${reward.name}</span>
+            </div>
+          `;
+        } else if (remaining > 0) {
+          // 可开启状态：闪烁魔法宝箱
+          html += `
+            <button onclick="openBlindBox(${i})" class="blind-box-ready rounded-2xl bg-gradient-to-b from-[#1A5276] to-[#0E2F44] border-2 border-amber-400 p-4 flex flex-col items-center justify-center text-white shadow-xl cursor-pointer group">
+              <div class="text-4xl sm:text-5xl mb-2 group-hover:scale-110 transition">🎁</div>
+              <div class="text-xs font-extrabold text-amber-300 tracking-wide">魔法盲盒 #${i + 1}</div>
+              <span class="mt-2 px-2.5 py-1 rounded-full bg-amber-400 text-slate-900 text-[11px] font-extrabold shadow">✨ 点击开启</span>
+            </button>
+          `;
+        } else {
+          // 锁定状态：积分不足
+          html += `
+            <div onclick="showToast('🔒 做练习题赚取更多积分即可解锁此盲盒！')" class="rounded-2xl bg-slate-200/75 border-2 border-dashed border-slate-400 p-4 flex flex-col items-center justify-center text-slate-500 opacity-75 cursor-not-allowed">
+              <div class="text-4xl mb-2 grayscale">🔒</div>
+              <div class="text-xs font-bold">魔法盲盒 #${i + 1}</div>
+              <span class="mt-1.5 text-[11px] text-slate-400">积分达标解锁</span>
+            </div>
+          `;
+        }
+      }
+      grid.innerHTML = html;
+    }
+
+    function openBlindBox(boxIndex) {
+      const remaining = Math.max(0, gameState.maxEarnedBoxes - gameState.openedBoxIndices.length);
+      if (remaining <= 0 || gameState.openedBoxIndices.includes(boxIndex)) {
+        showToast('当前没有可用的盲盒开启次数哦！');
+        return;
+      }
+
+      // 优先从尚未收集的贴图中随机抽取（增加收集乐趣），若已全收集则全池随机
+      const uncollected = STICKER_POOL.filter(s => !gameState.unlockedStickerIds.has(s.id));
+      const pool = uncollected.length > 0 ? uncollected : STICKER_POOL;
+      const chosenSticker = pool[Math.floor(Math.random() * pool.length)];
+
+      gameState.openedBoxIndices.push(boxIndex);
+      gameState.boxRewards[boxIndex] = chosenSticker;
+      gameState.unlockedStickerIds.add(chosenSticker.id);
+
+      playMagicSparkleSfx();
+      updateDashboardUI();
+
+      // 弹出惊喜获奖窗
+      document.getElementById('modal-sticker-title').textContent = `恭喜获得【${chosenSticker.name}】！`;
+      document.getElementById('modal-sticker-img').src = chosenSticker.url;
+      document.getElementById('reward-modal').classList.remove('hidden');
+      document.getElementById('reward-modal').classList.add('flex');
+    }
+
+    function previewSticker(stickerId) {
+      const sticker = STICKER_POOL.find(s => s.id === stickerId);
+      if (!sticker) return;
+      document.getElementById('modal-sticker-title').textContent = sticker.name;
+      document.getElementById('modal-sticker-img').src = sticker.url;
+      document.getElementById('reward-modal').classList.remove('hidden');
+      document.getElementById('reward-modal').classList.add('flex');
+    }
+
+    function closeRewardModal() {
+      const modal = document.getElementById('reward-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    function renderStickerAlbum() {
+      const grid = document.getElementById('sticker-album-grid');
+      document.getElementById('collection-progress').textContent = gameState.unlockedStickerIds.size;
+
+      grid.innerHTML = STICKER_POOL.map(sticker => {
+        const unlocked = gameState.unlockedStickerIds.has(sticker.id);
+        if (unlocked) {
+          return `
+            <div onclick="previewSticker(${sticker.id})" class="rounded-2xl bg-white border-2 border-amber-400 p-3 flex flex-col items-center justify-between shadow-sm hover:shadow-md hover:scale-105 transition cursor-pointer">
+              <div class="w-full h-28 flex items-center justify-center p-1">
+                <img src="${sticker.url}" alt="${sticker.name}" class="max-w-full max-h-full object-contain rounded-lg" />
+              </div>
+              <div class="mt-2 text-xs font-bold text-[#1A5276] flex items-center gap-1">
+                <span>✨</span> ${sticker.name}
+              </div>
+            </div>
+          `;
+        } else {
+          return `
+            <div class="rounded-2xl bg-slate-100 border border-slate-300 p-3 flex flex-col items-center justify-center text-slate-400 h-40">
+              <div class="w-16 h-16 rounded-full bg-slate-200 flex items-center justify-center text-2xl mb-2">❓</div>
+              <div class="text-xs font-semibold">未解锁贴图 #${sticker.id}</div>
+            </div>
+          `;
+        }
+      }).join('');
+    }
+
+    // ==================== 9. 选项卡切换与提示框 ====================
+    function switchTab(tabName) {
+      ['vocab', 'practice', 'blindbox'].forEach(name => {
+        const panel = document.getElementById(`panel-${name}`);
+        const btn = document.getElementById(`tab-btn-${name}`);
+        if (name === tabName) {
+          panel.classList.remove('hidden');
+          btn.className = 'tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-1.5 bg-[#2980B9] text-white border border-amber-300 shadow cursor-pointer';
+        } else {
+          panel.classList.add('hidden');
+          btn.className = 'tab-btn px-4 py-2 rounded-xl text-sm font-bold transition flex items-center gap-1.5 bg-[#132C4A] text-sky-200 hover:bg-[#1A5276] border border-sky-700/50 cursor-pointer';
+        }
+      });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    let toastTimeout = null;
+    function showToast(msg) {
+      const toast = document.getElementById('magic-toast');
+      document.getElementById('toast-text').textContent = msg;
+      toast.classList.remove('hidden');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => {
+        toast.classList.add('hidden');
+      }, 3000);
+    }
+
+    // ==================== 10. 初始化 ====================
+    window.addEventListener('DOMContentLoaded', () => {
+      renderVocab();
+      renderPractice();
+      updateDashboardUI();
+    });
+  </script>
+</body>
+</html>

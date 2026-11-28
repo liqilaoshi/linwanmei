@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="zh-SG">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新加坡小学四年级华文 Topical Test · 第七课《他的脸红了》（双套试卷练习版 · 每套60分）</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-light: #dbeafe;
+    --primary-dark: #1d4ed8;
+    --success: #16a34a;
+    --success-bg: #dcfce7;
+    --danger: #dc2626;
+    --danger-bg: #fee2e2;
+    --warning: #d97706;
+    --warning-bg: #fef3c7;
+    --purple: #7c3aed;
+    --purple-light: #ede9fe;
+    --bg: #f8fafc;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #cbd5e1;
+  }
+
+  * {
+    box-sizing: border-box;
+    font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    padding-bottom: 70px;
+  }
+
+  /* 顶部固定状态栏 */
+  .sticky-bar {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: #1e293b;
+    color: #fff;
+    padding: 10px 18px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.18);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .bar-title {
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .bar-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .badge-timer {
+    background: #334155;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-family: monospace;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #38bdf8;
+    border: 1px solid #475569;
+  }
+
+  .badge-score {
+    background: #0f172a;
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-weight: bold;
+    color: #4ade80;
+    border: 1px solid #22c55e;
+  }
+
+  .btn {
+    border: none;
+    padding: 6px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .btn-toggle {
+    background: #475569;
+    color: #f1f5f9;
+  }
+  .btn-toggle.active {
+    background: #f59e0b;
+    color: #1e293b;
+  }
+
+  .btn-dict {
+    background: var(--purple);
+    color: #fff;
+  }
+  .btn-dict:hover { background: #6d28d9; }
+
+  .btn-primary {
+    background: var(--primary);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--primary-dark); }
+
+  .btn-success {
+    background: var(--success);
+    color: white;
+    font-size: 1.02rem;
+    padding: 11px 24px;
+  }
+  .btn-success:hover { background: #15803d; }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid #94a3b8;
+    color: #e2e8f0;
+  }
+  .btn-outline:hover { background: #334155; }
+
+  /* 试卷切换选项卡 */
+  .set-switcher {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+  }
+
+  .set-tab {
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-size: 1.02rem;
+    font-weight: 700;
+    cursor: pointer;
+    border: 2px solid var(--border);
+    background: #fff;
+    color: #475569;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .set-tab:hover {
+    border-color: var(--primary);
+    color: var(--primary-dark);
+  }
+
+  .set-tab.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary-dark);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+  }
+
+  .set-tab .tab-status {
+    font-size: 0.78rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.12);
+  }
+  .set-tab:not(.active) .tab-status {
+    background: #f1f5f9;
+    color: #64748b;
+  }
+
+  /* 万能小词典侧边抽屉 */
+  .dict-drawer {
+    position: fixed;
+    top: 58px;
+    right: -400px;
+    width: 380px;
+    max-width: 92vw;
+    height: calc(100vh - 58px);
+    background: #ffffff;
+    box-shadow: -6px 0 24px rgba(0,0,0,0.18);
+    z-index: 190;
+    transition: right 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid var(--purple);
+  }
+
+  .dict-drawer.open {
+    right: 0;
+  }
+
+  .dict-header {
+    background: var(--purple);
+    color: white;
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .dict-header h3 {
+    margin: 0;
+    font-size: 1.05rem;
+  }
+
+  .dict-search-box {
+    padding: 12px 14px;
+    background: #f5f3ff;
+    border-bottom: 1px solid #ddd6fe;
+  }
+
+  .dict-search-box input {
+    width: 100%;
+    padding: 8px 12px;
+    border: 1.5px solid #a78bfa;
+    border-radius: 8px;
+    font-size: 0.95rem;
+  }
+
+  .dict-tags {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .dict-tag {
+    font-size: 0.78rem;
+    background: #ede9fe;
+    color: #5b21b6;
+    padding: 2px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    border: 1px solid #c4b5fd;
+  }
+  .dict-tag:hover { background: #ddd6fe; }
+
+  .dict-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 14px;
+  }
+
+  .dict-entry {
+    border: 1px solid #e2e8f0;
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 10px;
+    background: #fafafa;
+  }
+
+  .dict-word-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+  }
+
+  .dict-word {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: #1e293b;
+  }
+
+  .dict-py {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--purple);
+  }
+
+  .dict-lesson-badge {
+    font-size: 0.72rem;
+    background: #e0e7ff;
+    color: #3730a3;
+    padding: 1px 6px;
+    border-radius: 4px;
+  }
+
+  .dict-en {
+    font-size: 0.88rem;
+    color: #475569;
+    font-style: italic;
+    margin-bottom: 4px;
+  }
+
+  .dict-ex {
+    font-size: 0.88rem;
+    color: #0f172a;
+    background: #f1f5f9;
+    padding: 5px 8px;
+    border-radius: 6px;
+  }
+
+  /* 主容器 */
+  .container {
+    max-width: 920px;
+    margin: 22px auto;
+    padding: 0 16px;
+  }
+
+  /* 试卷头部 */
+  .exam-header {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 22px 24px;
+    border: 2px solid #e2e8f0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  }
+
+  .exam-header h1 {
+    margin: 0 0 6px 0;
+    font-size: 1.45rem;
+    color: #0f172a;
+    text-align: center;
+  }
+
+  .exam-subtitle {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin-bottom: 16px;
+  }
+
+  .student-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+    background: #f1f5f9;
+    padding: 12px 14px;
+    border-radius: 10px;
+  }
+
+  .student-info label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .student-info input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.95rem;
+  }
+
+  /* 辅助提示框（拼音与英译） */
+  .help-box {
+    display: none;
+    background: #fffbeb;
+    border-left: 4px solid #f59e0b;
+    padding: 8px 12px;
+    margin-top: 8px;
+    border-radius: 0 8px 8px 0;
+    font-size: 0.88rem;
+    color: #78350f;
+  }
+
+  body.show-help .help-box {
+    display: block;
+    animation: fadeIn 0.25s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .help-py {
+    font-weight: 600;
+    color: #b45309;
+    display: block;
+  }
+  .help-en {
+    color: #475569;
+    font-style: italic;
+  }
+
+  /* 大题区块 */
+  .section-card {
+    background: var(--card);
+    border-radius: 14px;
+    padding: 20px 24px;
+    margin-bottom: 22px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--primary-dark);
+    border-bottom: 2px solid var(--primary-light);
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .section-desc {
+    color: #475569;
+    font-size: 0.94rem;
+    margin-bottom: 14px;
+  }
+
+  .example-box {
+    background: #f8fafc;
+    border: 1px dashed #94a3b8;
+    padding: 9px 14px;
+    border-radius: 8px;
+    margin-bottom: 14px;
+    font-size: 0.94rem;
+    color: #334155;
+  }
+
+  /* 单题样式 */
+  .question-item {
+    padding: 14px;
+    border-radius: 10px;
+    border: 1px solid #f1f5f9;
+    margin-bottom: 14px;
+    background: #fcfcfd;
+    transition: border-color 0.2s;
+  }
+
+  .question-item.correct {
+    border-color: var(--success);
+    background: #f0fdf4;
+  }
+
+  .question-item.incorrect {
+    border-color: var(--danger);
+    background: #fef2f2;
+  }
+
+  .q-text {
+    font-size: 1.04rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  /* 选择题按钮组 */
+  .options-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .option-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 15px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    background: white;
+    font-size: 0.98rem;
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .option-label:hover {
+    border-color: var(--primary);
+    background: var(--primary-light);
+  }
+
+  .option-label input[type="radio"] {
+    accent-color: var(--primary);
+    transform: scale(1.15);
+  }
+
+  /* 看词选图卡片组 */
+  .pic-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 8px;
+  }
+
+  .pic-card {
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    padding: 10px;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.15s;
+  }
+
+  .pic-card:hover {
+    border-color: var(--primary);
+    background: #eff6ff;
+  }
+
+  .pic-card svg {
+    width: 90px;
+    height: 90px;
+    margin: 6px 0;
+  }
+
+  .pic-card-label {
+    font-weight: 700;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* 文本输入框 */
+  .text-input {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background: #f8fafc;
+    padding: 4px 10px;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--primary-dark);
+    text-align: center;
+    width: 76px;
+    border-radius: 4px 4px 0 0;
+  }
+  .text-input:focus {
+    outline: none;
+    background: var(--primary-light);
+  }
+
+  .sentence-input {
+    width: 100%;
+    padding: 9px 12px;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    font-size: 1rem;
+    margin-top: 6px;
+  }
+  .sentence-input:focus {
+    outline: none;
+    border-color: var(--primary);
+  }
+
+  /* 词库方框 */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    background: #eff6ff;
+    border: 1.5px solid #93c5fd;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    font-size: 1.08rem;
+    font-weight: 700;
+  }
+
+  /* 选字组词十字格 */
+  .cross-grid-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px;
+    justify-content: space-around;
+    margin-top: 10px;
+  }
+
+  .cross-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .cross-table {
+    border-collapse: collapse;
+  }
+  .cross-table td {
+    width: 48px;
+    height: 48px;
+    text-align: center;
+    vertical-align: middle;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  .cross-table td.cell-box {
+    border: 2px solid #334155;
+    background: #fff;
+  }
+  .cross-table td.cell-input input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--primary-dark);
+    background: #fef9c3;
+  }
+
+  /* 词语搭配网格 */
+  .collocation-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+  }
+
+  /* 短文框 */
+  .passage-box {
+    background: #f8fafc;
+    border: 1.5px solid #cbd5e1;
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+    font-size: 1.04rem;
+    line-height: 1.95;
+  }
+
+  .inline-select {
+    padding: 4px 8px;
+    font-size: 0.98rem;
+    font-weight: 600;
+    border: 1.5px solid var(--primary);
+    border-radius: 6px;
+    background: #eff6ff;
+    color: var(--primary-dark);
+    cursor: pointer;
+  }
+
+  /* 批改反馈信息 */
+  .feedback {
+    margin-top: 8px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.ok { color: var(--success); }
+  .feedback.err { color: var(--danger); }
+
+  /* 底部提交与成绩单 */
+  .submit-area {
+    text-align: center;
+    margin-top: 30px;
+    padding: 24px;
+    background: var(--card);
+    border-radius: 14px;
+    border: 2px solid var(--primary-light);
+  }
+
+  .result-banner {
+    display: none;
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 12px;
+    background: #eff6ff;
+    border: 2px solid var(--primary);
+    text-align: left;
+  }
+
+  .result-banner h3 {
+    margin-top: 0;
+    color: var(--primary-dark);
+  }
+
+  .score-breakdown {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 12px;
+    font-size: 0.88rem;
+    background: #fff;
+  }
+  .score-breakdown th, .score-breakdown td {
+    border: 1px solid #cbd5e1;
+    padding: 6px 10px;
+    text-align: left;
+  }
+  .score-breakdown th {
+    background: #dbeafe;
+    color: #1e3a8a;
+  }
+
+  .exam-set { display: none; }
+  .exam-set.active { display: block; }
+
+  @media (max-width: 640px) {
+    .pic-grid { grid-template-columns: 1fr; }
+    .options-row { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<!-- 顶部状态与控制栏 -->
+<div class="sticky-bar">
+  <div class="bar-title">🇸🇬 小学四年级华文 · 第七课《他的脸红了》（双套试卷 · 每套60分）</div>
+  <div class="bar-controls">
+    <div class="badge-timer" id="timerDisplay">⏱ 00:00</div>
+    <button class="btn btn-outline" id="pauseBtn" onclick="toggleTimer()">暂停</button>
+    <button class="btn btn-toggle" id="helpToggleBtn" onclick="toggleHelp()">💡 拼音与英译提示：关</button>
+    <button class="btn btn-dict" onclick="toggleDict()">📖 万能小词典</button>
+    <div class="badge-score" id="scoreDisplay">当前得分：-- / 60</div>
+  </div>
+</div>
+
+<!-- 万能小词典侧边栏 -->
+<div class="dict-drawer" id="dictDrawer">
+  <div class="dict-header">
+    <h3>📖 第七课《他的脸红了》万能小词典</h3>
+    <button class="btn btn-outline" style="padding:3px 9px;" onclick="toggleDict()">✕</button>
+  </div>
+  <div class="dict-search-box">
+    <input type="text" id="dictSearchInput" placeholder="输入汉字、拼音或英文搜索..." oninput="filterDict()">
+    <div class="dict-tags">
+      <span class="dict-tag" onclick="quickFilter('')">全部词汇</span>
+      <span class="dict-tag" onclick="quickFilter('神态与情绪')">神态与情绪</span>
+      <span class="dict-tag" onclick="quickFilter('诚实与道歉')">诚实与道歉</span>
+    </div>
+  </div>
+  <div class="dict-list" id="dictList"></div>
+</div>
+
+<div class="container">
+  <!-- 试卷头部 -->
+  <div class="exam-header">
+    <h1>Primary 4 Chinese — Topical Test (第七课《他的脸红了》双套复习测验)</h1>
+    <div class="exam-subtitle">范围：《欢乐伙伴》4A 第七课《他的脸红了》｜ 题型一致 · 双套并行 · 每套满分：60 分</div>
+    <div class="student-info">
+      <label>姓名 Name: <input type="text" id="studentName" placeholder="输入学生姓名"></label>
+      <label>班级 Class: <input type="text" id="studentClass" value="P4"></label>
+      <label>每套建议用时: <span style="color:#2563eb;">35–40 分钟</span></label>
+    </div>
+  </div>
+
+  <!-- 试卷切换栏 -->
+  <div class="set-switcher">
+    <button class="set-tab active" id="tab-set1" onclick="switchSet(1)">
+      📝 第一套试卷（基础巩固卷）
+      <span class="tab-status" id="status-set1">未批改</span>
+    </button>
+    <button class="set-tab" id="tab-set2" onclick="switchSet(2)">
+      🚀 第二套试卷（全新进阶卷）
+      <span class="tab-status" id="status-set2">未批改</span>
+    </button>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!--                          第一套试卷 (SET 1)                           -->
+  <!-- ===================================================================== -->
+  <div class="exam-set active" id="exam-set-1">
+    <!-- 一、辨字测验 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>一、辨字测验（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">从各题所提供的答案中，选出最恰当的一个。</div>
+      <div class="example-box">例：妈妈（A. 跑 &nbsp; <strong>B. 抱</strong> &nbsp; C. 泡）着妹妹出去了。 → 答案：<strong>B</strong></div>
+
+      <div class="question-item" id="s1_q1">
+        <div class="q-text">1. 不小心弄坏了同学的铅笔盒，他的（A. 脸江 &nbsp; B. 脸红 &nbsp; C. 脸虹）了，低下了头。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q1" value="A"> A. 脸江</label>
+          <label class="option-label"><input type="radio" name="s1_q1" value="B"> B. 脸红</label>
+          <label class="option-label"><input type="radio" name="s1_q1" value="C"> C. 脸虹</label>
+        </div>
+        <div class="help-box"><span class="help-py">Bù xiǎoxīn nòng huài le tóngxué de qiānbǐhé, tā de liǎnhóng le, dī xià le tóu.</span><span class="help-en">After accidentally breaking his classmate's pencil case, his face turned red and he lowered his head.</span></div>
+        <div class="feedback" id="fb-s1_q1"></div>
+      </div>
+
+      <div class="question-item" id="s1_q2">
+        <div class="q-text">2. 做错了事，我们要勇敢地向别人（A. 道谢 &nbsp; B. 道理 &nbsp; C. 道歉），不要撒谎。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q2" value="A"> A. 道谢</label>
+          <label class="option-label"><input type="radio" name="s1_q2" value="B"> B. 道理</label>
+          <label class="option-label"><input type="radio" name="s1_q2" value="C"> C. 道歉</label>
+        </div>
+        <div class="help-box"><span class="help-py">Zuò cuò le shì, wǒmen yào yǒnggǎn de xiàng biérén dàoqiàn, bú yào sāhuǎng.</span><span class="help-en">When we do something wrong, we should bravely apologize to others and not lie.</span></div>
+        <div class="feedback" id="fb-s1_q2"></div>
+      </div>
+
+      <div class="question-item" id="s1_q3">
+        <div class="q-text">3. 诚实的孩子受到大家的（A. 尊重 &nbsp; B. 尊贵 &nbsp; C. 尊敬重），大家都愿意和他做朋友。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q3" value="A"> A. 尊重</label>
+          <label class="option-label"><input type="radio" name="s1_q3" value="B"> B. 尊贵</label>
+          <label class="option-label"><input type="radio" name="s1_q3" value="C"> C. 尊敬重</label>
+        </div>
+        <div class="help-box"><span class="help-py">Chéngshí de háizi shòudào dàjiā de zūnzhòng, dàjiā dōu yuànyì hé tā zuò péngyou.</span><span class="help-en">Honest children earn everyone's respect, and everyone wants to be friends with them.</span></div>
+        <div class="feedback" id="fb-s1_q3"></div>
+      </div>
+    </div>
+
+    <!-- 二、看汉字选拼音 (3题 × 1分 = 3分) -->
+    <div class="section-card">
+      <div class="section-title"><span>二、看汉字选拼音（3题，共3分）</span><span>每题 1 分</span></div>
+      <div class="section-desc">根据所写的汉字，选出相应的汉语拼音。</div>
+
+      <div class="question-item" id="s1_q4">
+        <div class="q-text">4. 诚实</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q4" value="A"> A. chéng shǐ</label>
+          <label class="option-label"><input type="radio" name="s1_q4" value="B"> B. chén shí</label>
+          <label class="option-label"><input type="radio" name="s1_q4" value="C"> C. chéng shí</label>
+        </div>
+        <div class="help-box"><span class="help-en">Meaning: honest / sincere</span></div>
+        <div class="feedback" id="fb-s1_q4"></div>
+      </div>
+
+      <div class="question-item" id="s1_q5">
+        <div class="q-text">5. 惭愧</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q5" value="A"> A. cán kuì</label>
+          <label class="option-label"><input type="radio" name="s1_q5" value="B"> B. chán kuì</label>
+          <label class="option-label"><input type="radio" name="s1_q5" value="C"> C. cán guì</label>
+        </div>
+        <div class="help-box"><span class="help-en">Meaning: ashamed / remorseful</span></div>
+        <div class="feedback" id="fb-s1_q5"></div>
+      </div>
+
+      <div class="question-item" id="s1_q6">
+        <div class="q-text">6. 原谅</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q6" value="A"> A. yuán liǎng</label>
+          <label class="option-label"><input type="radio" name="s1_q6" value="B"> B. yuán liàng</label>
+          <label class="option-label"><input type="radio" name="s1_q6" value="C"> C. yuán láng</label>
+        </div>
+        <div class="help-box"><span class="help-en">Meaning: to forgive / pardon</span></div>
+        <div class="feedback" id="fb-s1_q6"></div>
+      </div>
+    </div>
+
+    <!-- 三、填写汉字 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>三、填写汉字（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据括号中的拼音，把句子中所缺的汉字填写在输入框里。</div>
+
+      <div class="question-item" id="s1_q7">
+        <div class="q-text">7. 看到自己弄脏了课本，明华觉得很惭 <input type="text" class="text-input" id="ans-s1_q7" maxlength="1"> (kuì)。</div>
+        <div class="help-box"><span class="help-py">cánkuì (ashamed / remorseful)</span></div>
+        <div class="feedback" id="fb-s1_q7"></div>
+      </div>
+
+      <div class="question-item" id="s1_q8">
+        <div class="q-text">8. 只要我们说实话，同学一定会原 <input type="text" class="text-input" id="ans-s1_q8" maxlength="1"> (liàng) 我们的。</div>
+        <div class="help-box"><span class="help-py">yuánliàng (to forgive)</span></div>
+        <div class="feedback" id="fb-s1_q8"></div>
+      </div>
+    </div>
+
+    <!-- 四、看词选图 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>四、看词选图（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据给出的词语，选出正确的图片。</div>
+
+      <div class="question-item" id="s1_q9">
+        <div class="q-text">9. 脸红</div>
+        <div class="pic-grid">
+          <label class="pic-card">
+            <img src="https://iili.io/oBHGI7S.png" alt="选项A" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s1_q9" value="A"> A</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHXSKG.png" alt="选项B" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s1_q9" value="B"> B</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHOguR.png" alt="选项C" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s1_q9" value="C"> C</span>
+          </label>
+        </div>
+        <div class="help-box"><span class="help-py">liǎn hóng</span><span class="help-en">blushing / face turning red</span></div>
+        <div class="feedback" id="fb-s1_q9"></div>
+      </div>
+
+      <div class="question-item" id="s1_q10">
+        <div class="q-text">10. 道歉</div>
+        <div class="pic-grid">
+          <label class="pic-card">
+            <img src="https://iili.io/oBHeb0F.png" alt="选项A" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s1_q10" value="A"> A</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHvMyG.png" alt="选项B" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s1_q10" value="B"> B</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHeex2.png" alt="选项C" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s1_q10" value="C"> C</span>
+          </label>
+        </div>
+        <div class="help-box"><span class="help-py">dàoqiàn</span><span class="help-en">to apologize</span></div>
+        <div class="feedback" id="fb-s1_q10"></div>
+      </div>
+    </div>
+
+    <!-- 五、选字组词 (2题 × 1.5分 = 3分) -->
+    <div class="section-card">
+      <div class="section-title"><span>五、选字组词（2题，共3分）</span><span>每题 1.5 分</span></div>
+      <div class="section-desc">从方框中选出适当的汉字，填在黄色的格子里，使横向和纵向都能组成正确的词语。</div>
+      <div class="word-bank"><span>诚</span><span>愧</span><span>歉</span><span>错</span></div>
+
+      <div class="cross-grid-wrap">
+        <div class="cross-item question-item" id="s1_q11" style="min-width:220px;">
+          <div style="font-weight:bold; margin-bottom:6px;">11.</div>
+          <table class="cross-table">
+            <tr><td></td><td class="cell-box">道</td></tr>
+            <tr><td class="cell-box">抱</td><td class="cell-box cell-input"><input type="text" id="ans-s1_q11" maxlength="1"></td></tr>
+          </table>
+          <div class="help-box" style="width:100%;"><span class="help-py">dàoqiàn / bàoqiàn</span></div>
+          <div class="feedback" id="fb-s1_q11"></div>
+        </div>
+
+        <div class="cross-item question-item" id="s1_q12" style="min-width:220px;">
+          <div style="font-weight:bold; margin-bottom:6px;">12.</div>
+          <table class="cross-table">
+            <tr><td></td><td class="cell-box">惭</td></tr>
+            <tr><td class="cell-box">羞</td><td class="cell-box cell-input"><input type="text" id="ans-s1_q12" maxlength="1"></td></tr>
+          </table>
+          <div class="help-box" style="width:100%;"><span class="help-py">cánkuì / xiūkuì</span></div>
+          <div class="feedback" id="fb-s1_q12"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 六、词语选择 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>六、词语选择（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">选出最适当的一个词语。</div>
+
+      <div class="question-item" id="s1_q13">
+        <div class="q-text">13. 小明不小心打碎了花瓶，他没有隐瞒，而是（ &nbsp;&nbsp;&nbsp;&nbsp; ）地向妈妈承认错误。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q13" value="A"> A. 诚实</label>
+          <label class="option-label"><input type="radio" name="s1_q13" value="B"> B. 热闹</label>
+          <label class="option-label"><input type="radio" name="s1_q13" value="C"> C. 柔软</label>
+        </div>
+        <div class="help-box"><span class="help-en">Admitted his mistake honestly instead of hiding it.</span></div>
+        <div class="feedback" id="fb-s1_q13"></div>
+      </div>
+
+      <div class="question-item" id="s1_q14">
+        <div class="q-text">14. 丽丽诚恳地向同学赔不是，同学笑着说：“没关系，我（ &nbsp;&nbsp;&nbsp;&nbsp; ）你。”</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s1_q14" value="A"> A. 原谅</label>
+          <label class="option-label"><input type="radio" name="s1_q14" value="B"> B. 准备</label>
+          <label class="option-label"><input type="radio" name="s1_q14" value="C"> C. 欣赏</label>
+        </div>
+        <div class="help-box"><span class="help-en">"It's okay, I forgive you."</span></div>
+        <div class="feedback" id="fb-s1_q14"></div>
+      </div>
+    </div>
+
+    <!-- 七、词语搭配 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>七、词语搭配（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">从方框所提供的词语中，选出可以和各题词语搭配成合理词组的选项。</div>
+      <div class="word-bank"><span>A. 错误</span><span>B. 脸红</span><span>C. 实话</span><span>D. 微笑</span></div>
+      <div class="example-box">例：露出 <u><strong>&nbsp; D (微笑) &nbsp;</strong></u></div>
+
+      <div class="collocation-grid">
+        <div class="question-item" id="s1_q15">
+          <div class="q-text">15. 承认 <select class="inline-select" id="ans-s1_q15"><option value="">-- 选择 --</option><option value="A">A. 错误</option><option value="B">B. 脸红</option><option value="C">C. 实话</option></select></div>
+          <div class="feedback" id="fb-s1_q15"></div>
+        </div>
+        <div class="question-item" id="s1_q16">
+          <div class="q-text">16. 羞得 <select class="inline-select" id="ans-s1_q16"><option value="">-- 选择 --</option><option value="A">A. 错误</option><option value="B">B. 脸红</option><option value="C">C. 实话</option></select></div>
+          <div class="feedback" id="fb-s1_q16"></div>
+        </div>
+        <div class="question-item" id="s1_q17">
+          <div class="q-text">17. 说出 <select class="inline-select" id="ans-s1_q17"><option value="">-- 选择 --</option><option value="A">A. 错误</option><option value="B">B. 脸红</option><option value="C">C. 实话</option></select></div>
+          <div class="feedback" id="fb-s1_q17"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 八、短文填空 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>八、短文填空（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据短文的意思，选择最适当的词语完成短文。</div>
+      <div class="word-bank" style="font-size:0.98rem;"><span>A. 原谅</span><span>B. 脸红</span><span>C. 道歉</span><span>D. 惭愧</span></div>
+
+      <div class="passage-box question-item" id="s1_cloze-box">
+        今天下课时，安安跑得太快，不小心把同桌的水彩颜料碰倒了。颜料洒在地上，安安立刻感到非常
+        <select class="inline-select" id="ans-s1_q18"><option value="">-- (18) --</option><option value="A">A. 原谅</option><option value="B">B. 脸红</option><option value="C">C. 道歉</option><option value="D">D. 惭愧</option></select>
+        ，他的
+        <select class="inline-select" id="ans-s1_q19"><option value="">-- (19) --</option><option value="A">A. 原谅</option><option value="B">B. 脸红</option><option value="C">C. 道歉</option><option value="D">D. 惭愧</option></select>
+        一直红到了耳根。安安拿来抹布把地擦干净，然后诚恳地向同桌
+        <select class="inline-select" id="ans-s1_q20"><option value="">-- (20) --</option><option value="A">A. 原谅</option><option value="B">B. 脸红</option><option value="C">C. 道歉</option><option value="D">D. 惭愧</option></select>
+        。同桌拍拍安安的肩膀说：“没关系，我原谅你！”
+      </div>
+      <div class="feedback" id="fb-s1_q18"></div><div class="feedback" id="fb-s1_q19"></div><div class="feedback" id="fb-s1_q20"></div>
+    </div>
+
+    <!-- 九、语序判断 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>九、语序判断（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">请选出语序最正确、通顺的句子。</div>
+
+      <div class="question-item" id="s1_q21">
+        <div class="q-text">21. 选出正确的句子：</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s1_q21" value="A"> A. 他红着脸向老师承认了自己的错误。</label>
+          <label class="option-label"><input type="radio" name="s1_q21" value="B"> B. 他向老师红着脸错误承认了自己的。</label>
+          <label class="option-label"><input type="radio" name="s1_q21" value="C"> C. 承认了自己的错误向老师他红着脸。</label>
+        </div>
+        <div class="feedback" id="fb-s1_q21"></div>
+      </div>
+
+      <div class="question-item" id="s1_q22">
+        <div class="q-text">22. 选出正确的句子：</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s1_q22" value="A"> A. 只要我们做一个诚实的孩子，大家就会喜欢我们。</label>
+          <label class="option-label"><input type="radio" name="s1_q22" value="B"> B. 做一个诚实的孩子只要我们，大家就会喜欢我们。</label>
+          <label class="option-label"><input type="radio" name="s1_q22" value="C"> C. 大家就会喜欢我们，只要我们孩子一个诚实的做。</label>
+        </div>
+        <div class="feedback" id="fb-s1_q22"></div>
+      </div>
+    </div>
+
+    <!-- 十、完成句子 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十、完成句子（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据所给的半个句子，将句子补充完整。</div>
+      <div class="example-box">例：<u><strong>这本书很有趣</strong></u> ，我们都喜欢读。</div>
+
+      <div class="question-item" id="s1_q23">
+        <div class="q-text">23. 看到自己做错了事，他羞得 <input type="text" class="sentence-input" id="ans-s1_q23" placeholder="提示：低下了头。 / 满脸通红。"></div>
+        <div class="feedback" id="fb-s1_q23"></div>
+      </div>
+
+      <div class="question-item" id="s1_q24">
+        <div class="q-text">24. 既然做错了事，我们就应该 <input type="text" class="sentence-input" id="ans-s1_q24" placeholder="提示：勇敢地向别人道歉。 / 诚实地承认错误。"></div>
+        <div class="feedback" id="fb-s1_q24"></div>
+      </div>
+    </div>
+
+    <!-- 十一、造句 (2题 × 3分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十一、造句（2题，共6分）</span><span>每题 3 分</span></div>
+      <div class="section-desc">根据所提供的词语造句，并加上合适的标点符号。</div>
+
+      <div class="question-item" id="s1_q25">
+        <div class="q-text">25. <strong>道歉</strong>：<input type="text" class="sentence-input" id="ans-s1_q25" placeholder="例如：小刚不小心踩了同学的脚，立刻向他道歉。"></div>
+        <div class="feedback" id="fb-s1_q25"></div>
+      </div>
+
+      <div class="question-item" id="s1_q26">
+        <div class="q-text">26. <strong>诚实</strong>：<input type="text" class="sentence-input" id="ans-s1_q26" placeholder="例如：爸爸从小教育我要做一个诚实的孩子。"></div>
+        <div class="feedback" id="fb-s1_q26"></div>
+      </div>
+    </div>
+
+    <!-- 十二、理解测验 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十二、理解测验（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据短文内容，选出最适合的答案。</div>
+
+      <div class="passage-box">
+        &nbsp;&nbsp;&nbsp;&nbsp;放学后，志强在操场上踢球，不小心把球踢到了教室的玻璃窗上，“啪”的一声，玻璃碎了一块。周围没有别人，志强心里慌极了，想着要不要偷偷跑回家。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;可是，他又想起了老师常说的话：“做错了事要勇于承认，不要逃避。”志强红着脸，走到办公室向老师说明了经过，并主动表示愿意用自己的零用钱赔偿玻璃。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;老师摸着志强的头，微笑着表扬他：“虽然弄碎了玻璃，但你能诚实地承认错误，真是个勇敢的好孩子！”
+      </div>
+
+      <div class="question-item" id="s1_q27">
+        <div class="q-text">27. 志强在操场上踢球时发生了什么事？</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s1_q27" value="A"> A. 他不小心把球踢碎了教室的玻璃。</label>
+          <label class="option-label"><input type="radio" name="s1_q27" value="B"> B. 他把足球弄丢了。</label>
+          <label class="option-label"><input type="radio" name="s1_q27" value="C"> C. 他和同学吵架了。</label>
+        </div>
+        <div class="feedback" id="fb-s1_q27"></div>
+      </div>
+
+      <div class="question-item" id="s1_q28">
+        <div class="q-text">28. 志强后来是怎么做的？</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s1_q28" value="A"> A. 他偷偷跑回家了。</label>
+          <label class="option-label"><input type="radio" name="s1_q28" value="B"> B. 他红着脸向老师承认错误，并愿意赔偿。</label>
+          <label class="option-label"><input type="radio" name="s1_q28" value="C"> C. 他把责任推给了别人。</label>
+        </div>
+        <div class="feedback" id="fb-s1_q28"></div>
+      </div>
+
+      <div class="question-item" id="s1_q29">
+        <div class="q-text">29. 老师为什么表扬志强？</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s1_q29" value="A"> A. 因为他踢球踢得最好。</label>
+          <label class="option-label"><input type="radio" name="s1_q29" value="B"> B. 因为他能诚实地承认错误。</label>
+          <label class="option-label"><input type="radio" name="s1_q29" value="C"> C. 因为他扫地扫得最干净。</label>
+        </div>
+        <div class="feedback" id="fb-s1_q29"></div>
+      </div>
+    </div>
+
+    <!-- 十三、理解问答 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十三、理解问答（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据短文的内容和上下文的意思，回答问题。</div>
+
+      <div class="passage-box">
+        &nbsp;&nbsp;&nbsp;&nbsp;昨天下午，文文借了小丽的故事书看。一不小心，文文把水洒在了书页上，弄湿了好几页。文文看着皱巴巴的书页，脸一下子红了，心里非常难过。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;今天早上，文文把书还给小丽，低着头对她说：“对不起，我不小心弄湿了你的书，我再去买一本新的还给你。”小丽笑着说：“谢谢你，只要你不是故意的，我就原谅你。”
+      </div>
+
+      <div class="question-item" id="s1_q30">
+        <div class="q-text">30. 弄湿了小丽的故事书后，文文有什么反应？<input type="text" class="sentence-input" id="ans-s1_q30" placeholder="提示：文文的脸一下子红了，心里非常难过。"></div>
+        <div class="feedback" id="fb-s1_q30"></div>
+      </div>
+
+      <div class="question-item" id="s1_q31">
+        <div class="q-text">31. 文文向小丽道歉时，提出了什么解决办法？<input type="text" class="sentence-input" id="ans-s1_q31" placeholder="提示：文文表示要去买一本新的书还给小丽。"></div>
+        <div class="feedback" id="fb-s1_q31"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================================================================== -->
+  <!--                     第二套试卷 (SET 2 — 全新题库)                     -->
+  <!-- ===================================================================== -->
+  <div class="exam-set" id="exam-set-2">
+    <!-- 一、辨字测验 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>一、辨字测验（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">从各题所提供的答案中，选出最恰当的一个。</div>
+
+      <div class="question-item" id="s2_q1">
+        <div class="q-text">1. 忘了做功课，小强站在座位旁，羞得（A. 满脸通行 &nbsp; B. 满脸通顺 &nbsp; C. 满脸通红）。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q1" value="A"> A. 满脸通行</label>
+          <label class="option-label"><input type="radio" name="s2_q1" value="B"> B. 满脸通顺</label>
+          <label class="option-label"><input type="radio" name="s2_q1" value="C"> C. 满脸通红</label>
+        </div>
+        <div class="help-box"><span class="help-py">Wàng le zuò gōngkè, Xiǎoqiáng zhàn zài zuòwèi páng, xiū de mǎnliǎn tōnghóng.</span><span class="help-en">Having forgotten his homework, Xiaoqiang stood by his seat with his face flushed bright red from embarrassment.</span></div>
+        <div class="feedback" id="fb-s2_q1"></div>
+      </div>
+
+      <div class="question-item" id="s2_q2">
+        <div class="q-text">2. 我们要做一个（A. 城市 &nbsp; B. 诚实 &nbsp; C. 成就）的人，绝不欺骗朋友。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q2" value="A"> A. 城市</label>
+          <label class="option-label"><input type="radio" name="s2_q2" value="B"> B. 诚实</label>
+          <label class="option-label"><input type="radio" name="s2_q2" value="C"> C. 成就</label>
+        </div>
+        <div class="help-box"><span class="help-py">Wǒmen yào zuò yí gè chéngshí de rén, jué bú qīpiàn péngyou.</span><span class="help-en">We should be honest people and never deceive our friends.</span></div>
+        <div class="feedback" id="fb-s2_q2"></div>
+      </div>
+
+      <div class="question-item" id="s2_q3">
+        <div class="q-text">3. 妈妈耐心地听我解释后，终于（A. 原谅 &nbsp; B. 原来 &nbsp; C. 愿意）了我这次的小疏忽。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q3" value="A"> A. 原谅</label>
+          <label class="option-label"><input type="radio" name="s2_q3" value="B"> B. 原来</label>
+          <label class="option-label"><input type="radio" name="s2_q3" value="C"> C. 愿意</label>
+        </div>
+        <div class="help-box"><span class="help-py">Māma nàixīn de tīng wǒ jiěshì hòu, zhōngyú yuánliàng le wǒ zhè cì de xiǎo shūhū.</span><span class="help-en">After listening patiently to my explanation, Mum finally forgave my small carelessness this time.</span></div>
+        <div class="feedback" id="fb-s2_q3"></div>
+      </div>
+    </div>
+
+    <!-- 二、看汉字选拼音 (3题 × 1分 = 3分) -->
+    <div class="section-card">
+      <div class="section-title"><span>二、看汉字选拼音（3题，共3分）</span><span>每题 1 分</span></div>
+      <div class="section-desc">根据所写的汉字，选出相应的汉语拼音。</div>
+
+      <div class="question-item" id="s2_q4">
+        <div class="q-text">4. 道歉</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q4" value="A"> A. dào qiǎn</label>
+          <label class="option-label"><input type="radio" name="s2_q4" value="B"> B. dào qiàn</label>
+          <label class="option-label"><input type="radio" name="s2_q4" value="C"> C. dǎo qiàn</label>
+        </div>
+        <div class="help-box"><span class="help-en">Meaning: to apologize</span></div>
+        <div class="feedback" id="fb-s2_q4"></div>
+      </div>
+
+      <div class="question-item" id="s2_q5">
+        <div class="q-text">5. 承认</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q5" value="A"> A. chéng rěn</label>
+          <label class="option-label"><input type="radio" name="s2_q5" value="B"> B. chén rèn</label>
+          <label class="option-label"><input type="radio" name="s2_q5" value="C"> C. chéng rèn</label>
+        </div>
+        <div class="help-box"><span class="help-en">Meaning: to admit / acknowledge</span></div>
+        <div class="feedback" id="fb-s2_q5"></div>
+      </div>
+
+      <div class="question-item" id="s2_q6">
+        <div class="q-text">6. 尊重</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q6" value="A"> A. zūn zhòng</label>
+          <label class="option-label"><input type="radio" name="s2_q6" value="B"> B. zhūn zhòng</label>
+          <label class="option-label"><input type="radio" name="s2_q6" value="C"> C. zūn zòng</label>
+        </div>
+        <div class="help-box"><span class="help-en">Meaning: to respect</span></div>
+        <div class="feedback" id="fb-s2_q6"></div>
+      </div>
+    </div>
+
+    <!-- 三、填写汉字 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>三、填写汉字（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据括号中的拼音，把句子中所缺的汉字填写在输入框里。</div>
+
+      <div class="question-item" id="s2_q7">
+        <div class="q-text">7. 哥哥勇于承 <input type="text" class="text-input" id="ans-s2_q7" maxlength="1"> (rèn) 自己的错误，没有推卸责任。</div>
+        <div class="help-box"><span class="help-py">chéngrèn (to admit)</span></div>
+        <div class="feedback" id="fb-s2_q7"></div>
+      </div>
+
+      <div class="question-item" id="s2_q8">
+        <div class="q-text">8. 爸爸教导我们说：做人要诚 <input type="text" class="text-input" id="ans-s2_q8" maxlength="1"> (shí)，不能撒谎。</div>
+        <div class="help-box"><span class="help-py">chéngshí (honest)</span></div>
+        <div class="feedback" id="fb-s2_q8"></div>
+      </div>
+    </div>
+
+    <!-- 四、看词选图 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>四、看词选图（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据给出的词语，选出正确的图片。</div>
+
+      <div class="question-item" id="s2_q9">
+        <div class="q-text">9. 承认错误</div>
+        <div class="pic-grid">
+          <label class="pic-card">
+            <img src="https://iili.io/oBHGI7S.png" alt="选项A" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s2_q9" value="A"> A</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHXSKG.png" alt="选项B" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s2_q9" value="B"> B</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHOguR.png" alt="选项C" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s2_q9" value="C"> C</span>
+          </label>
+        </div>
+        <div class="help-box"><span class="help-py">chéngrèn cuòwù</span><span class="help-en">to admit a mistake</span></div>
+        <div class="feedback" id="fb-s2_q9"></div>
+      </div>
+
+      <div class="question-item" id="s2_q10">
+        <div class="q-text">10. 握手原谅</div>
+        <div class="pic-grid">
+          <label class="pic-card">
+            <img src="https://iili.io/oBHeb0F.png" alt="选项A" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s2_q10" value="A"> A</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHvMyG.png" alt="选项B" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s2_q10" value="B"> B</span>
+          </label>
+          <label class="pic-card">
+            <img src="https://iili.io/oBHeex2.png" alt="选项C" style="width:96px;height:96px;object-fit:contain;margin:6px 0;">
+            <span class="pic-card-label"><input type="radio" name="s2_q10" value="C"> C</span>
+          </label>
+        </div>
+        <div class="help-box"><span class="help-py">wòshǒu yuánliàng</span><span class="help-en">shake hands and forgive</span></div>
+        <div class="feedback" id="fb-s2_q10"></div>
+      </div>
+    </div>
+
+    <!-- 五、选字组词 (2题 × 1.5分 = 3分) -->
+    <div class="section-card">
+      <div class="section-title"><span>五、选字组词（2题，共3分）</span><span>每题 1.5 分</span></div>
+      <div class="section-desc">从方框中选出适当的汉字，填在黄色的格子里，使横向和纵向都能组成正确的词语。</div>
+      <div class="word-bank"><span>认</span><span>实</span><span>脸</span><span>红</span></div>
+
+      <div class="cross-grid-wrap">
+        <div class="cross-item question-item" id="s2_q11" style="min-width:220px;">
+          <div style="font-weight:bold; margin-bottom:6px;">11.</div>
+          <table class="cross-table">
+            <tr><td></td><td class="cell-box">承</td></tr>
+            <tr><td class="cell-box">确</td><td class="cell-box cell-input"><input type="text" id="ans-s2_q11" maxlength="1"></td></tr>
+          </table>
+          <div class="help-box" style="width:100%;"><span class="help-py">chéngrèn / què rèn</span></div>
+          <div class="feedback" id="fb-s2_q11"></div>
+        </div>
+
+        <div class="cross-item question-item" id="s2_q12" style="min-width:220px;">
+          <div style="font-weight:bold; margin-bottom:6px;">12.</div>
+          <table class="cross-table">
+            <tr><td></td><td class="cell-box">老</td></tr>
+            <tr><td class="cell-box">真</td><td class="cell-box cell-input"><input type="text" id="ans-s2_q12" maxlength="1"></td></tr>
+          </table>
+          <div class="help-box" style="width:100%;"><span class="help-py">lǎoshí / zhēnshí</span></div>
+          <div class="feedback" id="fb-s2_q12"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 六、词语选择 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>六、词语选择（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">选出最适当的一个词语。</div>
+
+      <div class="question-item" id="s2_q13">
+        <div class="q-text">13. 刚才是我不小心弄洒了汤，请你（ &nbsp;&nbsp;&nbsp;&nbsp; ）我。</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q13" value="A"> A. 原谅</label>
+          <label class="option-label"><input type="radio" name="s2_q13" value="B"> B. 欢迎</label>
+          <label class="option-label"><input type="radio" name="s2_q13" value="C"> C. 参观</label>
+        </div>
+        <div class="feedback" id="fb-s2_q13"></div>
+      </div>
+
+      <div class="question-item" id="s2_q14">
+        <div class="q-text">14. 老师问是谁没交作业，小美站起来，低着头（ &nbsp;&nbsp;&nbsp;&nbsp; ）：“是我忘了带。”</div>
+        <div class="options-row">
+          <label class="option-label"><input type="radio" name="s2_q14" value="A"> A. 承认</label>
+          <label class="option-label"><input type="radio" name="s2_q14" value="B"> B. 庆祝</label>
+          <label class="option-label"><input type="radio" name="s2_q14" value="C"> C. 决定</label>
+        </div>
+        <div class="feedback" id="fb-s2_q14"></div>
+      </div>
+    </div>
+
+    <!-- 七、词语搭配 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>七、词语搭配（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">从方框所提供的词语中，选出可以和各题词语搭配成合理词组的选项。</div>
+      <div class="word-bank"><span>A. 道歉</span><span>B. 孩子</span><span>C. 错误</span><span>D. 眼睛</span></div>
+
+      <div class="collocation-grid">
+        <div class="question-item" id="s2_q15">
+          <div class="q-text">15. 诚实的 <select class="inline-select" id="ans-s2_q15"><option value="">-- 选择 --</option><option value="A">A. 道歉</option><option value="B">B. 孩子</option><option value="C">C. 错误</option></select></div>
+          <div class="feedback" id="fb-s2_q15"></div>
+        </div>
+        <div class="question-item" id="s2_q16">
+          <div class="q-text">16. 改正 <select class="inline-select" id="ans-s2_q16"><option value="">-- 选择 --</option><option value="A">A. 道歉</option><option value="B">B. 孩子</option><option value="C">C. 错误</option></select></div>
+          <div class="feedback" id="fb-s2_q16"></div>
+        </div>
+        <div class="question-item" id="s2_q17">
+          <div class="q-text">17. 诚恳 <select class="inline-select" id="ans-s2_q17"><option value="">-- 选择 --</option><option value="A">A. 道歉</option><option value="B">B. 孩子</option><option value="C">C. 错误</option></select></div>
+          <div class="feedback" id="fb-s2_q17"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 八、短文填空 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>八、短文填空（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据短文的意思，选择最适当的词语完成短文。</div>
+      <div class="word-bank" style="font-size:0.98rem;"><span>A. 承认</span><span>B. 诚实</span><span>C. 脸红</span><span>D. 道歉</span></div>
+
+      <div class="passage-box question-item" id="s2_cloze-box">
+        今天值日时，大明不小心把花盆碰倒了，泥土撒了一地。刚开始，大明觉得很不好意思，
+        <select class="inline-select" id="ans-s2_q18"><option value="">-- (18) --</option><option value="A">A. 承认</option><option value="B">B. 诚实</option><option value="C">C. 脸红</option><option value="D">D. 道歉</option></select>
+        地站在那里。后来，他鼓起勇气走去找老师，主动
+        <select class="inline-select" id="ans-s2_q19"><option value="">-- (19) --</option><option value="A">A. 承认</option><option value="B">B. 诚实</option><option value="C">C. 脸红</option><option value="D">D. 道歉</option></select>
+        自己不小心弄倒了花盆，并向老师和同学
+        <select class="inline-select" id="ans-s2_q20"><option value="">-- (20) --</option><option value="A">A. 承认</option><option value="B">B. 诚实</option><option value="C">C. 脸红</option><option value="D">D. 道歉</option></select>
+        。大家都夸大明是一个好孩子。
+      </div>
+      <div class="feedback" id="fb-s2_q18"></div><div class="feedback" id="fb-s2_q19"></div><div class="feedback" id="fb-s2_q20"></div>
+    </div>
+
+    <!-- 九、语序判断 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>九、语序判断（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">请选出语序最正确、通顺的句子。</div>
+
+      <div class="question-item" id="s2_q21">
+        <div class="q-text">21. 选出正确的句子：</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s2_q21" value="A"> A. 弟弟惭愧地低下了头，向姐姐道歉。</label>
+          <label class="option-label"><input type="radio" name="s2_q21" value="B"> B. 低下了头弟弟惭愧地，道歉向姐姐。</label>
+          <label class="option-label"><input type="radio" name="s2_q21" value="C"> C. 向姐姐道歉低下了头，弟弟惭愧地。</label>
+        </div>
+        <div class="feedback" id="fb-s2_q21"></div>
+      </div>
+
+      <div class="question-item" id="s2_q22">
+        <div class="q-text">22. 选出正确的句子：</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s2_q22" value="A"> A. 只要原谅别人，自己心里也会感到快乐。</label>
+          <label class="option-label"><input type="radio" name="s2_q22" value="B"> B. 别人只要原谅，自己心里也会感到快乐。</label>
+          <label class="option-label"><input type="radio" name="s2_q22" value="C"> C. 自己心里也会感到快乐，原谅只要别人。</label>
+        </div>
+        <div class="feedback" id="fb-s2_q22"></div>
+      </div>
+    </div>
+
+    <!-- 十、完成句子 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十、完成句子（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据所给的半个句子，将句子补充完整。</div>
+
+      <div class="question-item" id="s2_q23">
+        <div class="q-text">23. 听到老师表扬他的诚实，他 <input type="text" class="sentence-input" id="ans-s2_q23" placeholder="提示：开心地笑了。 / 脸红了起来。"></div>
+        <div class="feedback" id="fb-s2_q23"></div>
+      </div>
+
+      <div class="question-item" id="s2_q24">
+        <div class="q-text">24. 只要我们勇于承认错误， <input type="text" class="sentence-input" id="ans-s2_q24" placeholder="提示：就能得到别人的原谅。 / 就会有所进步。"></div>
+        <div class="feedback" id="fb-s2_q24"></div>
+      </div>
+    </div>
+
+    <!-- 十一、造句 (2题 × 3分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十一、造句（2题，共6分）</span><span>每题 3 分</span></div>
+      <div class="section-desc">根据所提供的词语造句，并加上合适的标点符号。</div>
+
+      <div class="question-item" id="s2_q25">
+        <div class="q-text">25. <strong>原谅</strong>：<input type="text" class="sentence-input" id="ans-s2_q25" placeholder="例如：好朋友向我道歉后，我立刻原谅了他。"></div>
+        <div class="feedback" id="fb-s2_q25"></div>
+      </div>
+
+      <div class="question-item" id="s2_q26">
+        <div class="q-text">26. <strong>惭愧</strong>：<input type="text" class="sentence-input" id="ans-s2_q26" placeholder="例如：看到自己考试粗心丢了分，我感到很惭愧。"></div>
+        <div class="feedback" id="fb-s2_q26"></div>
+      </div>
+    </div>
+
+    <!-- 十二、理解测验 (3题 × 2分 = 6分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十二、理解测验（3题，共6分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据短文内容，选出最适合的答案。</div>
+
+      <div class="passage-box">
+        &nbsp;&nbsp;&nbsp;&nbsp;星期天，浩浩在家里练习写毛笔字。一不小心，黑墨水打翻了，染黑了旁边的一本图画书。浩浩看着黑乎乎的书页，脸刷地红了起来。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;那是姐姐最喜欢的图画书。浩浩犹豫了一会儿，决定不隐瞒。他拿着书走到姐姐面前，红着脸说：“姐姐，对不起，我写字时不小心把墨水弄到你的书上了。”<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;姐姐看了看书，笑着说：“没关系，书角还能看清楚。谢谢你诚实地告诉我，下次小心一点儿就行了。”
+      </div>
+
+      <div class="question-item" id="s2_q27">
+        <div class="q-text">27. 浩浩写毛笔字时发生了什么事？</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s2_q27" value="A"> A. 他把黑墨水打翻，染黑了姐姐的图画书。</label>
+          <label class="option-label"><input type="radio" name="s2_q27" value="B"> B. 他的毛笔断了。</label>
+          <label class="option-label"><input type="radio" name="s2_q27" value="C"> C. 姐姐把他的书藏起来了。</label>
+        </div>
+        <div class="feedback" id="fb-s2_q27"></div>
+      </div>
+
+      <div class="question-item" id="s2_q28">
+        <div class="q-text">28. 浩浩决定怎么做？</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s2_q28" value="A"> A. 他把书藏在抽屉里。</label>
+          <label class="option-label"><input type="radio" name="s2_q28" value="B"> B. 他红着脸向姐姐道歉，承认自己不小心弄脏了书。</label>
+          <label class="option-label"><input type="radio" name="s2_q28" value="C"> C. 他请妈妈帮他擦干净。</label>
+        </div>
+        <div class="feedback" id="fb-s2_q28"></div>
+      </div>
+
+      <div class="question-item" id="s2_q29">
+        <div class="q-text">29. 姐姐为什么原谅了浩浩？</div>
+        <div class="options-row" style="flex-direction:column;">
+          <label class="option-label"><input type="radio" name="s2_q29" value="A"> A. 因为浩浩买了一本新书送给她。</label>
+          <label class="option-label"><input type="radio" name="s2_q29" value="B"> B. 因为浩浩画了一幅新画。</label>
+          <label class="option-label"><input type="radio" name="s2_q29" value="C"> C. 因为浩浩诚实地告诉她，而且不是故意的。</label>
+        </div>
+        <div class="feedback" id="fb-s2_q29"></div>
+      </div>
+    </div>
+
+    <!-- 十三、理解问答 (2题 × 2分 = 4分) -->
+    <div class="section-card">
+      <div class="section-title"><span>十三、理解问答（2题，共4分）</span><span>每题 2 分</span></div>
+      <div class="section-desc">根据短文的内容和上下文的意思，回答问题。</div>
+
+      <div class="passage-box">
+        &nbsp;&nbsp;&nbsp;&nbsp;小宇非常喜欢吃饼干。一天晚上，趁妈妈不在厨房，小宇偷偷拿了两块饼干吃。没想到，吃完后他心里很不舒服，觉得自己做了不对的事。<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;妈妈回来后，小宇红着脸对妈妈说：“妈妈，我刚才没经过你的同意就偷吃了饼干，对不起。”妈妈欣慰地说：“你能主动承认错误，妈妈很高兴。以后想吃东西，要先问过妈妈哦！”
+      </div>
+
+      <div class="question-item" id="s2_q30">
+        <div class="q-text">30. 偷吃了饼干后，小宇心里有什么感觉？<input type="text" class="sentence-input" id="ans-s2_q30" placeholder="提示：小宇心里很不舒服，觉得自己做了不对的事。"></div>
+        <div class="feedback" id="fb-s2_q30"></div>
+      </div>
+
+      <div class="question-item" id="s2_q31">
+        <div class="q-text">31. 妈妈对小宇提出了什么要求？<input type="text" class="sentence-input" id="ans-s2_q31" placeholder="提示：妈妈要求小宇以后想吃东西，要先问过妈妈。"></div>
+        <div class="feedback" id="fb-s2_q31"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部交卷按钮与成绩单 -->
+  <div class="submit-area">
+    <button class="btn btn-success" id="submitBtn" onclick="gradeCurrentSet()">✅ 提交当前试卷并自动批改</button>
+    <button class="btn btn-primary" style="margin-left:10px;" onclick="resetCurrentSet()">🔄 清空重做本套试卷</button>
+
+    <div class="result-banner" id="resultBanner">
+      <h3 id="resultTitle">📊 测验结果分析报告（满分 60 分）</h3>
+      <p id="resultSummary"></p>
+      <p id="resultAdvice" style="color:#334155; font-size:0.95rem;"></p>
+      <div id="breakdownContainer"></div>
+      <div style="margin-top:14px; text-align:right;">
+        <button class="btn btn-primary" id="nextSetPromptBtn" onclick="switchSet(currentSet === 1 ? 2 : 1)">👉 切换到另一套试卷继续练习</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ================= 万能小词典数据（第七课《他的脸红了》） =================
+  const dictionaryData = [
+    { word: "脸红", py: "liǎn hóng", lesson: "神态与情绪", en: "blush / face turns red", ex: "做错了事，他的脸一下子红了。" },
+    { word: "满脸通红", py: "mǎn liǎn tōng hóng", lesson: "神态与情绪", en: "face flushed bright red", ex: "被老师点名后，他羞得满脸通红。" },
+    { word: "惭愧", py: "cán kuì", lesson: "神态与情绪", en: "ashamed / remorseful", ex: "忘了带作业，他感到很惭愧。" },
+    { word: "诚实", py: "chéng shí", lesson: "诚实与道歉", en: "honest / sincere", ex: "诚实的孩子受到大家的喜欢。" },
+    { word: "承认", py: "chéng rèn", lesson: "诚实与道歉", en: "to admit / acknowledge", ex: "他勇敢地向老师承认了错误。" },
+    { word: "道歉", py: "dào qiàn", lesson: "诚实与道歉", en: "to apologize", ex: "弄坏了别人的东西，要诚恳地道歉。" },
+    { word: "原谅", py: "yuán liàng", lesson: "诚实与道歉", en: "to forgive / pardon", ex: "只要知错就改，大家就会原谅你。" },
+    { word: "尊重", py: "zūn zhòng", lesson: "诚实与道歉", en: "to respect", ex: "我们要尊重每一位同学。" },
+    { word: "错误", py: "cuò wù", lesson: "诚实与道歉", en: "mistake / error", ex: "犯了错误要及时改正。" },
+    { word: "实话", py: "shí huà", lesson: "诚实与道歉", en: "truth / honest words", ex: "遇到事情我们要说实话。" }
+  ];
+
+  function renderDict(list) {
+    const container = document.getElementById('dictList');
+    if (list.length === 0) {
+      container.innerHTML = '<div style="text-align:center; color:#64748b; padding:20px;">未找到匹配的词语，请尝试其他关键词。</div>';
+      return;
+    }
+    container.innerHTML = list.map(item => `
+      <div class="dict-entry">
+        <div class="dict-word-row">
+          <div><span class="dict-word">${item.word}</span><span class="dict-py" style="margin-left:8px;">${item.py}</span></div>
+          <span class="dict-lesson-badge">${item.lesson}</span>
+        </div>
+        <div class="dict-en">${item.en}</div>
+        <div class="dict-ex"><strong>例句：</strong>${item.ex}</div>
+      </div>
+    `).join('');
+  }
+
+  function filterDict() {
+    const q = document.getElementById('dictSearchInput').value.trim().toLowerCase();
+    renderDict(dictionaryData.filter(d => d.word.includes(q) || d.py.toLowerCase().includes(q) || d.en.toLowerCase().includes(q) || d.lesson.includes(q)));
+  }
+
+  function quickFilter(tag) {
+    document.getElementById('dictSearchInput').value = tag;
+    filterDict();
+  }
+
+  function toggleDict() {
+    document.getElementById('dictDrawer').classList.toggle('open');
+  }
+  renderDict(dictionaryData);
+
+  // ================= 双套试卷状态与独立计时 =================
+  let currentSet = 1;
+  const setState = {
+    1: { seconds: 0, paused: false, score: null },
+    2: { seconds: 0, paused: true, score: null }
+  };
+
+  setInterval(() => {
+    const st = setState[currentSet];
+    if (!st.paused) {
+      st.seconds++;
+      updateTimerDisplay();
+    }
+  }, 1000);
+
+  function updateTimerDisplay() {
+    const s = setState[currentSet].seconds;
+    const mins = String(Math.floor(s / 60)).padStart(2, '0');
+    const secs = String(s % 60).padStart(2, '0');
+    document.getElementById('timerDisplay').textContent = `⏱ ${mins}:${secs}`;
+  }
+
+  function toggleTimer() {
+    const st = setState[currentSet];
+    st.paused = !st.paused;
+    document.getElementById('pauseBtn').textContent = st.paused ? '继续' : '暂停';
+  }
+
+  function switchSet(setNum) {
+    setState[currentSet].paused = true;
+
+    currentSet = setNum;
+    document.getElementById('tab-set1').classList.toggle('active', setNum === 1);
+    document.getElementById('tab-set2').classList.toggle('active', setNum === 2);
+    document.getElementById('exam-set-1').classList.toggle('active', setNum === 1);
+    document.getElementById('exam-set-2').classList.toggle('active', setNum === 2);
+
+    if (setState[setNum].score === null) {
+      setState[setNum].paused = false;
+      document.getElementById('pauseBtn').textContent = '暂停';
+      document.getElementById('scoreDisplay').textContent = '当前得分：-- / 60';
+      document.getElementById('resultBanner').style.display = 'none';
+    } else {
+      setState[setNum].paused = true;
+      document.getElementById('pauseBtn').textContent = '继续';
+      document.getElementById('scoreDisplay').textContent = `当前得分：${setState[setNum].score} / 60`;
+      gradeCurrentSet(true);
+    }
+
+    updateTimerDisplay();
+    document.getElementById('nextSetPromptBtn').textContent =
+      setNum === 1 ? '👉 切换到【第二套试卷】继续练习' : '👉 切换回【第一套试卷】查看';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ================= 拼音与英译切换 =================
+  let helpVisible = false;
+  function toggleHelp() {
+    helpVisible = !helpVisible;
+    document.body.classList.toggle('show-help', helpVisible);
+    const btn = document.getElementById('helpToggleBtn');
+    btn.classList.toggle('active', helpVisible);
+    btn.textContent = helpVisible ? '💡 拼音与英译提示：开' : '💡 拼音与英译提示：关';
+  }
+
+  // ================= 两套试卷标准答案库（第七课 · 每套严格 60 分） =================
+  const answerKeys = {
+    1: {
+      q1: { ans: 'B', pts: 2, exp: '正确答案：B. 脸红' },
+      q2: { ans: 'C', pts: 2, exp: '正确答案：C. 道歉' },
+      q3: { ans: 'A', pts: 2, exp: '正确答案：A. 尊重' },
+      q4: { ans: 'C', pts: 1, exp: '正确答案：C. chéng shí' },
+      q5: { ans: 'A', pts: 1, exp: '正确答案：A. cán kuì' },
+      q6: { ans: 'B', pts: 1, exp: '正确答案：B. yuán liàng' },
+      q7: { ans: '愧', pts: 2, exp: '正确答案：愧（惭愧）' },
+      q8: { ans: '谅', pts: 2, exp: '正确答案：谅（原谅）' },
+      q9: { ans: 'A', pts: 2, exp: '正确答案：A（脸红）' },
+      q10: { ans: 'B', pts: 2, exp: '正确答案：B（两人交流道歉）' },
+      q11: { ans: '歉', pts: 1.5, exp: '正确答案：歉（道歉、抱歉）' },
+      q12: { ans: '愧', pts: 1.5, exp: '正确答案：愧（惭愧、羞愧）' },
+      q13: { ans: 'A', pts: 2, exp: '正确答案：A. 诚实' },
+      q14: { ans: 'A', pts: 2, exp: '正确答案：A. 原谅' },
+      q15: { ans: 'A', pts: 2, exp: '正确答案：A. 错误' },
+      q16: { ans: 'B', pts: 2, exp: '正确答案：B. 脸红' },
+      q17: { ans: 'C', pts: 2, exp: '正确答案：C. 实话' },
+      q18: { ans: 'D', pts: 2, exp: '第18题正确答案：D. 惭愧' },
+      q19: { ans: 'B', pts: 2, exp: '第19题正确答案：B. 脸红' },
+      q20: { ans: 'C', pts: 2, exp: '第20题正确答案：C. 道歉' },
+      q21: { ans: 'A', pts: 2, exp: '正确答案：A' },
+      q22: { ans: 'A', pts: 2, exp: '正确答案：A' },
+      q27: { ans: 'A', pts: 2, exp: '正确答案：A' },
+      q28: { ans: 'B', pts: 2, exp: '正确答案：B' },
+      q29: { ans: 'B', pts: 2, exp: '正确答案：B' }
+    },
+    2: {
+      q1: { ans: 'C', pts: 2, exp: '正确答案：C. 满脸通红' },
+      q2: { ans: 'B', pts: 2, exp: '正确答案：B. 诚实' },
+      q3: { ans: 'A', pts: 2, exp: '正确答案：A. 原谅' },
+      q4: { ans: 'B', pts: 1, exp: '正确答案：B. dào qiàn' },
+      q5: { ans: 'C', pts: 1, exp: '正确答案：C. chéng rèn' },
+      q6: { ans: 'A', pts: 1, exp: '正确答案：A. zūn zhòng' },
+      q7: { ans: '认', pts: 2, exp: '正确答案：认（承认）' },
+      q8: { ans: '实', pts: 2, exp: '正确答案：实（诚实）' },
+      q9: { ans: 'A', pts: 2, exp: '正确答案：A（承认错误）' },
+      q10: { ans: 'B', pts: 2, exp: '正确答案：B（握手原谅）' },
+      q11: { ans: '认', pts: 1.5, exp: '正确答案：认（承认、确认）' },
+      q12: { ans: '实', pts: 1.5, exp: '正确答案：实（老实、真实）' },
+      q13: { ans: 'A', pts: 2, exp: '正确答案：A. 原谅' },
+      q14: { ans: 'A', pts: 2, exp: '正确答案：A. 承认' },
+      q15: { ans: 'B', pts: 2, exp: '正确答案：B. 孩子' },
+      q16: { ans: 'C', pts: 2, exp: '正确答案：C. 错误' },
+      q17: { ans: 'A', pts: 2, exp: '正确答案：A. 道歉' },
+      q18: { ans: 'C', pts: 2, exp: '第18题正确答案：C. 脸红' },
+      q19: { ans: 'A', pts: 2, exp: '第19题正确答案：A. 承认' },
+      q20: { ans: 'D', pts: 2, exp: '第20题正确答案：D. 道歉' },
+      q21: { ans: 'A', pts: 2, exp: '正确答案：A' },
+      q22: { ans: 'A', pts: 2, exp: '正确答案：A' },
+      q27: { ans: 'A', pts: 2, exp: '正确答案：A' },
+      q28: { ans: 'B', pts: 2, exp: '正确答案：B' },
+      q29: { ans: 'C', pts: 2, exp: '正确答案：C' }
+    }
+  };
+
+  function showFeedback(fullId, isCorrect, msg) {
+    const fb = document.getElementById('fb-' + fullId);
+    const card = document.getElementById(fullId);
+    if (fb) {
+      fb.textContent = (isCorrect ? '✔ 回答正确！ ' : '✘ ') + msg;
+      fb.className = 'feedback show ' + (isCorrect ? 'ok' : 'err');
+    }
+    if (card) {
+      card.classList.remove('correct', 'incorrect');
+      card.classList.add(isCorrect ? 'correct' : 'incorrect');
+    }
+  }
+
+  function gradeCurrentSet(silentScroll = false) {
+    const p = `s${currentSet}_`;
+    const keys = answerKeys[currentSet];
+    setState[currentSet].paused = true;
+    document.getElementById('pauseBtn').textContent = '继续';
+
+    let secScores = {
+      s1: 0, s2: 0, s3: 0, s4: 0, s5: 0, s6: 0, s7: 0,
+      s8: 0, s9: 0, s10: 0, s11: 0, s12: 0, s13: 0
+    };
+
+    const radioMap = {
+      q1:'s1', q2:'s1', q3:'s1', q4:'s2', q5:'s2', q6:'s2',
+      q9:'s4', q10:'s4', q13:'s6', q14:'s6', q21:'s9', q22:'s9',
+      q27:'s12', q28:'s12', q29:'s12'
+    };
+    Object.keys(radioMap).forEach(q => {
+      const selected = document.querySelector(`input[name="${p}${q}"]:checked`);
+      const val = selected ? selected.value : '';
+      const info = keys[q];
+      if (val === info.ans) {
+        secScores[radioMap[q]] += info.pts;
+        showFeedback(p + q, true, `(+${info.pts}分)`);
+      } else {
+        showFeedback(p + q, false, `${info.exp} (0分)`);
+      }
+    });
+
+    const textMap = { q7:'s3', q8:'s3', q11:'s5', q12:'s5' };
+    Object.keys(textMap).forEach(q => {
+      const val = document.getElementById(`ans-${p}${q}`).value.trim();
+      const info = keys[q];
+      if (val === info.ans) {
+        secScores[textMap[q]] += info.pts;
+        showFeedback(p + q, true, `(+${info.pts}分)`);
+      } else {
+        showFeedback(p + q, false, `${info.exp} (0分)`);
+      }
+    });
+
+    ['q15','q16','q17'].forEach(q => {
+      const val = document.getElementById(`ans-${p}${q}`).value;
+      const info = keys[q];
+      if (val === info.ans) {
+        secScores.s7 += info.pts;
+        showFeedback(p + q, true, `(+${info.pts}分)`);
+      } else {
+        showFeedback(p + q, false, `${info.exp} (0分)`);
+      }
+    });
+
+    let clozeCorrect = 0;
+    ['q18','q19','q20'].forEach(q => {
+      const val = document.getElementById(`ans-${p}${q}`).value;
+      const info = keys[q];
+      if (val === info.ans) {
+        secScores.s8 += info.pts;
+        clozeCorrect++;
+        showFeedback(p + q, true, `${info.exp} (+${info.pts}分)`);
+      } else {
+        showFeedback(p + q, false, `${info.exp} (0分)`);
+      }
+    });
+    const clozeBox = document.getElementById(`${p}cloze-box`);
+    clozeBox.classList.remove('correct', 'incorrect');
+    clozeBox.classList.add(clozeCorrect === 3 ? 'correct' : 'incorrect');
+
+    if (currentSet === 1) {
+      const v23 = document.getElementById('ans-s1_q23').value.trim();
+      const kw23 = ['头', '红', '惭愧', '不好意思', '害怕', '哭', '难过'];
+      if (v23.length >= 2 && kw23.some(k => v23.includes(k))) {
+        secScores.s10 += 2;
+        showFeedback('s1_q23', true, '神态描写自然，句意通顺！（+2分）参考：低下了头。');
+      } else if (v23.length >= 2) {
+        secScores.s10 += 1;
+        showFeedback('s1_q23', false, '已作答，可补充羞愧或低头的神态。（+1分）');
+      } else {
+        showFeedback('s1_q23', false, '未作答。参考：低下了头。 (0分)');
+      }
+
+      const v24 = document.getElementById('ans-s1_q24').value.trim();
+      const kw24 = ['道歉', '承认', '改正', '诚实', '说对不起', '负责', '赔偿'];
+      if (v24.length >= 3 && kw24.some(k => v24.includes(k))) {
+        secScores.s10 += 2;
+        showFeedback('s1_q24', true, '句意连贯，态度诚恳！（+2分）参考：勇敢地向别人道歉。');
+      } else if (v24.length >= 2) {
+        secScores.s10 += 1;
+        showFeedback('s1_q24', false, '建议补充“道歉”或“承认错误”等做法。（+1分）');
+      } else {
+        showFeedback('s1_q24', false, '未作答。参考：勇敢地向别人道歉。 (0分)');
+      }
+
+      gradeSentence('s1_q25', '道歉', '小刚不小心踩了同学的脚，立刻向他道歉。', secScores);
+      gradeSentence('s1_q26', '诚实', '爸爸从小教育我要做一个诚实的孩子。', secScores);
+
+      const v30 = document.getElementById('ans-s1_q30').value.trim();
+      if ((v30.includes('脸') || v30.includes('红')) && (v30.includes('难过') || v30.includes('心'))) {
+        secScores.s13 += 2;
+        showFeedback('s1_q30', true, '回答完整准确！（+2分）标准答案：文文的脸一下子红了，心里非常难过。');
+      } else if (v30.includes('红') || v30.includes('脸') || v30.includes('难过')) {
+        secScores.s13 += 1;
+        showFeedback('s1_q30', false, '答对了一半！完整答案：文文的脸一下子红了，心里非常难过。（+1分）');
+      } else {
+        showFeedback('s1_q30', false, '请看第一段：文文看着皱巴巴的书页，脸一下子红了，心里非常难过。 (0分)');
+      }
+
+      const v31 = document.getElementById('ans-s1_q31').value.trim();
+      if (v31.includes('买') && (v31.includes('新') || v31.includes('书'))) {
+        secScores.s13 += 2;
+        showFeedback('s1_q31', true, '回答完整准确！（+2分）标准答案：文文提出再去买一本新的书还给小丽。');
+      } else if (v31.includes('买') || v31.includes('新')) {
+        secScores.s13 += 1;
+        showFeedback('s1_q31', false, '答对了一半！文文提出再去买一本新的书还给小丽。（+1分）');
+      } else {
+        showFeedback('s1_q31', false, '请看第二段文文说的话：“我再去买一本新的还给你。” (0分)');
+      }
+    } else {
+      const v23 = document.getElementById('ans-s2_q23').value.trim();
+      const kw23 = ['笑', '开心', '高兴', '红', '满意', '骄傲', '自豪'];
+      if (v23.length >= 2 && kw23.some(k => v23.includes(k))) {
+        secScores.s10 += 2;
+        showFeedback('s2_q23', true, '句意连贯，神态合理！（+2分）参考：开心地笑了。');
+      } else if (v23.length >= 2) {
+        secScores.s10 += 1;
+        showFeedback('s2_q23', false, '已作答，可补充高兴或脸红的表情。（+1分）');
+      } else {
+        showFeedback('s2_q23', false, '未作答。参考：开心地笑了。 (0分)');
+      }
+
+      const v24 = document.getElementById('ans-s2_q24').value.trim();
+      const kw24 = ['原谅', '进步', '改正', '喜欢', '相信', '表扬', '成长'];
+      if (v24.length >= 3 && kw24.some(k => v24.includes(k))) {
+        secScores.s10 += 2;
+        showFeedback('s2_q24', true, '条件句式准确，句意通顺！（+2分）参考：就能得到别人的原谅。');
+      } else if (v24.length >= 2) {
+        secScores.s10 += 1;
+        showFeedback('s2_q24', false, '建议用“就能……”写出结果。（+1分）');
+      } else {
+        showFeedback('s2_q24', false, '未作答。参考：就能得到别人的原谅。 (0分)');
+      }
+
+      gradeSentence('s2_q25', '原谅', '好朋友向我道歉后，我立刻原谅了他。', secScores);
+      gradeSentence('s2_q26', '惭愧', '看到自己考试粗心丢了分，我感到很惭愧。', secScores);
+
+      const v30 = document.getElementById('ans-s2_q30').value.trim();
+      if (v30.includes('不舒服') || v30.includes('不对')) {
+        secScores.s13 += 2;
+        showFeedback('s2_q30', true, '回答完整准确！（+2分）标准答案：小宇心里很不舒服，觉得自己做了不对的事。');
+      } else {
+        showFeedback('s2_q30', false, '请看第一段：吃完后他心里很不舒服，觉得自己做了不对的事。 (0分)');
+      }
+
+      const v31 = document.getElementById('ans-s2_q31').value.trim();
+      if (v31.includes('问') || v31.includes('同意')) {
+        secScores.s13 += 2;
+        showFeedback('s2_q31', true, '回答完整准确！（+2分）标准答案：妈妈要求小宇以后想吃东西，要先问过妈妈。');
+      } else {
+        showFeedback('s2_q31', false, '请看第二段妈妈说的话：“以后想吃东西，要先问过妈妈哦！” (0分)');
+      }
+    }
+
+    const totalScore = Object.values(secScores).reduce((a, b) => a + b, 0);
+    const maxScore = 60;
+    const pct = Math.round((totalScore / maxScore) * 100);
+
+    setState[currentSet].score = totalScore;
+    document.getElementById('scoreDisplay').textContent = `当前得分：${totalScore} / ${maxScore}`;
+    document.getElementById(`status-set${currentSet}`).textContent = `${totalScore} / 60 分`;
+
+    const name = document.getElementById('studentName').value.trim() || '同学';
+    const mins = Math.floor(setState[currentSet].seconds / 60);
+    const secs = setState[currentSet].seconds % 60;
+
+    const banner = document.getElementById('resultBanner');
+    banner.style.display = 'block';
+    document.getElementById('resultTitle').textContent =
+      `📊 第${currentSet === 1 ? '一' : '二'}套试卷 · 测验结果分析报告（第七课《他的脸红了》· 满分 60 分）`;
+    document.getElementById('resultSummary').innerHTML =
+      `<strong>${name}</strong> 的最终得分：<strong>${totalScore} / ${maxScore} 分</strong>（折合百分制：<strong>${pct}%</strong>） ｜ 用时：<strong>${mins} 分 ${secs} 秒</strong>`;
+
+    let advice = '';
+    if (pct >= 85) {
+      advice = '🌟 非常优秀！你对第七课《他的脸红了》的生字词、搭配和句式掌握得很扎实！可以继续挑战另一套试卷。';
+    } else if (pct >= 65) {
+      advice = '👍 表现不错！建议打开右上角的【📖 万能小词典】和【💡 拼音与英译提示】，订正错题后再做另一套巩固。';
+    } else {
+      advice = '💪 继续加油！做题时可以随时打开右上角的【📖 万能小词典】查生词，订正后再挑战另一套试卷！';
+    }
+    document.getElementById('resultAdvice').textContent = advice;
+
+    document.getElementById('breakdownContainer').innerHTML = `
+      <table class="score-breakdown">
+        <tr><th>大题项目</th><th>得分 / 满分</th><th>大题项目</th><th>得分 / 满分</th></tr>
+        <tr><td>一、辨字测验</td><td>${secScores.s1} / 6</td><td>八、短文填空</td><td>${secScores.s8} / 6</td></tr>
+        <tr><td>二、看汉字选拼音</td><td>${secScores.s2} / 3</td><td>九、语序判断</td><td>${secScores.s9} / 4</td></tr>
+        <tr><td>三、填写汉字</td><td>${secScores.s3} / 4</td><td>十、完成句子</td><td>${secScores.s10} / 4</td></tr>
+        <tr><td>四、看词选图</td><td>${secScores.s4} / 4</td><td>十一、造句</td><td>${secScores.s11} / 6</td></tr>
+        <tr><td>五、选字组词</td><td>${secScores.s5} / 3</td><td>十二、理解测验</td><td>${secScores.s12} / 6</td></tr>
+        <tr><td>六、词语选择</td><td>${secScores.s6} / 4</td><td>十三、理解问答</td><td>${secScores.s13} / 4</td></tr>
+        <tr><td>七、词语搭配</td><td>${secScores.s7} / 6</td><td><strong>本套总计</strong></td><td><strong>${totalScore} / 60</strong></td></tr>
+      </table>
+    `;
+
+    if (!silentScroll) {
+      banner.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+
+  function gradeSentence(fullId, keyword, sample, secScores) {
+    const val = document.getElementById('ans-' + fullId).value.trim();
+    const hasPunct = /[。！？]$/.test(val);
+    if (val.includes(keyword) && val.length >= 7 && hasPunct) {
+      secScores.s11 += 3;
+      showFeedback(fullId, true, `用词准确且标点完整！（+3分）参考：${sample}`);
+    } else if (val.includes(keyword) && val.length >= 6) {
+      secScores.s11 += 2;
+      showFeedback(fullId, false, `句子通顺，别忘了在句末加上标点符号（。！？）哦！（+2分）`);
+    } else {
+      showFeedback(fullId, false, `句子需包含“${keyword}”并表达完整意思。参考：${sample} (0分)`);
+    }
+  }
+
+  function resetCurrentSet() {
+    if (!confirm(`确定要清空【第${currentSet === 1 ? '一' : '二'}套试卷】的答案并重新计时吗？`)) return;
+    const container = document.getElementById(`exam-set-${currentSet}`);
+    container.querySelectorAll('input[type="radio"]').forEach(el => el.checked = false);
+    container.querySelectorAll('input[type="text"]').forEach(el => el.value = '');
+    container.querySelectorAll('select').forEach(el => el.selectedIndex = 0);
+    container.querySelectorAll('.feedback').forEach(el => {
+      el.className = 'feedback';
+      el.textContent = '';
+    });
+    container.querySelectorAll('.question-item').forEach(el => {
+      el.classList.remove('correct', 'incorrect');
+    });
+
+    setState[currentSet] = { seconds: 0, paused: false, score: null };
+    document.getElementById(`status-set${currentSet}`).textContent = '未批改';
+    document.getElementById('resultBanner').style.display = 'none';
+    document.getElementById('scoreDisplay').textContent = '当前得分：-- / 60';
+    document.getElementById('pauseBtn').textContent = '暂停';
+    updateTimerDisplay();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+</body>
+</html>
